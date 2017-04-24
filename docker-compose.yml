@@ -1,0 +1,50 @@
+web_api:
+  build: ./web-api
+  ports:
+    - "4000:4000"
+  volumes:
+    - ./web-api:/usr/src/app
+  volumes_from:
+    - web_api_node_modules
+  links:
+    - pg
+
+web_api_node_modules:
+  image: busybox
+  volumes:
+    - /usr/src/app/node_modules
+
+web:
+  build: ./web
+  ports:
+    - "8080:80"
+
+app:
+  build: ./app
+  ports:
+    - "3000:3000"
+  volumes:
+    - ./app:/usr/src/app
+  volumes_from:
+    - app_node_modules
+
+app_node_modules:
+  image: busybox
+  volumes:
+    - /usr/src/app/node_modules
+
+pg:
+  image: postgres:9.4.5
+  ports:
+    - 5432
+  volumes_from:
+    - pg-data
+  environment:
+    - POSTGRES_USER=sid
+    - POSTGRES_PASSWORD=sid
+    - POSTGRES_DB=sid
+
+pg-data:
+  image: busybox
+  volumes:
+    - "/var/lib/postgresql/data"
