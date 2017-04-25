@@ -4,9 +4,31 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "standard",
+    "test": "tap test/*.js",
+    "start": "./node_modules/.bin/supervisor app/server.js | bunyan",
+    "migrate": "./migrate-up.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "bluebird": "^3.5.0",
+    "boom": "^4.3.1",
+    "bunyan": "^1.8.10",
+    "hapi": "^16.1.1",
+    "hapi-auth-jwt2": "^7.2.4",
+    "hapi-bunyan": "^0.7.0",
+    "joi": "^10.4.1",
+    "pg": "^6.1.5",
+    "require-directory": "^2.1.1",
+    "sequelize": "^3.30.4"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^2.7.0",
+    "standard": "^10.0.2",
+    "supervisor": "^0.12.0",
+    "tap": "^10.3.2"
+  }
 }

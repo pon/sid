@@ -2,6 +2,11 @@ web_api:
   build: ./web-api
   ports:
     - "4000:4000"
+  environment:
+    - DATABASE_DATABASE=sid
+    - DATABASE_USERNAME=sid
+    - DATABASE_PASSWORD=sid
+    - DATABASE_HOST=pg
   volumes:
     - ./web-api:/usr/src/app
   volumes_from:
@@ -36,7 +41,7 @@ app_node_modules:
 pg:
   image: postgres:9.4.5
   ports:
-    - 5432
+    - "5433:5432"
   volumes_from:
     - pg-data
   environment:
