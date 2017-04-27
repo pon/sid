@@ -50,7 +50,8 @@ server.register([
         sessionLength: '10h',
         hashSaltRounds: 10
       }
-    }
+    },
+    require('./features/profile')
   ], err => {
     if (err) throw err
     server.start(err => {

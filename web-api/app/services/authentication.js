@@ -68,7 +68,7 @@ exports.register = (server, options, next) => {
       config: {
         auth: false,
         handler: (request, reply) => {
-          return User.findOne({email: request.payload.email})
+          return User.findOne({where: {email: request.payload.email}})
           .then(user => {
             if (user) {
               throw server.plugins.errors.emailAlreadyExists
