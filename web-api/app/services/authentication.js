@@ -10,15 +10,15 @@ exports.register = (server, options, next) => {
     if (err) next(err)
     const User = server.plugins.db.models.User
     const validate = (decoded, request, cb) => {
-      return User.findById(decoded.id)
+      User.findById(decoded.id)
       .then(user => {
         if (!user) {
-          return false
+          return cb(null, false)
         }
 
-        return true
+        return cb(null, true, user)
       })
-      .asCallback(cb)
+      .catch(cb)
     }
 
     server.expose({validate: validate})
