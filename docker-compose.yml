@@ -13,6 +13,7 @@ web_api:
     - web_api_node_modules
   links:
     - pg
+    - testpg
 
 web_api_node_modules:
   image: busybox
@@ -48,6 +49,13 @@ pg:
     - POSTGRES_USER=sid
     - POSTGRES_PASSWORD=sid
     - POSTGRES_DB=sid
+
+testpg:
+  image: postgres:9.4.5
+  environment:
+    - POSTGRES_USER=sid
+    - POSTGRES_PASSWORD=sid
+    - POSTGRES_DB=sid_test
 
 pg-data:
   image: busybox

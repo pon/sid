@@ -1,4 +1,4 @@
-const id        = require('../utils/id')
+const id = require('../utils/id')
 const Sequelize = require('sequelize')
 
 module.exports = db => {

@@ -1,5 +1,5 @@
-const requireDirectory  = require('require-directory')
-const models            = requireDirectory(module)
+const requireDirectory = require('require-directory')
+const models = requireDirectory(module)
 
 module.exports = function (db) {
   const modelsExport = {}

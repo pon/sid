@@ -1,12 +1,11 @@
 const Hapi = require('hapi')
-const Path = require('path')
-const Pkg  = require('../package.json')
+const Pkg = require('../package.json')
 
-const Bunyan = require('bunyan');
-const logger = Bunyan.createLogger({name: Pkg.name, level: 'debug'});
+const Bunyan = require('bunyan')
+const logger = Bunyan.createLogger({name: Pkg.name, level: 'debug'})
 process.on('uncaughtException', err => {
-  logger.error(err);
-});
+  logger.error(err)
+})
 
 const server = new Hapi.Server({
   connections: {
@@ -25,6 +24,8 @@ server.register([
     register: require('./services/logging'),
     options: {logger: logger}
   },
+  require('./services/errors'),
+  require('./services/schemas'),
   {
     register: require('./services/db'),
     options: {
@@ -39,8 +40,22 @@ server.register([
     }
   }
 ], err => {
-  return server.start()
-  .then(() => {
-    console.log(`Server Running at: ${server.info.uri}`)
+  if (err) throw err
+
+  server.register([
+    {
+      register: require('./services/authentication'),
+      options: {
+        key: 'MySecret',
+        sessionLength: '10h',
+        hashSaltRounds: 10
+      }
+    }
+  ], err => {
+    if (err) throw err
+    server.start(err => {
+      if (err) throw err
+      console.log(`Server Running at: ${server.info.uri}`)
+    })
   })
 })
