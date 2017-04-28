@@ -48,7 +48,8 @@ server.register([
       options: {
         key: 'MySecret',
         sessionLength: '10h',
-        hashSaltRounds: 10
+        hashSaltRounds: 10,
+        passwordResetExpiryHours: 24
       }
     },
     require('./features/profile')

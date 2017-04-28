@@ -1,4 +1,7 @@
 const Bcrypt = require('bcrypt')
+const crypto = require('crypto')
+const P = require('bluebird')
+const Joi = require('joi')
 const Jwt = require('jsonwebtoken')
 
 exports.register = (server, options, next) => {
@@ -8,6 +11,20 @@ exports.register = (server, options, next) => {
   }], err => {
     /* istanbul ignore next */
     if (err) next(err)
+
+    const optionsSchema = Joi.object().keys({
+      key: Joi.string().required(),
+      sessionLength: Joi.string().required(),
+      hashSaltRounds: Joi.number().integer().required().min(1),
+      passwordResetExpiryHours: Joi.number().integer().required().min(1)
+    })
+
+    const optionsResult = Joi.validate(options, optionsSchema)
+    if (optionsResult.error) {
+      return next(optionsResult.error)
+    }
+
+    const PasswordReset = server.plugins.db.models.PasswordReset
     const User = server.plugins.db.models.User
     const validate = (decoded, request, cb) => {
       User.findById(decoded.id)
@@ -95,6 +112,79 @@ exports.register = (server, options, next) => {
             last_name: server.plugins.schemas.lastName,
             email: server.plugins.schemas.email,
             password: server.plugins.schemas.password
+          }
+        }
+      }
+    }, {
+      method: 'POST',
+      path: '/password-reset',
+      config: {
+        auth: false,
+        handler: (request, reply) => {
+          return User.findOne({where: {email: request.payload.email}})
+          .then(user => {
+            if (!user) {
+              throw server.plugins.errors.userNotFound
+            } else {
+              const now = new Date()
+              return PasswordReset.create({
+                user_id: user.id,
+                token: crypto.randomBytes(12).toString('hex'),
+                expires_at: now.setHours(now.getHours() + options.passwordResetExpiryHours)
+              })
+              // TODO: Gotta send an email here
+            }
+          })
+          .then(() => {
+            return reply().code(201)
+          })
+          .catch(reply)
+        },
+        validate: {
+          payload: {
+            email: server.plugins.schemas.email
+          }
+        }
+      }
+    }, {
+      method: 'POST',
+      path: '/change-password',
+      config: {
+        auth: false,
+        handler: (request, reply) => {
+          return PasswordReset.findOne({
+            where: {
+              token: request.payload.token,
+              expires_at: {$gte: new Date()}
+            },
+            include: [User]
+          })
+          .then(reset => {
+            if (!reset) {
+              throw server.plugins.errors.invalidPasswordToken
+            }
+
+            return P.all([
+              Bcrypt.hash(request.payload.new_password, options.hashSaltRounds),
+              P.resolve(reset)
+            ])
+          })
+          .spread((hash, reset) => {
+            return reset.user.update({
+              password: hash
+            })
+          })
+          .then(() => {
+            return reply()
+          })
+          .catch(reply)
+        },
+        validate: {
+          payload: {
+            token: server.plugins.schemas.passwordResetToken,
+            new_password: server.plugins.schemas.password,
+            new_password_confirmation:
+              server.plugins.schemas.password.valid(Joi.ref('new_password'))
           }
         }
       }

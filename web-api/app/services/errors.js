@@ -4,7 +4,8 @@ exports.register = (server, options, next) => {
   const errors = {
     emailAlreadyExists: Boom.badRequest('email already exists'),
     userNotFound: Boom.notFound('user could not be found'),
-    userInvalidPassword: Boom.badRequest('incorrect password')
+    userInvalidPassword: Boom.badRequest('incorrect password'),
+    invalidPasswordToken: Boom.badRequest('invalid password reset token')
   }
 
   server.expose(errors)

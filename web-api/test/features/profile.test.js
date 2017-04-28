@@ -1,5 +1,4 @@
 const Hapi = require('hapi')
-const utils = require('../test-utils')
 
 describe('profile plugin', () => {
   let server
