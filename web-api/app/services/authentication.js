@@ -53,6 +53,7 @@ exports.register = (server, options, next) => {
       path: '/login',
       config: {
         auth: false,
+        tags: ['api', 'authentication'],
         handler: (request, reply) => {
           return User.findOne({where: {email: request.payload.email}})
           .then(user => {
@@ -84,6 +85,7 @@ exports.register = (server, options, next) => {
       path: '/register',
       config: {
         auth: false,
+        tags: ['api', 'authentication'],
         handler: (request, reply) => {
           return User.findOne({where: {email: request.payload.email}})
           .then(user => {
@@ -120,6 +122,7 @@ exports.register = (server, options, next) => {
       path: '/password-reset',
       config: {
         auth: false,
+        tags: ['api'],
         handler: (request, reply) => {
           return User.findOne({where: {email: request.payload.email}})
           .then(user => {
@@ -151,6 +154,7 @@ exports.register = (server, options, next) => {
       path: '/change-password',
       config: {
         auth: false,
+        tags: ['api', 'authentication'],
         handler: (request, reply) => {
           return PasswordReset.findOne({
             where: {

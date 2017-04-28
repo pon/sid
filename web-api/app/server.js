@@ -38,7 +38,8 @@ server.register([
       },
       models: require('./models')
     }
-  }
+  },
+  require('./services/documentation')
 ], err => {
   if (err) throw err
 

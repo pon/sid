@@ -3,6 +3,7 @@ exports.register = (server, options, next) => {
     method: 'GET',
     path: '/users/me',
     config: {
+      tags: ['api'],
       handler: (request, reply) => {
         const {id, first_name, last_name, email} = request.auth.credentials
         reply({id, first_name, last_name, email})

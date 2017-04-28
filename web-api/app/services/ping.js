@@ -4,6 +4,7 @@ exports.register = (server, options, next) => {
     path: '/ping',
     config: {
       auth: false,
+      tags: ['api'],
       handler: (request, reply) => {
         return reply({
           name: options.name,
