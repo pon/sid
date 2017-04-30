@@ -19,7 +19,7 @@ exports.register = (server, options, next) => {
   const generateQueueUrl = queueName => {
     return new P((resolve, reject) => {
       SQS.createQueue({
-        QueueName: options.sqsQueueName
+        QueueName: queueName
       }, (err, config) => {
         /* istanbul ignore next */
         if (err) {
@@ -36,8 +36,8 @@ exports.register = (server, options, next) => {
     })
   }
 
-  const enqueueMessage = (body, attributes) => {
-    return generateQueueUrl(options.sqsQueueName)
+  const enqueueMessage = (queueName, body, attributes) => {
+    return generateQueueUrl(queueName)
     .then(queueUrl => {
       const params = {
         QueueUrl: queueUrl,

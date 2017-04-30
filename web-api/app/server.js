@@ -47,8 +47,7 @@ server.register([
       secretKey: process.env.AWS_SECRET_ACCESS_KEY,
       region: process.env.AWS_REGION,
       sqsUrl: process.env.AWS_SQS_URL,
-      sqsPort: process.env.AWS_SQS_PORT,
-      sqsQueueName: process.env.AWS_SQS_QUEUE_NAME
+      sqsPort: process.env.AWS_SQS_PORT
     }
   }
 ], err => {

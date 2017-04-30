@@ -12,7 +12,6 @@ web_api:
     - AWS_REGION=us-east-1
     - AWS_SQS_URL=sqs
     - AWS_SQS_PORT=4568
-    - AWS_SQS_QUEUE_NAME=sid
   volumes:
     - ./web-api:/usr/src/app
   volumes_from:
