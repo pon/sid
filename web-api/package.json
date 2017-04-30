@@ -23,6 +23,7 @@
     ]
   },
   "dependencies": {
+    "aws-sdk": "^2.48.0",
     "bcrypt": "^1.0.2",
     "bluebird": "^3.5.0",
     "boom": "^4.3.1",

@@ -39,7 +39,18 @@ server.register([
       models: require('./models')
     }
   },
-  require('./services/documentation')
+  require('./services/documentation'),
+  {
+    register: require('./services/aws'),
+    options: {
+      accessKey: process.env.AWS_ACCESS_KEY_ID,
+      secretKey: process.env.AWS_SECRET_ACCESS_KEY,
+      region: process.env.AWS_REGION,
+      sqsUrl: process.env.AWS_SQS_URL,
+      sqsPort: process.env.AWS_SQS_PORT,
+      sqsQueueName: process.env.AWS_SQS_QUEUE_NAME
+    }
+  }
 ], err => {
   if (err) throw err
 

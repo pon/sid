@@ -7,6 +7,12 @@ web_api:
     - DATABASE_USERNAME=sid
     - DATABASE_PASSWORD=sid
     - DATABASE_HOST=pg
+    - AWS_ACCESS_KEY_ID=key
+    - AWS_SECRET_ACCESS_KEY=key
+    - AWS_REGION=us-east-1
+    - AWS_SQS_URL=sqs
+    - AWS_SQS_PORT=4568
+    - AWS_SQS_QUEUE_NAME=sid
   volumes:
     - ./web-api:/usr/src/app
   volumes_from:
@@ -14,6 +20,7 @@ web_api:
   links:
     - pg
     - testpg
+    - sqs
 
 web_api_node_modules:
   image: busybox
@@ -61,3 +68,6 @@ pg-data:
   image: busybox
   volumes:
     - "/var/lib/postgresql/data"
+
+sqs:
+  image: airdock/fake-sqs
