@@ -10,6 +10,7 @@ The following components are included:
 - **app** - [React](https://github.com/facebookincubator/create-react-app) app for serving up the application flow
 - **web** - Static [Nginx](https://www.nginx.com/) server for landing pages and marketing stuff
 - **web-api** - [Hapi.js](https://hapijs.com/) server for driving the application workflow (BFF + Auth)
+- **emailer** - SQS task consumer for sending templated emails
 
 # Quickstart
 
