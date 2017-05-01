@@ -29,3 +29,7 @@ Build the images locally.
 #### Start Static Web Content on `localhost:8080`:
 
 `./go start web`
+
+#### Start Emailer Task Consumer:
+
+`./go start emailer`
