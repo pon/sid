@@ -16,7 +16,8 @@ exports.register = (server, options, next) => {
       key: Joi.string().required(),
       sessionLength: Joi.string().required(),
       hashSaltRounds: Joi.number().integer().required().min(1),
-      passwordResetExpiryHours: Joi.number().integer().required().min(1)
+      passwordResetExpiryHours: Joi.number().integer().required().min(1),
+      emailVerificationExpiryHours: Joi.number().integer().required().min(1)
     })
 
     const optionsResult = Joi.validate(options, optionsSchema)
@@ -24,6 +25,7 @@ exports.register = (server, options, next) => {
       return next(optionsResult.error)
     }
 
+    const EmailVerification = server.plugins.db.models.EmailVerification
     const PasswordReset = server.plugins.db.models.PasswordReset
     const User = server.plugins.db.models.User
     const validate = (decoded, request, cb) => {
@@ -87,9 +89,10 @@ exports.register = (server, options, next) => {
         auth: false,
         tags: ['api', 'authentication'],
         handler: (request, reply) => {
+          let user
           return User.findOne({where: {email: request.payload.email}})
-          .then(user => {
-            if (user) {
+          .then(_user => {
+            if (_user) {
               throw server.plugins.errors.emailAlreadyExists
             } else {
               return Bcrypt.hash(request.payload.password, options.hashSaltRounds)
@@ -103,6 +106,22 @@ exports.register = (server, options, next) => {
               password: hash
             })
           })
+          .then(_user => {
+            user = _user
+            const now = new Date()
+            return EmailVerification.create({
+              user_id: user.id,
+              token: crypto.randomBytes(12).toString('hex'),
+              expires_at: now.setHours(now.getHours() +
+                options.emailVerificationExpiryHours)
+            })
+          })
+          .then(verification => {
+            return server.plugins.emailer.sendEmailVerification(user.email, {
+              verificationToken: verification.token,
+              firstName: user.first_name
+            })
+          })
           .then(() => {
             return reply().code(201)
           })
@@ -114,6 +133,70 @@ exports.register = (server, options, next) => {
             last_name: server.plugins.schemas.lastName,
             email: server.plugins.schemas.email,
             password: server.plugins.schemas.password
+          }
+        }
+      }
+    }, {
+      method: 'POST',
+      path: '/resend-email-verification',
+      config: {
+        tags: ['api'],
+        handler: (request, reply) => {
+          const now = new Date()
+          const user = request.auth.credentials
+          if (request.auth.credentials.verified) {
+            throw server.plugins.errors.userAlreadyVerified
+          }
+          return EmailVerification.create({
+            user_id: user.id,
+            token: crypto.randomBytes(12).toString('hex'),
+            expires_at: now.setHours(now.getHours() +
+              options.emailVerificationExpiryHours)
+          })
+          .then(verification => {
+            return server.plugins.emailer.sendEmailVerification(user.email, {
+              verificationToken: verification.token,
+              firstName: user.first_name
+            })
+          })
+          .then(() => {
+            return reply().code(201)
+          })
+          .catch(reply)
+        }
+      }
+    }, {
+      method: 'POST',
+      path: '/verify-email',
+      config: {
+        auth: false,
+        tags: ['api'],
+        handler: (request, reply) => {
+          return EmailVerification.findOne({
+            where: {
+              token: request.payload.token,
+              expires_at: {$gte: new Date()}
+            },
+            include: [User]
+          })
+          .then(verification => {
+            if (!verification) {
+              throw server.plugins.errors.invalidVerificationToken
+            }
+
+            return verification.user.update({
+              verified: true,
+              verified_at: new Date()
+            })
+          })
+          .then(() => {
+            return reply()
+          })
+          .catch(reply)
+        },
+        validate: {
+          payload: {
+            token: server.plugins.schemas.emailVerificationToken
           }
         }
       }

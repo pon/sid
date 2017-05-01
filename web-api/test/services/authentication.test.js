@@ -45,17 +45,22 @@ describe('authentication plugin', () => {
             }
           }
         ], err => {
-          if (err) done(err)
+          if (err) {
+            return done(err)
+          }
           server.register([{
             register: require('../../app/services/authentication'),
             options: {
               key: 'MySecret',
               sessionLength: '10h',
               hashSaltRounds: 10,
-              passwordResetExpiryHours: 24
+              passwordResetExpiryHours: 24,
+              emailVerificationExpiryHours: 24
             }
           }], err => {
-            if (err) done(err)
+            if (err) {
+              return done(err)
+            }
             server.route({
               method: 'GET',
               path: '/authed',
@@ -76,6 +81,13 @@ describe('authentication plugin', () => {
     })
 
     it('should successfully register a new user and log them in', () => {
+      const emailerMock = sinon.mock(server.plugins.emailer)
+      emailerMock.expects('sendEmailVerification').once().withArgs('john@example.com', {
+        verificationToken: sinon.match.string,
+        firstName: 'John'
+      })
+      .returns(P.resolve())
+
       return server.inject({
         method: 'POST',
         url: '/register',
@@ -117,6 +129,12 @@ describe('authentication plugin', () => {
       const emailerMock = sinon.mock(server.plugins.emailer)
       emailerMock.expects('sendPasswordReset').once().withArgs('john@example.com', {
         resetToken: sinon.match.string,
+        firstName: 'John'
+      })
+      .returns(P.resolve())
+
+      emailerMock.expects('sendEmailVerification').once().withArgs('john@example.com', {
+        verificationToken: sinon.match.string,
         firstName: 'John'
       })
       .returns(P.resolve())
@@ -278,6 +296,116 @@ describe('authentication plugin', () => {
             password: 'wrongpassword'
           }
         })
+      })
+      .then(res => {
+        res.statusCode.should.equal(400)
+      })
+    })
+
+    it('should resend an email verification', () => {
+      const emailerMock = sinon.mock(server.plugins.emailer)
+      emailerMock.expects('sendEmailVerification').twice().withArgs('john@example.com', {
+        firstName: 'John',
+        verificationToken: sinon.match.string
+      })
+      .returns(P.resolve())
+
+      return P.resolve(server.inject({
+        method: 'POST',
+        url: '/register',
+        payload: {
+          first_name: 'John',
+          last_name: 'Doe',
+          email: 'john@example.com',
+          password: 'password'
+        }
+      }))
+      .then(res => {
+        return server.inject({
+          method: 'POST',
+          url: '/login',
+          payload: {
+            email: 'john@example.com',
+            password: 'password'
+          }
+        })
+      })
+      .then(res => {
+        return server.inject({
+          method: 'POST',
+          url: '/resend-email-verification',
+          headers: {
+            Authorization: res.result.token
+          }
+        })
+      })
+      .then(res => {
+        res.statusCode.should.equal(201)
+        emailerMock.verify()
+      })
+      .finally(() => {
+        emailerMock.restore()
+      })
+    })
+
+    it('should error if trying to resend verification for verified user', () => {
+      return server.inject({
+        method: 'POST',
+        url: '/resend-email-verification',
+        credentials: {
+          id: '1',
+          email: 'john@example.com',
+          first_name: 'John',
+          verified: true
+        }
+      })
+      .then(res => {
+        res.statusCode.should.equal(400)
+      })
+    })
+
+    it('should verify a user when email verification endpoint is hit', () => {
+      let user
+      return server.plugins.db.models.User.create({
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'john@example.com',
+        password: 'password'
+      })
+      .then(_user => {
+        user = _user
+        const now = new Date()
+        return server.plugins.db.models.EmailVerification.create({
+          user_id: user.id,
+          token: 'token',
+          expires_at: now.setHours(now.getHours() + 1)
+        })
+      })
+      .then(verification => {
+        return server.inject({
+          method: 'POST',
+          url: '/verify-email',
+          payload: {
+            token: 'token'
+          }
+        })
+      })
+      .then(res => {
+        res.statusCode.should.equal(200)
+        return user.reload()
+      })
+      .then(updatedUser => {
+        updatedUser.verified.should.equal(true)
+      })
+    })
+
+    it('should return an error if the token does not exist', () => {
+      return server.inject({
+        method: 'POST',
+        url: '/verify-email',
+        payload: {
+          token: 'token'
+        }
       })
       .then(res => {
         res.statusCode.should.equal(400)

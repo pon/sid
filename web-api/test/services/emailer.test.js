@@ -18,6 +18,9 @@ describe('emailer service', () => {
         sqsPort: process.env.AWS_SQS_PORT
       }
     }, err => {
+      if (err) {
+        return done(err)
+      }
       server.register({
         register: require('../../app/services/emailer'),
         options: {
@@ -58,6 +61,37 @@ describe('emailer service', () => {
 
     it('should throw an error if invalid parameters are provided', () => {
       return server.plugins.emailer.sendPasswordReset('john@example.com', {})
+        .should.be.rejected
+    })
+  })
+
+  describe('email verification', () => {
+    it('should enqueue the correct message', () => {
+      const awsMock = sinon.mock(server.plugins.aws)
+      awsMock.expects('enqueueMessage').once().withArgs(process.env.EMAILER_QUEUE, {
+        to: 'john@example.com',
+        template: 'email-verification',
+        data: {
+          firstName: 'John',
+          verificationToken: 'token'
+        }
+      })
+      .returns(P.resolve())
+
+      return server.plugins.emailer.sendEmailVerification('john@example.com', {
+        firstName: 'John',
+        verificationToken: 'token'
+      })
+      .then(() => {
+        awsMock.verify()
+      })
+      .finally(() => {
+        awsMock.restore()
+      })
+    })
+
+    it('should throw an error if invalid parameters are provided', () => {
+      return server.plugins.emailer.sendEmailVerification('john@example.com', {})
         .should.be.rejected
     })
   })

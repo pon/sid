@@ -70,7 +70,8 @@ server.register([
           key: 'MySecret',
           sessionLength: '10h',
           hashSaltRounds: 10,
-          passwordResetExpiryHours: 24
+          passwordResetExpiryHours: 24,
+          emailVerificationExpiryHours: 48
         }
       },
       require('./features/profile')

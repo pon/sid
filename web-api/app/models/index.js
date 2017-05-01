@@ -12,6 +12,8 @@ module.exports = function (db) {
     modelsExport[key] = models[model](db)
   })
 
+  modelsExport.User.hasMany(modelsExport.EmailVerification, {foreignKey: 'user_id'})
+  modelsExport.EmailVerification.belongsTo(modelsExport.User, {foreignKey: 'user_id'})
   modelsExport.User.hasMany(modelsExport.PasswordReset, {foreignKey: 'user_id'})
   modelsExport.PasswordReset.belongsTo(modelsExport.User, {foreignKey: 'user_id'})
 

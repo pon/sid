@@ -22,7 +22,13 @@ module.exports = db => {
     password: {
       type: Sequelize.STRING(255),
       allowNull: false
-    }
+    },
+    verified: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    verified_at: Sequelize.DATE
   }, {
     hooks: {
       beforeCreate: (model, options, done) => {
