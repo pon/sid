@@ -55,20 +55,31 @@ server.register([
 
   server.register([
     {
-      register: require('./services/authentication'),
+      register: require('./services/emailer'),
       options: {
-        key: 'MySecret',
-        sessionLength: '10h',
-        hashSaltRounds: 10,
-        passwordResetExpiryHours: 24
+        queueName: process.env.EMAILER_QUEUE
       }
-    },
-    require('./features/profile')
+    }
   ], err => {
     if (err) throw err
-    server.start(err => {
+
+    server.register([
+      {
+        register: require('./services/authentication'),
+        options: {
+          key: 'MySecret',
+          sessionLength: '10h',
+          hashSaltRounds: 10,
+          passwordResetExpiryHours: 24
+        }
+      },
+      require('./features/profile')
+    ], err => {
       if (err) throw err
-      console.log(`Server Running at: ${server.info.uri}`)
+      server.start(err => {
+        if (err) throw err
+        console.log(`Server Running at: ${server.info.uri}`)
+      })
     })
   })
 })

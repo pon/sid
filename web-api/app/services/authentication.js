@@ -124,8 +124,10 @@ exports.register = (server, options, next) => {
         auth: false,
         tags: ['api'],
         handler: (request, reply) => {
+          let user
           return User.findOne({where: {email: request.payload.email}})
-          .then(user => {
+          .then(_user => {
+            user = _user
             if (!user) {
               throw server.plugins.errors.userNotFound
             } else {
@@ -135,8 +137,13 @@ exports.register = (server, options, next) => {
                 token: crypto.randomBytes(12).toString('hex'),
                 expires_at: now.setHours(now.getHours() + options.passwordResetExpiryHours)
               })
-              // TODO: Gotta send an email here
             }
+          })
+          .then(reset => {
+            return server.plugins.emailer.sendPasswordReset(user.email, {
+              resetToken: reset.token,
+              firstName: user.first_name
+            })
           })
           .then(() => {
             return reply().code(201)

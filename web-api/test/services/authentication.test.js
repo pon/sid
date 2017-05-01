@@ -1,4 +1,6 @@
 const Hapi = require('hapi')
+const P = require('bluebird')
+const sinon = require('sinon')
 const utils = require('../test-utils')
 
 describe('authentication plugin', () => {
@@ -35,7 +37,13 @@ describe('authentication plugin', () => {
             }
           },
           require('../../app/services/errors'),
-          require('../../app/services/schemas')
+          require('../../app/services/schemas'),
+          {
+            register: require('../../app/services/emailer'),
+            options: {
+              queueName: process.env.EMAILER_QUEUE
+            }
+          }
         ], err => {
           if (err) done(err)
           server.register([{
@@ -106,7 +114,14 @@ describe('authentication plugin', () => {
     })
 
     it('should allow password reset and change', () => {
-      return server.inject({
+      const emailerMock = sinon.mock(server.plugins.emailer)
+      emailerMock.expects('sendPasswordReset').once().withArgs('john@example.com', {
+        resetToken: sinon.match.string,
+        firstName: 'John'
+      })
+      .returns(P.resolve())
+
+      return P.resolve(server.inject({
         method: 'POST',
         url: '/register',
         payload: {
@@ -115,7 +130,7 @@ describe('authentication plugin', () => {
           email: 'john@example.com',
           password: 'password'
         }
-      })
+      }))
       .then(res => {
         res.statusCode.should.equal(201)
         return server.inject({
@@ -154,6 +169,10 @@ describe('authentication plugin', () => {
       })
       .then(res => {
         res.statusCode.should.equal(200)
+        emailerMock.verify()
+      })
+      .finally(() => {
+        emailerMock.restore()
       })
     })
 
