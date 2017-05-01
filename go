@@ -19,6 +19,7 @@ function bootstrap {
   ${DC} build web_api
   ${DC} build web
   ${DC} build app
+  ${DC} build emailer
 
   ${DC} run web_api npm run migrate
   ${DC} run -e DATABASE_HOST=testpg -e DATABASE_DATABASE=sid_test web_api npm run migrate

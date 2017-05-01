@@ -12,6 +12,7 @@ web_api:
     - AWS_REGION=us-east-1
     - AWS_SQS_URL=sqs
     - AWS_SQS_PORT=4568
+    - EMAILER_QUEUE=emailer
   volumes:
     - ./web-api:/usr/src/app
   volumes_from:
@@ -41,6 +42,28 @@ app:
     - app_node_modules
 
 app_node_modules:
+  image: busybox
+  volumes:
+    - /usr/src/app/node_modules
+
+emailer:
+  build: ./emailer
+  volumes:
+    - ./emailer:/usr/src/app
+  volumes_from:
+    - emailer_node_modules
+  environment:
+    - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+    - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    - AWS_REGION=us-east-1
+    - AWS_SQS_QUEUE_NAME=emailer
+    - AWS_SQS_URL=sqs
+    - AWS_SQS_PORT=4568
+    - FROM_EMAIL=pnagel5@gmail.com
+  links:
+    - sqs
+
+emailer_node_modules:
   image: busybox
   volumes:
     - /usr/src/app/node_modules
