@@ -123,9 +123,15 @@ exports.register = (server, options, next) => {
             })
           })
           .then(() => {
-            return reply().code(201)
+            return {
+              token: Jwt.sign({
+                id: user.id
+              }, options.key, {
+                expiresIn: options.sessionLength
+              })
+            }
           })
-          .catch(reply)
+          .asCallback(reply)
         },
         validate: {
           payload: {

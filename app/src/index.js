@@ -1,9 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import './index.css';
+import {render} from 'react-dom';
+import routes from './routes';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-);
+function boot({container}) {
+  render(routes(), container);
+}
+
+boot({
+  container: document.getElementById('root')
+});

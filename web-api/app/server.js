@@ -13,7 +13,7 @@ const server = new Hapi.Server({
   }
 })
 
-server.connection({port: 4000})
+server.connection({port: 4000, routes: {cors: true}})
 
 server.register([
   {
