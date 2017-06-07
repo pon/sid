@@ -5,9 +5,10 @@ exports.register = function (server, options, next) {
       host: options.config.host,
       dialect: options.config.dialect,
       define: {
+        paranoid: true,
         createdAt: 'created_at',
-        updatedAt: false,
-        deletedAt: false
+        updatedAt: 'updated_at',
+        deletedAt: 'deleted_at'
       },
       logging: false
     })

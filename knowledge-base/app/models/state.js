@@ -5,6 +5,10 @@ module.exports = db => {
     id: {type: Sequelize.STRING(2), primaryKey: true},
     name: {type: Sequelize.STRING(255), allowNull: false}
   }, {
-    createdAt: false
+    timestamps: false,
+    parnoid: false,
+    createdAt: false,
+    updatedAt: false,
+    deletedAt: false
   })
 }

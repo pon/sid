@@ -2,12 +2,23 @@ const Joi = require('joi')
 
 exports.register = (server, options, next) => {
   const schemas = {
-    address: Joi.object().keys({
-      streetOne: Joi.string().max(255).required(),
-      streetTwo: Joi.string().max(255),
+    addressCreate: Joi.object().keys({
+      user_id: Joi.string().max(255).required(),
+      street_one: Joi.string().max(255).required(),
+      street_two: Joi.string().max(255),
       city: Joi.string().max(255).required(),
       state: Joi.string().max(2).required(),
-      zipCode: Joi.string().regex(/[0-9]/).max(9).required()
+      zip_code: Joi.string().regex(/[0-9]/).max(9).required()
+    }),
+    addressUpdate: Joi.object().keys({
+      street_one: Joi.string().max(255),
+      street_two: Joi.string().max(255),
+      city: Joi.string().max(255),
+      state: Joi.string().max(2),
+      zip_code: Joi.string().regex(/[0-9]/).max(9)
+    }),
+    getAddressQuery: Joi.object().keys({
+      as_of: Joi.number().integer().optional()
     })
   }
 

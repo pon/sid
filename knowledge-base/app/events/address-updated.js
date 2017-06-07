@@ -1,10 +1,9 @@
-'use strict'
+'use strict';
 
-module.exports = class AddressCreated {
-  constructor(args) {
-    this._type = 'ADDRESS_CREATED'
-    this._id = args.id
-    this._user_id = args.user_id
+module.exports = class AddressUpdated {
+  constructor(id, args) {
+    this._type = 'ADDRESS_UPDATED'
+    this._id = id
     this._street_one = args.street_one
     this._street_two = args.street_two
     this._city = args.city
@@ -14,8 +13,6 @@ module.exports = class AddressCreated {
 
   toJSON() {
     return {
-      id: this._id,
-      user_id: this._user_id,
       street_one: this._street_one,
       street_two: this._street_two,
       city: this._city,
@@ -30,7 +27,6 @@ module.exports = class AddressCreated {
   // Basic Getters
   get id() {return this._id}
   get type() {return this._type}
-  get user_id() {return this._user_id}
   get street_one() {return this._street_one}
   get street_two() {return this._street_two}
   get city() {return this._city}

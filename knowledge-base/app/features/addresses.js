@@ -1,14 +1,77 @@
-const Joi     = require('joi')
+const Joi = require('joi')
+const P   = require('bluebird')
 
 exports.register = (server, options, next) => {
 
   const Events = options.events
 
   const Address = server.plugins.db.models.Address
+  const Event   = server.plugins.db.models.Event
   const State   = server.plugins.db.models.State
+
   server.route([{
+    method: 'GET',
+    path: '/addresses/{addressId}',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return P.resolve()
+        .then(() => {
+          if (!request.query.as_of) {
+            return Address.findById(request.params.addressId)
+            .then(address => {
+              if (!address) throw server.plugins.errors.addressNotFound
+              return address
+            })
+          }
+
+          return Event.findAll({
+            where: {aggregate_id: request.params.addressId},
+            order: [['id', 'ASC']]
+          })
+          .filter(event => {
+            return event.created_at.getTime() <= request.query.as_of
+          })
+          .then(events => {
+            if (!events.length) throw server.plugins.errors.addressNotFound
+            const address = Address.build()
+            events.forEach(event => {
+              address.process(event)
+            })
+
+            return address
+          })
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'GET',
+    path: '/addresses/{addressId}/events',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Event.findAll({
+          where: {aggregate_id: request.params.addressId},
+          order: [['id', 'ASC']]
+        })
+        .map(event => {
+          const as_of = event.created_at.getTime()
+          return {
+            id: event.id,
+            type: event.type,
+            meta_data: event.meta_data,
+            payload: event.payload,
+            created_at: as_of,
+            url: `/addresses/${request.params.addressId}?as_of=${as_of}`
+          }
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
     method: 'POST',
-    path: '/users/{userId}/addresses',
+    path: '/addresses',
     config: {
       tags: ['api'],
       handler: (request, reply) => {
@@ -17,12 +80,12 @@ exports.register = (server, options, next) => {
           if (!state) throw server.plugins.errors.invalidState
 
           return Address.create({
-            user_id: request.params.userId,
-            street_one: request.payload.streetOne,
-            street_two: request.payload.streetTwo,
+            user_id: request.payload.user_id,
+            street_one: request.payload.street_one,
+            street_two: request.payload.street_two,
             city: request.payload.city,
             state_id: state.id,
-            zip_code: request.payload.zipCode
+            zip_code: request.payload.zip_code
           })
           .then(address => {
             const AddressCreatedEvent = new Events.ADDRESS_CREATED(address)
@@ -32,7 +95,142 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
-        payload: server.plugins.schemas.address
+        payload: server.plugins.schemas.addressCreate,
+        options: {stripUnknown: true}
+      }
+    }
+  }, {
+    method: 'PATCH',
+    path: '/addresses/{addressId}',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        let state
+        return P.resolve()
+        .then(() => {
+          if (request.payload.state) {
+            return State.findById(request.payload.state.toUpperCase())
+            .then(_state => {
+              if (!_state) throw server.plugins.errors.invalidState
+              state = _state
+            })
+          }
+        })
+        .then(() => {
+          return Address.findById(request.params.addressId)
+        })
+        .then(address => {
+          if (!address) throw server.plugins.errors.addressNotFound
+
+          let addressUpdate = Object.keys(request.payload).reduce((agg, key) => {
+            if (request.payload[key] !== undefined && key !== 'state') {
+              agg[key] = request.payload[key]
+            }
+
+            return agg
+          }, {});
+
+          if (state) {
+            addressUpdate.state_id = state.id
+          }
+
+          return address.update(addressUpdate)
+          .then(address => {
+            const AddressUpdatedEvent = new Events.ADDRESS_UPDATED(
+              request.params.addressId,
+              addressUpdate
+            )
+            server.emit('KB', AddressUpdatedEvent)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        payload: server.plugins.schemas.addressUpdate,
+        options: {stripUnknown: true}
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/addresses/{addressId}/verify',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Address.findById(request.params.addressId)
+        .then(address => {
+          if (!address) {
+            throw server.plugins.errors.addressNotFound
+          } else if (address.verified) {
+            throw server.plugins.errors.addressAlreadyVerified
+          }
+
+          return address.update({verified: true, verified_at: new Date()})
+          .then(() => {
+            const AddressVerifiedEvent = new Events.ADDRESS_VERIFIED(request.params.addressId)
+            server.emit('KB', AddressVerifiedEvent)
+          })
+          .asCallback(reply)
+        })
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/addresses/{addressId}/unverify',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Address.findById(request.params.addressId)
+        .then(address => {
+          if (!address) {
+            throw server.plugins.errors.addressNotFound
+          } else if (!address.verified) {
+            throw server.plugins.errors.addressNotVerified
+          }
+
+          return address.update({verified: false, verified_at: null})
+          .then(() => {
+            const AddressUnverifiedEvent = new Events.ADDRESS_UNVERIFIED(request.params.addressId)
+            server.emit('KB', AddressUnverifiedEvent)
+          })
+          .asCallback(reply)
+        })
+      }
+    }
+
+  }, {
+    method: 'DELETE',
+    path: '/addresses/{addressId}',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Address.findById(request.params.addressId)
+        .then(address => {
+          if (!address) throw server.plugins.errors.addressNotFound
+          return address.destroy()
+          .then(() => {
+            const AddressDeletedEvent = new Events.ADDRESS_DELETED(request.params.addressId)
+            server.emit('KB', AddressDeletedEvent)
+          })
+          .asCallback(reply)
+        })
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/addresses/{addressId}/restore',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Address.findById(request.params.addressId, {paranoid: false})
+        .then(address => {
+          if (!address) throw server.plugins.errors.addressNotFound
+          return address.restore()
+          .then(() => {
+            const AddressRestoredEvent = new Events.ADDRESS_RESTORED(request.params.addressId)
+            server.emit('KB', AddressRestoredEvent)
+          })
+        })
+        .asCallback(reply)
       }
     }
   }])

@@ -7,5 +7,9 @@ module.exports = db => {
     type: {type: Sequelize.STRING(255), allowNull: false},
     meta_data: {type: Sequelize.JSON, defaultValue: {}, allowNull: false},
     payload: {type: Sequelize.JSON, defaultValue: {}, allowNull: false}
+  }, {
+    paranoid: false,
+    updatedAt: false,
+    deletedAt: false
   })
 }

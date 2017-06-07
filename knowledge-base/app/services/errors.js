@@ -2,7 +2,10 @@ const Boom = require('boom')
 
 exports.register = (server, options, next) => {
   const errors = {
-    invalidState: Boom.badRequest('state does not exist')
+    invalidState: Boom.badRequest('state does not exist'),
+    addressAlreadyVerified: Boom.badRequest('address already verified'),
+    addressNotFound: Boom.notFound('address does not exist'),
+    addressNotVerified: Boom.badRequest('address not verified')
   }
 
   server.expose(errors)
