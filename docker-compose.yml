@@ -27,6 +27,31 @@ web_api_node_modules:
   volumes:
     - /usr/src/app/node_modules
 
+knowledge_base:
+  build: ./knowledge-base
+  ports:
+    - "5000:5000"
+  environment:
+    - DATABASE_DATABASE=knowledge_base
+    - DATABASE_USERNAME=knowledge_base
+    - DATABASE_PASSWORD=knowledge_base
+    - DATABASE_HOST=knowledge_base_pg
+    - AWS_ACCESS_KEY_ID=key
+    - AWS_SECRET_ACCESS_KEY=key
+    - AWS_REGION=us-east-1
+  volumes:
+    - ./knowledge-base:/usr/src/app
+  volumes_from:
+    - knowledge_base_node_modules
+  links:
+    - knowledge_base_pg
+    - knowledge_base_testpg
+
+knowledge_base_node_modules:
+  image: busybox
+  volumes:
+    - /usr/src/app/node_modules
+
 web:
   build: ./web
   ports:
@@ -79,6 +104,17 @@ pg:
     - POSTGRES_PASSWORD=sid
     - POSTGRES_DB=sid
 
+knowledge_base_pg:
+  image: postgres:9.4.5
+  ports:
+    - "5434:5432"
+  volumes_from:
+    - knowledge_base_pg_data
+  environment:
+    - POSTGRES_USER=knowledge_base
+    - POSTGRES_PASSWORD=knowledge_base
+    - POSTGRES_DB=knowledge_base
+
 testpg:
   image: postgres:9.4.5
   environment:
@@ -86,7 +122,19 @@ testpg:
     - POSTGRES_PASSWORD=sid
     - POSTGRES_DB=sid_test
 
+knowledge_base_testpg:
+  image: postgres:9.4.5
+  environment:
+    - POSTGRES_USER=knowledge_base
+    - POSTGRES_PASSWORD=knowledge_base
+    - POSTGRES_DB=knowledge_base_test
+
 pg-data:
+  image: busybox
+  volumes:
+    - "/var/lib/postgresql/data"
+
+knowledge_base_pg_data:
   image: busybox
   volumes:
     - "/var/lib/postgresql/data"

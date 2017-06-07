@@ -20,9 +20,12 @@ function bootstrap {
   ${DC} build web
   ${DC} build app
   ${DC} build emailer
+  ${DC} build knowledge_base
 
   ${DC} run web_api npm run migrate
+  ${DC} run knowledge_base npm run migrate
   ${DC} run -e DATABASE_HOST=testpg -e DATABASE_DATABASE=sid_test web_api npm run migrate
+  ${DC} run -e DATABASE_HOST=knowledge_base_testpg -e DATABASE_DATABASE=knowledge_base_test knowledge_base npm run migrate
 }
 
 function start {
