@@ -1,13 +1,16 @@
 'use strict';
 
 module.exports = class AddressVerified {
-  constructor(id) {
+  constructor(id, verifiedAt) {
     this._type = 'ADDRESS_VERIFIED'
     this._id = id
+    this._verified_at = verifiedAt || new Date()
   }
 
   toJSON() {
-    return {}
+    return {
+      verified_at: this._verified_at
+    }
   }
 
   // Aggregate ID
@@ -16,4 +19,5 @@ module.exports = class AddressVerified {
   // Basic Getters
   get id() {return this._id}
   get type() {return this._type}
+  get verified_at() {return this._verified_at}
 }

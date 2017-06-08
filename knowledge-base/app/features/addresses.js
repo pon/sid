@@ -18,7 +18,7 @@ exports.register = (server, options, next) => {
         return P.resolve()
         .then(() => {
           if (!request.query.as_of) {
-            return Address.findById(request.params.addressId)
+            return Address.findOne({where: {id: request.params.addressId, deleted_at: null}})
             .then(address => {
               if (!address) throw server.plugins.errors.addressNotFound
               return address
@@ -36,7 +36,7 @@ exports.register = (server, options, next) => {
             if (!events.length) throw server.plugins.errors.addressNotFound
             const address = Address.build()
             events.forEach(event => {
-              address.process(event)
+              address.process(event.type, event.payload, true)
             })
 
             return address
@@ -79,7 +79,10 @@ exports.register = (server, options, next) => {
         .then(state => {
           if (!state) throw server.plugins.errors.invalidState
 
-          return Address.create({
+          const address = Address.build()
+
+          const AddressCreatedEvent = new Events.ADDRESS_CREATED({
+            id: address.id,
             user_id: request.payload.user_id,
             street_one: request.payload.street_one,
             street_two: request.payload.street_two,
@@ -87,8 +90,9 @@ exports.register = (server, options, next) => {
             state_id: state.id,
             zip_code: request.payload.zip_code
           })
-          .then(address => {
-            const AddressCreatedEvent = new Events.ADDRESS_CREATED(address)
+
+          return address.process(AddressCreatedEvent.type, AddressCreatedEvent.toJSON())
+          .then(() => {
             server.emit('KB', AddressCreatedEvent)
           })
         })
@@ -134,12 +138,13 @@ exports.register = (server, options, next) => {
             addressUpdate.state_id = state.id
           }
 
-          return address.update(addressUpdate)
-          .then(address => {
-            const AddressUpdatedEvent = new Events.ADDRESS_UPDATED(
-              request.params.addressId,
-              addressUpdate
-            )
+          const AddressUpdatedEvent = new Events.ADDRESS_UPDATED(
+            address.id,
+            addressUpdate
+          )
+
+          return address.process(AddressUpdatedEvent.type, AddressUpdatedEvent.toJSON())
+          .then(() => {
             server.emit('KB', AddressUpdatedEvent)
           })
         })
@@ -164,9 +169,10 @@ exports.register = (server, options, next) => {
             throw server.plugins.errors.addressAlreadyVerified
           }
 
-          return address.update({verified: true, verified_at: new Date()})
+          const AddressVerifiedEvent = new Events.ADDRESS_VERIFIED(request.params.addressId)
+
+          return address.process(AddressVerifiedEvent.type, AddressVerifiedEvent.toJSON())
           .then(() => {
-            const AddressVerifiedEvent = new Events.ADDRESS_VERIFIED(request.params.addressId)
             server.emit('KB', AddressVerifiedEvent)
           })
           .asCallback(reply)
@@ -187,9 +193,10 @@ exports.register = (server, options, next) => {
             throw server.plugins.errors.addressNotVerified
           }
 
-          return address.update({verified: false, verified_at: null})
+          const AddressUnverifiedEvent = new Events.ADDRESS_UNVERIFIED(request.params.addressId)
+
+          return address.process(AddressUnverifiedEvent.type, AddressUnverifiedEvent.toJSON())
           .then(() => {
-            const AddressUnverifiedEvent = new Events.ADDRESS_UNVERIFIED(request.params.addressId)
             server.emit('KB', AddressUnverifiedEvent)
           })
           .asCallback(reply)
@@ -206,9 +213,10 @@ exports.register = (server, options, next) => {
         return Address.findById(request.params.addressId)
         .then(address => {
           if (!address) throw server.plugins.errors.addressNotFound
-          return address.destroy()
+
+          const AddressDeletedEvent = new Events.ADDRESS_DELETED(request.params.addressId)
+          return address.process(AddressDeletedEvent.type, AddressDeletedEvent.toJSON())
           .then(() => {
-            const AddressDeletedEvent = new Events.ADDRESS_DELETED(request.params.addressId)
             server.emit('KB', AddressDeletedEvent)
           })
           .asCallback(reply)
@@ -224,9 +232,10 @@ exports.register = (server, options, next) => {
         return Address.findById(request.params.addressId, {paranoid: false})
         .then(address => {
           if (!address) throw server.plugins.errors.addressNotFound
-          return address.restore()
+
+          const AddressRestoredEvent = new Events.ADDRESS_RESTORED(request.params.addressId)
+          return address.process(AddressRestoredEvent.type, AddressRestoredEvent.toJSON())
           .then(() => {
-            const AddressRestoredEvent = new Events.ADDRESS_RESTORED(request.params.addressId)
             server.emit('KB', AddressRestoredEvent)
           })
         })

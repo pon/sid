@@ -11,39 +11,49 @@ module.exports = db => {
     zip_code: {type: Sequelize.STRING(9), allowNull: false},
     country_id: {type: Sequelize.STRING(2), allowNull: false, defaultValue: 'US'},
     verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},
-    verified_at: Sequelize.DATE
+    verified_at: Sequelize.DATE,
+    deleted_at: Sequelize.DATE
   }, {
+    paranoid: false,
+    deletedAt: false,
     instanceMethods: {
-      process: function (event) {
-        switch (event.type) {
+      process: function (eventType, event, inMemory = false) {
+        switch (eventType) {
           case 'ADDRESS_CREATED':
-            this.id = event.payload.id
-            this.user_id = event.payload.user_id
-            this.street_one = event.payload.street_one
-            this.street_two = event.payload.street_two
-            this.city = event.payload.city
-            this.state_id = event.payload.state_id
-            this.zip_code = event.payload.zip_code
-            this.deleted_at = null
+            this.id = event.id
+            this.user_id = event.user_id
+            this.street_one = event.street_one
+            this.street_two = event.street_two
+            this.city = event.city
+            this.state_id = event.state_id
+            this.zip_code = event.zip_code
+            if (!inMemory) return this.save()
             break
           case 'ADDRESS_UPDATED':
-            Object.keys(event.payload).forEach(key => {
-              this[key] = event.payload[key]
+            ['street_one', 'street_two', 'city', 'state_id', 'zip_code'].forEach(key => {
+              if (event[key] !== undefined) {
+                this[key] = event[key]
+              }
             })
+            if (!inMemory) return this.save()
             break
           case 'ADDRESS_DELETED':
-            this.deleted_at = event.created_at
+            this.deleted_at = event.deleted_at
+            if (!inMemory) return this.save()
             break
           case 'ADDRESS_RESTORED':
             this.deleted_at = null
+            if (!inMemory) return this.save()
             break
           case 'ADDRESS_VERIFIED':
             this.verified = true
-            this.verified_at = event.created_at
+            this.verified_at = event.verified_at
+            if (!inMemory) return this.save()
             break
           case 'ADDRESS_UNVERIFIED':
             this.verified = false
             this.verified_at = null
+            if (!inMemory) return this.save()
             break
           default:
             console.log(event.type, 'event not supported')
