@@ -6,6 +6,8 @@ module.exports = db => {
     user_id: {type: Sequelize.STRING(255), allowNull: false},
     status: {type: Sequelize.ENUM('CURRENT', 'FUTURE'), allowNull: false},
     employer_name: {type: Sequelize.STRING(255), allowNull: false},
+    start_month: {type:Sequelize.INTEGER, allowNull: false},
+    start_year: {type: Sequelize.INTEGER, allowNull: false},
     is_self_employed: {type: Sequelize.BOOLEAN, allowNull: false},
     self_employed_details: {type: Sequelize.JSON},
     stated_income: {type: Sequelize.INTEGER, allowNull: false},
@@ -27,6 +29,8 @@ module.exports = db => {
             this.is_self_employed = event.is_self_employed
             this.self_employed_details = event.self_employed_details
             this.stated_income = event.stated_income
+            this.start_month = event.start_month
+            this.start_year = event.start_year
 
             if (!inMemory) return this.save()
             break
@@ -36,7 +40,9 @@ module.exports = db => {
               'employer_name',
               'is_self_employed',
               'self_employed_details',
-              'stated_income'
+              'stated_income',
+              'start_month',
+              'start_year'
             ].forEach(key => {
               if (event[key] !== undefined) {
                 this[key] = event[key]

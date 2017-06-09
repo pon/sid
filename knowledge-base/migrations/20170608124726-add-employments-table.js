@@ -10,6 +10,8 @@ module.exports = {
       user_id: {type: Sequelize.STRING(255), allowNull: false},
       status: {type: Sequelize.ENUM('CURRENT', 'FUTURE'), allowNull: false},
       employer_name: {type: Sequelize.STRING(255), allowNull: false},
+      start_month: {type: Sequelize.INTEGER, allowNull: false},
+      start_year: {type: Sequelize.INTEGER, allowNull: false},
       is_self_employed: {type: Sequelize.BOOLEAN, allowNull: false},
       self_employed_details: {type: Sequelize.JSON},
       stated_income: {type: Sequelize.INTEGER, allowNull: false},

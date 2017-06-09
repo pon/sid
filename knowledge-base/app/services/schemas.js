@@ -24,6 +24,8 @@ exports.register = (server, options, next) => {
       user_id: Joi.string().max(255).required(),
       status: Joi.valid('CURRENT', 'FUTURE').required(),
       employer_name: Joi.string().max(255).required(),
+      start_month: Joi.number().integer().min(1).max(12).required(),
+      start_year: Joi.number().integer().min(1900).required(),
       is_self_employed: Joi.boolean().required(),
       self_employed_details: Joi.object(),
       stated_income: Joi.number().integer().required()
@@ -31,6 +33,8 @@ exports.register = (server, options, next) => {
     employmentUpdate: Joi.object().keys({
       status: Joi.valid('CURRENT', 'FUTURE'),
       employer_name: Joi.string().max(255),
+      start_month: Joi.number().integer().min(1).max(12),
+      start_year: Joi.number().integer().min(1900),
       is_self_employed: Joi.boolean(),
       self_employed_details: Joi.object(),
       stated_income: Joi.number().integer()
