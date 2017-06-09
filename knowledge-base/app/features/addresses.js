@@ -121,7 +121,7 @@ exports.register = (server, options, next) => {
           }
         })
         .then(() => {
-          return Address.findById(request.params.addressId)
+          return Address.findOne({where: {id: request.params.addressId, deleted_at: null}})
         })
         .then(address => {
           if (!address) throw server.plugins.errors.addressNotFound
@@ -161,7 +161,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Address.findById(request.params.addressId)
+        return Address.findOne({where: {id: request.params.addressId, deleted_at: null}})
         .then(address => {
           if (!address) {
             throw server.plugins.errors.addressNotFound
@@ -185,7 +185,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Address.findById(request.params.addressId)
+        return Address.findOne({where: {id: request.params.addressId, deleted_at: null}})
         .then(address => {
           if (!address) {
             throw server.plugins.errors.addressNotFound
@@ -210,7 +210,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Address.findById(request.params.addressId)
+        return Address.findOne({where: {id: request.params.addressId, deleted_at: null}})
         .then(address => {
           if (!address) throw server.plugins.errors.addressNotFound
 
@@ -229,7 +229,12 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Address.findById(request.params.addressId, {paranoid: false})
+        return Address.findOne({
+          where: {
+            id: request.params.addressId,
+            deleted_at: {$ne: null}
+          }
+        })
         .then(address => {
           if (!address) throw server.plugins.errors.addressNotFound
 

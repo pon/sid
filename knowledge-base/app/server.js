@@ -45,10 +45,13 @@ server.register([
     require('./event-handlers'),
     {
       register: require('./features/addresses'),
-      options: {
-        events: require('./events')
-      }
+      options: {events: require('./events')}
+    },
+    {
+      register: require('./features/employments'),
+      options: {events: require('./events')}
     }
+
   ], err => {
     if (err) throw err
     server.start(err => {
