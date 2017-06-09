@@ -17,7 +17,7 @@ exports.register = (server, options, next) => {
       state: Joi.string().max(2),
       zip_code: Joi.string().regex(/[0-9]/).max(9)
     }),
-    getAddressQuery: Joi.object().keys({
+    asOfQuery: Joi.object().keys({
       as_of: Joi.number().integer().optional()
     }),
     employmentCreate: Joi.object().keys({

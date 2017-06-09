@@ -9,6 +9,67 @@ exports.register = (server, options, next) => {
   const Event      = server.plugins.db.models.Event
 
   server.route([{
+    method: 'GET',
+    path: '/employments/{employmentId}',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return P.resolve()
+        .then(() => {
+          if (!request.query.as_of) {
+            return Employment.findOne({where: {id: request.params.employmentId, deleted_at: null}})
+            .then(employment => {
+              if (!employment) throw server.plugins.errors.employmentNotFound
+                return employment
+            })
+          }
+
+          return Event.findAll({
+            where: {aggregate_id: request.params.employmentId},
+            order: [['id', 'ASC']]
+          })
+          .filter(event => {
+            return event.created_at.getTime() <= request.query.as_of
+          })
+          .then(events => {
+            if (!events.length) throw server.plugins.errors.employmentNotFound
+            const employment = Employment.build()
+            events.forEach(event => {
+              employment.process(event.type, event.payload, true)
+            })
+
+            return employment
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {query: server.plugins.schemas.asOfQuery}
+    }
+  }, {
+    method: 'GET',
+    path: '/employments/{employmentId}/events',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Event.findAll({
+          where: {aggregate_id: request.params.employmentId},
+          order: [['id', 'ASC']]
+        })
+        .map(event => {
+          const as_of = event.created_at.getTime()
+          return {
+            id: event.id,
+            type: event.type,
+            meta_data: event.meta_data,
+            payload: event.payload,
+            created_at: event.created_at,
+            url: `/employments/${request.params.employmentId}?as_of=${as_of}`
+          }
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
     method: 'POST',
     path: '/employments',
     config: {

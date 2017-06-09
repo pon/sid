@@ -43,7 +43,8 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
-      }
+      },
+      validate: {query: server.plugins.schemas.asOfQuery}
     }
   }, {
     method: 'GET',
