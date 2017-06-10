@@ -41,6 +41,22 @@ exports.register = (server, options, next) => {
     }),
     employmentVerify: Joi.object().keys({
       verified_income: Joi.number().integer().required()
+    }),
+    leaseCreate: Joi.object().keys({
+      user_id: Joi.string().max(255).required(),
+      address_id: Joi.string().max(255).required(),
+      security_deposit: Joi.number().integer().min(0).required(),
+      monthly_rent: Joi.number().integer().min(0).required(),
+      start_date: Joi.date().required(),
+      end_date: Joi.date().required(),
+      term_months: Joi.number().integer().min(1).required()
+    }),
+    leaseUpdate: Joi.object().keys({
+      security_deposit: Joi.number().integer().min(0),
+      monthly_rent: Joi.number().integer().min(0),
+      start_date: Joi.date(),
+      end_date: Joi.date(),
+      term_months: Joi.number().integer().min(1)
     })
   }
 

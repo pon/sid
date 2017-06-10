@@ -63,7 +63,7 @@ exports.register = (server, options, next) => {
             type: event.type,
             meta_data: event.meta_data,
             payload: event.payload,
-            created_at: as_of,
+            created_at: event.created_at,
             url: `/addresses/${request.params.addressId}?as_of=${as_of}`
           }
         })

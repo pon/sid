@@ -50,8 +50,11 @@ server.register([
     {
       register: require('./features/employments'),
       options: {events: require('./events')}
+    },
+    {
+      register: require('./features/leases'),
+      options: {events: require('./events')}
     }
-
   ], err => {
     if (err) throw err
     server.start(err => {
