@@ -168,55 +168,6 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       }
     }
-  }, {
-    method: 'POST',
-    path: '/leases/{leaseId}/verify',
-    config: {
-      tags: ['api'],
-      handler: (request, reply) => {
-        return Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
-        .then(lease => {
-          if (!lease) {
-            throw server.plugins.errors.leaseNotFound
-          } else if (lease.verified) {
-            throw server.plugins.errors.leaseAlreadyVerified
-          }
-
-          const LeaseVerifiedEvent = new Events.LEASE_VERIFIED(Lease.id)
-
-          return lease.process(LeaseVerifiedEvent.type, LeaseVerifiedEvent.toJSON()
-          )
-          .then(() => {
-            server.emit('KB', LeaseVerifiedEvent)
-          })
-        })
-        .asCallback(reply)
-      }
-    }
-  }, {
-    method: 'POST',
-    path: '/leases/{leaseId}/unverify',
-    config: {
-      tags: ['api'],
-      handler: (request, reply) => {
-        return Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
-        .then(lease => {
-          if (!lease) {
-            throw server.plugins.errors.leaseNotFound
-          } else if (!lease.verified) {
-            throw server.plugins.errors.leaseNotVerified
-          }
-
-          const LeaseUnverifiedEvent = new Events.LEASE_UNVERIFIED(Request.params.leaseId)
-
-          return lease.process(LeaseUnverifiedEvent.type, LeaseUnverifiedEvent.toJSON())
-          .then(() => {
-            server.emit('KB', LeaseUnverifiedEvent)
-          })
-        })
-        .asCallback(reply)
-      }
-    }
   }])
 
   next()

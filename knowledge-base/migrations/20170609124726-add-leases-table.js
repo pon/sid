@@ -18,8 +18,6 @@ module.exports = {
       start_date: {type: Sequelize.DATE, allowNull: false},
       end_date: {type: Sequelize.DATE, allowNull: false},
       term_months: {type: Sequelize.INTEGER, allowNull: false},
-      verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},
-      verified_at: Sequelize.DATE,
       created_at: {type: Sequelize.DATE, allowNull: false},
       updated_at: {type: Sequelize.DATE, allowNull: false},
       deleted_at: {type: Sequelize.DATE}

@@ -19,8 +19,6 @@ module.exports = db => {
     start_date: {type: Sequelize.DATE, allowNull: false},
     end_date: {type: Sequelize.DATE, allowNull: false},
     term_months: {type: Sequelize.INTEGER, allowNull: false},
-    verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},
-    verified_at: Sequelize.DATE,
     deleted_at: {type: Sequelize.DATE}
   }, {
     paranoid: false,
@@ -59,16 +57,6 @@ module.exports = db => {
             break
           case 'LEASE_RESTORED':
             this.deleted_at = null
-            if (!inMemory) return this.save()
-            break
-          case 'LEASE_VERIFIED':
-            this.verified_at = event.verified_at
-            this.verified = true
-            if (!inMemory) return this.save()
-            break
-          case 'LEASE_UNVERIFIED':
-            this.verified_at = null
-            this.verified = false
             if (!inMemory) return this.save()
             break
           default:
