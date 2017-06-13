@@ -281,6 +281,10 @@ class KnowledgeBaseClient {
     .then(res => res.body)
   }
 
+  getUserApplications(userId) {
+    return this._get(`/users/${userId}/applications`).then(res => res.body)
+  }
+
   applicationApply(applicationId) {
     return this._post(`/applications/${applicationId}/apply`)
   }
@@ -306,3 +310,5 @@ class KnowledgeBaseClient {
     })
   }
 }
+
+module.exports = KnowledgeBaseClient

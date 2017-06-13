@@ -1,7 +1,6 @@
 const Hapi = require('hapi')
 const Pkg = require('../package.json')
 
-require('./clients/knowledge-base-client')
 
 const Bunyan = require('bunyan')
 const logger = Bunyan.createLogger({name: Pkg.name, level: 'debug'})
@@ -16,6 +15,8 @@ const server = new Hapi.Server({
 })
 
 server.connection({port: 4000, routes: {cors: true}})
+
+const KBClient = require('./clients/knowledge-base-client')
 
 server.register([
   {
@@ -39,6 +40,15 @@ server.register([
         dialect: 'postgres'
       },
       models: require('./models')
+    }
+  },
+  {
+    register: require('./services/clients'),
+    options: {
+      knowledgeBaseClient: new KBClient({
+        url: process.env.KNOWLEDGE_BASE_URL,
+        logger: message => {server.log(['clients', 'kb'], message)}
+      })
     }
   },
   require('./services/documentation'),

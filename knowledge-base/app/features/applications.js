@@ -101,6 +101,27 @@ exports.register = (server, options, next) => {
       }
     }
   }, {
+    method: 'GET',
+    path: '/users/{userId}/applications',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Application.findAll({
+          where: {user_id: request.params.userId, deleted_at: null},
+          order: [['created_at', 'DESC']]
+        })
+        .map(application => {
+          return {
+            id: application.id,
+            status: application.status,
+            url: `/applications/${application.id}`,
+            created_at: application.created_at
+          }
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
     method: 'POST',
     path: '/applications',
     config: {
