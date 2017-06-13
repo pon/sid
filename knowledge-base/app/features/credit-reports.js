@@ -42,7 +42,6 @@ exports.register = (server, options, next) => {
         .then(() => {
           const creditReport = CreditReport.build()
           request.payload.id = creditReport.id
-          console.log(request.payload)
 
           const CreditReportCreatedEvent = new Events.CREDIT_REPORT_CREATED(request.payload)
 
