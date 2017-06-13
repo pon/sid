@@ -18,8 +18,6 @@ module.exports = {
       },
       zip_code: {type: Sequelize.STRING(9), allowNull: false},
       country_id: {type: Sequelize.STRING(2), defaultValue: 'US', allowNull: false},
-      verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},
-      verified_at: Sequelize.DATE,
       created_at: {type: Sequelize.DATE, allowNull: false},
       updated_at: {type: Sequelize.DATE, allowNull: false},
       deleted_at: {type: Sequelize.DATE}

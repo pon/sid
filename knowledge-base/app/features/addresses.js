@@ -157,55 +157,6 @@ exports.register = (server, options, next) => {
       }
     }
   }, {
-    method: 'POST',
-    path: '/addresses/{addressId}/verify',
-    config: {
-      tags: ['api'],
-      handler: (request, reply) => {
-        return Address.findOne({where: {id: request.params.addressId, deleted_at: null}})
-        .then(address => {
-          if (!address) {
-            throw server.plugins.errors.addressNotFound
-          } else if (address.verified) {
-            throw server.plugins.errors.addressAlreadyVerified
-          }
-
-          const AddressVerifiedEvent = new Events.ADDRESS_VERIFIED(request.params.addressId)
-
-          return address.process(AddressVerifiedEvent.type, AddressVerifiedEvent.toJSON())
-          .then(() => {
-            server.emit('KB', AddressVerifiedEvent)
-          })
-          .asCallback(reply)
-        })
-      }
-    }
-  }, {
-    method: 'POST',
-    path: '/addresses/{addressId}/unverify',
-    config: {
-      tags: ['api'],
-      handler: (request, reply) => {
-        return Address.findOne({where: {id: request.params.addressId, deleted_at: null}})
-        .then(address => {
-          if (!address) {
-            throw server.plugins.errors.addressNotFound
-          } else if (!address.verified) {
-            throw server.plugins.errors.addressNotVerified
-          }
-
-          const AddressUnverifiedEvent = new Events.ADDRESS_UNVERIFIED(request.params.addressId)
-
-          return address.process(AddressUnverifiedEvent.type, AddressUnverifiedEvent.toJSON())
-          .then(() => {
-            server.emit('KB', AddressUnverifiedEvent)
-          })
-          .asCallback(reply)
-        })
-      }
-    }
-
-  }, {
     method: 'DELETE',
     path: '/addresses/{addressId}',
     config: {

@@ -10,8 +10,6 @@ module.exports = db => {
     state_id: {type: Sequelize.STRING(2), allowNull: false},
     zip_code: {type: Sequelize.STRING(9), allowNull: false},
     country_id: {type: Sequelize.STRING(2), allowNull: false, defaultValue: 'US'},
-    verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},
-    verified_at: Sequelize.DATE,
     deleted_at: Sequelize.DATE
   }, {
     paranoid: false,
@@ -43,16 +41,6 @@ module.exports = db => {
             break
           case 'ADDRESS_RESTORED':
             this.deleted_at = null
-            if (!inMemory) return this.save()
-            break
-          case 'ADDRESS_VERIFIED':
-            this.verified = true
-            this.verified_at = event.verified_at
-            if (!inMemory) return this.save()
-            break
-          case 'ADDRESS_UNVERIFIED':
-            this.verified = false
-            this.verified_at = null
             if (!inMemory) return this.save()
             break
           default:
