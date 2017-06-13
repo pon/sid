@@ -39,7 +39,17 @@ server.register([
       models: require('./models')
     }
   },
-  require('./services/documentation')
+  require('./services/documentation'),
+  {
+    register: require('./services/aws'),
+    options: {
+      accessKey: process.env.AWS_ACCESS_KEY_ID,
+      secretKey: process.env.AWS_SECRET_ACCESS_KEY,
+      region: process.env.AWS_REGION,
+      fakeS3Url: process.env.AWS_FAKE_S3_URL,
+      fakeS3Port: process.env.AWS_FAKE_S3_PORT
+    }
+  }
 ], err => {
   server.register([
     require('./event-handlers'),
@@ -54,6 +64,13 @@ server.register([
     {
       register: require('./features/leases'),
       options: {events: require('./events')}
+    },
+    {
+      register: require('./features/uploads'),
+      options: {
+        events: require('./events'),
+        bucket: process.env.UPLOADS_BUCKET
+      }
     }
   ], err => {
     if (err) throw err

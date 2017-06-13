@@ -64,7 +64,7 @@ exports.register = (server, options, next) => {
             meta_data: event.meta_data,
             payload: event.payload,
             created_at: event.created_at,
-            url: `/leases/${request.params.employmentId}?as_of=${as_of}`
+            url: `/leases/${request.params.leaseId}?as_of=${as_of}`
           }
         })
         .asCallback(reply)
@@ -86,7 +86,7 @@ exports.register = (server, options, next) => {
 
           const LeaseCreatedEvent = new Events.LEASE_CREATED(request.payload)
 
-          return lease.process(LeaseCreatedEvent.type, LeaseCreatedEvent)
+          return lease.process(LeaseCreatedEvent.type, LeaseCreatedEvent.toJSON())
           .then(() => {
             server.emit('KB', LeaseCreatedEvent)
           })

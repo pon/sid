@@ -11,7 +11,8 @@ exports.register = (server, options, next) => {
     employmentNotVerified: Boom.badRequest('employment not verified'),
     leaseAlreadyVerified: Boom.badRequest('lease already verified'),
     leaseNotFound: Boom.notFound('lease does not exist'),
-    leaseNotVerified: Boom.badRequest('lease not verified')
+    leaseNotVerified: Boom.badRequest('lease not verified'),
+    uploadNotFound: Boom.notFound('upload does not exist'),
   }
 
   server.expose(errors)

@@ -14,5 +14,8 @@ module.exports = {
   LEASE_CREATED: require('./lease-created'),
   LEASE_DELETED: require('./lease-deleted'),
   LEASE_RESTORED: require('./lease-updated'),
-  LEASE_UPDATED: require('./lease-updated')
+  LEASE_UPDATED: require('./lease-updated'),
+  UPLOAD_CREATED: require('./upload-created'),
+  UPLOAD_DELETED: require('./upload-deleted'),
+  UPLOAD_RESTORED: require('./upload-restored')
 }

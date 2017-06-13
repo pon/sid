@@ -39,6 +39,9 @@ knowledge_base:
     - AWS_ACCESS_KEY_ID=key
     - AWS_SECRET_ACCESS_KEY=key
     - AWS_REGION=us-east-1
+    - AWS_FAKE_S3_URL=s3
+    - AWS_FAKE_S3_PORT=4569
+    - UPLOADS_BUCKET=kb-uploads
   volumes:
     - ./knowledge-base:/usr/src/app
   volumes_from:
@@ -46,6 +49,7 @@ knowledge_base:
   links:
     - knowledge_base_pg
     - knowledge_base_testpg
+    - s3
 
 knowledge_base_node_modules:
   image: busybox
@@ -141,3 +145,6 @@ knowledge_base_pg_data:
 
 sqs:
   image: airdock/fake-sqs
+
+s3:
+  image: lphoward/fake-s3

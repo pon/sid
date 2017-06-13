@@ -57,6 +57,10 @@ exports.register = (server, options, next) => {
       start_date: Joi.date(),
       end_date: Joi.date(),
       term_months: Joi.number().integer().min(1)
+    }),
+    uploadCreate: Joi.object().keys({
+      user_id: Joi.string().max(255).required(),
+      file: Joi.object().required()
     })
   }
 
