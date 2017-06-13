@@ -71,6 +71,12 @@ server.register([
         events: require('./events'),
         bucket: process.env.UPLOADS_BUCKET
       }
+    },
+    {
+      register: require('./features/credit-reports'),
+      options: {
+        events: require('./events')
+      }
     }
   ], err => {
     if (err) throw err

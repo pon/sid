@@ -20,6 +20,11 @@ exports.register = (server, options, next) => {
     asOfQuery: Joi.object().keys({
       as_of: Joi.number().integer().optional()
     }),
+    creditReportCreate: Joi.object().keys({
+      user_id: Joi.string().max(255).required(),
+      raw_credit_report: Joi.object().required(),
+      fico_score: Joi.number().integer().required()
+    }),
     employmentCreate: Joi.object().keys({
       user_id: Joi.string().max(255).required(),
       status: Joi.valid('CURRENT', 'FUTURE').required(),

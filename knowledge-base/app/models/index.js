@@ -14,6 +14,8 @@ module.exports = function (db) {
 
   modelsExport.Address.belongsTo(modelsExport.State, {foreignKey: 'state_id'})
   modelsExport.State.hasMany(modelsExport.Address, {foreignKey: 'state_id'})
+  modelsExport.Lease.belongsTo(modelsExport.Address, {foreignKey: 'address_id'})
+  modelsExport.Address.hasMany(modelsExport.Lease, {foreignKey: 'address_id'})
 
   return modelsExport
 }
