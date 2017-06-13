@@ -77,6 +77,12 @@ server.register([
       options: {
         events: require('./events')
       }
+    },
+    {
+      register: require('./features/applications'),
+      options: {
+        events: require('./events')
+      }
     }
   ], err => {
     if (err) throw err

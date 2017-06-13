@@ -6,6 +6,9 @@ exports.register = (server, options, next) => {
     addressAlreadyVerified: Boom.badRequest('address already verified'),
     addressNotFound: Boom.notFound('address does not exist'),
     addressNotVerified: Boom.badRequest('address not verified'),
+    applicationNotFound: Boom.notFound('application does not exist'),
+    applicationInvalidStatusToApply: Boom.badRequest('application must be applying to apply'),
+    applicationNotReadyToApply: Boom.badRequest('application not ready to apply'),
     creditReportNotFound: Boom.notFound('credit report does not exist'),
     employmentAlreadyVerified: Boom.badRequest('employment already verified'),
     employmentNotFound: Boom.notFound('employment does not exist'),
@@ -13,7 +16,8 @@ exports.register = (server, options, next) => {
     leaseAlreadyVerified: Boom.badRequest('lease already verified'),
     leaseNotFound: Boom.notFound('lease does not exist'),
     leaseNotVerified: Boom.badRequest('lease not verified'),
-    uploadNotFound: Boom.notFound('upload does not exist'),
+    multipleActiveApplications: Boom.badRequest('multiple active applications not allowed'),
+    uploadNotFound: Boom.notFound('upload does not exist')
   }
 
   server.expose(errors)

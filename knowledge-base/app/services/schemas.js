@@ -17,6 +17,18 @@ exports.register = (server, options, next) => {
       state: Joi.string().max(2),
       zip_code: Joi.string().regex(/[0-9]/).max(9)
     }),
+    applicationAttachCreditReport: Joi.object().keys({
+      credit_report_id: Joi.string().max(255).required()
+    }),
+    applicationAttachEmployment: Joi.object().keys({
+      employment_id: Joi.string().max(255).required()
+    }),
+    applicationAttachLease: Joi.object().keys({
+      lease_id: Joi.string().max(255).required()
+    }),
+    applicationCreate: Joi.object().keys({
+      user_id: Joi.string().max(255).required()
+    }),
     asOfQuery: Joi.object().keys({
       as_of: Joi.number().integer().optional()
     }),

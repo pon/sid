@@ -42,6 +42,12 @@ exports.register = (server, options, next) => {
             return lease
           })
         })
+        .then(lease => {
+          lease = lease.toJSON()
+          lease.address = `/addresses/${lease.address_id}`
+          lease.address = lease.address + (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
+          return lease
+        })
         .asCallback(reply)
       },
       validate: {query: server.plugins.schemas.asOfQuery}
