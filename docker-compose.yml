@@ -18,6 +18,7 @@ web_api:
   volumes_from:
     - web_api_node_modules
   links:
+    - knowledge_base
     - pg
     - testpg
     - sqs

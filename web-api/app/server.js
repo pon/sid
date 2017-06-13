@@ -1,6 +1,8 @@
 const Hapi = require('hapi')
 const Pkg = require('../package.json')
 
+require('./clients/knowledge-base-client')
+
 const Bunyan = require('bunyan')
 const logger = Bunyan.createLogger({name: Pkg.name, level: 'debug'})
 process.on('uncaughtException', err => {

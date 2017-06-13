@@ -86,6 +86,7 @@ exports.register = (server, options, next) => {
     method: 'GET',
     path: '/uploads/{uploadId}',
     config: {
+      tags: ['api'],
       handler: (request, reply) => {
         return P.resolve()
         .then(() => {
@@ -133,6 +134,7 @@ exports.register = (server, options, next) => {
     method: 'GET',
     path: '/users/{userId}/uploads',
     config: {
+      tags: ['api'],
       handler: (request, reply) => {
         return Upload.findAll({where: {user_id: request.params.userId, deleted_at: null}})
         .map(upload => {

@@ -61,6 +61,7 @@ exports.register = (server, options, next) => {
     method: 'GET',
     path: '/credit-reports/{creditReportId}',
     config: {
+      tags: ['api'],
       handler: (request, reply) => {
         return P.resolve()
         .then(() => {
