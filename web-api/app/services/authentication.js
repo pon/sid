@@ -121,6 +121,7 @@ exports.register = (server, options, next) => {
           })
           .then(() => {
             return {
+              user_id: user.id,
               token: Jwt.sign({
                 id: user.id
               }, options.key, {

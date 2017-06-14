@@ -79,8 +79,8 @@ exports.register = (server, options, next) => {
       user_id: Joi.string().max(255).required(),
       first_name: Joi.string().max(255).required(),
       last_name: Joi.string().max(255).required(),
-      citizenship: Joi.valid('US_CITIZEN', 'PERM_RESIDENT', 'NON_PERM_RESIDENT').required(),
-      date_of_birth: Joi.date().required()
+      citizenship: Joi.valid('US_CITIZEN', 'PERM_RESIDENT', 'NON_PERM_RESIDENT'),
+      date_of_birth: Joi.date()
     }),
     profileUpdate: Joi.object().keys({
       first_name: Joi.string().max(255),

@@ -6,11 +6,8 @@ module.exports = db => {
     user_id: {type: Sequelize.STRING(255), allowNull: false},
     first_name: {type: Sequelize.STRING(255), allowNull: false},
     last_name: {type: Sequelize.STRING(255), allowNull: false},
-    citizenship: {
-      type: Sequelize.ENUM('US_CITIZEN', 'PERM_RESIDENT', 'NON_PERM_RESIDENT'),
-      allowNull: false
-    },
-    date_of_birth: {type: Sequelize.DATE, allowNull: false},
+    citizenship: {type: Sequelize.ENUM('US_CITIZEN', 'PERM_RESIDENT', 'NON_PERM_RESIDENT')},
+    date_of_birth: {type: Sequelize.DATE},
     identity_verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},
     identity_verified_at: {type: Sequelize.DATE},
     citizenship_verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},
@@ -26,7 +23,7 @@ module.exports = db => {
             this.id = event.id
             this.user_id = event.user_id
             this.first_name = event.first_name
-            this.last_name = event.first_name
+            this.last_name = event.last_name
             this.citizenship = event.citizenship
             this.date_of_birth = event.date_of_birth
             if (!inMemory) return this.save()

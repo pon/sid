@@ -10,11 +10,8 @@ module.exports = {
       user_id: {type: Sequelize.STRING(255), allowNull: false},
       first_name: {type: Sequelize.STRING(255), allowNull: false},
       last_name: {type: Sequelize.STRING(255), allowNull: false},
-      citizenship: {
-        type: Sequelize.ENUM('US_CITIZEN', 'PERM_RESIDENT', 'NON_PERM_RESIDENT'),
-        allowNull: false
-      },
-      date_of_birth: {type: Sequelize.DATE, allowNull: false},
+      citizenship: {type: Sequelize.ENUM('US_CITIZEN', 'PERM_RESIDENT', 'NON_PERM_RESIDENT')},
+      date_of_birth: {type: Sequelize.DATE},
       identity_verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},
       identity_verified_at: {type: Sequelize.DATE},
       citizenship_verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},

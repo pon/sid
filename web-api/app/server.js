@@ -86,7 +86,7 @@ server.register([
           emailVerificationExpiryHours: 48
         }
       },
-      require('./features/profile')
+      require('./features/apply')
     ], err => {
       if (err) throw err
       server.start(err => {
