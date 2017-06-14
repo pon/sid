@@ -75,6 +75,19 @@ exports.register = (server, options, next) => {
       end_date: Joi.date(),
       term_months: Joi.number().integer().min(1)
     }),
+    profileCreate: Joi.object().keys({
+      user_id: Joi.string().max(255).required(),
+      first_name: Joi.string().max(255).required(),
+      last_name: Joi.string().max(255).required(),
+      citizenship: Joi.valid('US_CITIZEN', 'PERM_RESIDENT', 'NON_PERM_RESIDENT').required(),
+      date_of_birth: Joi.date().required()
+    }),
+    profileUpdate: Joi.object().keys({
+      first_name: Joi.string().max(255),
+      last_name: Joi.string().max(255),
+      citizenship: Joi.valid('US_CITIZEN', 'PERM_RESIDENT', 'NON_PERM_RESIDENT'),
+      date_of_birth: Joi.date()
+    }),
     uploadCreate: Joi.object().keys({
       user_id: Joi.string().max(255).required(),
       file: Joi.object().required()

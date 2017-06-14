@@ -7,13 +7,6 @@ import RenderField from '../common/RenderField';
 const validate = values => {
   const errors = {};
 
-  if (!values.firstName) {
-    errors.firstName = 'Required';
-  }
-  if (!values.lastName) {
-    errors.lastName = 'Required';
-  } 
-
   if (!values.email) {
     errors.email = 'Required';
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -41,28 +34,6 @@ const RegisterForm = props => {
       <h1>Register</h1>
       <span>{error}</span>
       <form onSubmit={handleSubmit(submitRegister)}>
-        <div>
-          <label>First Name</label>
-          <div>
-            <Field
-              name="firstName"
-              component={RenderField}
-              type="text"
-              placeholder="First Name"
-            />
-          </div>
-        </div>
-        <div>
-          <label>Last Name</label>
-          <div>
-            <Field
-              name="lastName"
-              component={RenderField}
-              type="text"
-              placeholder="Last Name"
-            />
-          </div>
-        </div>
         <div>
           <label>Email</label>
           <div>

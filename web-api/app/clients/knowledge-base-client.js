@@ -309,6 +309,43 @@ class KnowledgeBaseClient {
       json: true
     })
   }
+
+  createProfile(profile) {
+    return this._post('/profiles', {body: profile, json: true})
+  }
+
+  getProfile(userId, asOf) {
+    return this._get(
+      `/users/${userId}/profile`,
+      asOf ? {json: true, as_of: asOf} : {json: true}
+    )
+    .then(res => res.body)
+  }
+
+  getProfileEvents(userId) {
+    return this._get(`/users/${userId}/profile/events`, {json: true})
+    .then(res => res.body)
+  }
+
+  updateProfile(userId, updates) {
+    return this._patch(`/users/${userId}/profile`, {body: updates, json: true})
+  }
+
+  profileVerifyIdentity(userId) {
+    return this._post(`/users/${userId}/profile/verify-identity`)
+  }
+
+  profileUnverifyIdentity(userId) {
+    return this._post(`/users/${userId}/profile/unverify-identity`)
+  }
+
+  profileVerifyCitizenship(userId) {
+    return this._post(`/users/${userId}/profile/verify-citizenship`)
+  }
+
+  profileUnverifyCitizenship(userId) {
+    return this._post(`/users/${userId}/profile/unverify-citizenship`)
+  }
 }
 
 module.exports = KnowledgeBaseClient

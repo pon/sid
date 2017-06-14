@@ -83,6 +83,12 @@ server.register([
       options: {
         events: require('./events')
       }
+    },
+    {
+      register: require('./features/profiles'),
+      options: {
+        events: require('./events')
+      }
     }
   ], err => {
     if (err) throw err

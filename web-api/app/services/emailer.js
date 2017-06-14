@@ -12,8 +12,7 @@ exports.register = (server, options, next) => {
 
   const sendPasswordReset = (to, data) => {
     const dataTemplate = Joi.object().keys({
-      resetToken: Joi.string().required(),
-      firstName: Joi.string().required()
+      resetToken: Joi.string().required()
     })
 
     const dataResult = Joi.validate(data, dataTemplate)
@@ -26,8 +25,7 @@ exports.register = (server, options, next) => {
 
   const sendEmailVerification = (to, data) => {
     const dataTemplate = Joi.object().keys({
-      verificationToken: Joi.string().required(),
-      firstName: Joi.string().required()
+      verificationToken: Joi.string().required()
     })
 
     const dataResult = Joi.validate(data, dataTemplate)

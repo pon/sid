@@ -17,6 +17,10 @@ exports.register = (server, options, next) => {
     leaseNotFound: Boom.notFound('lease does not exist'),
     leaseNotVerified: Boom.badRequest('lease not verified'),
     multipleActiveApplications: Boom.badRequest('multiple active applications not allowed'),
+    profileAlreadyExists: Boom.badRequest('profile already exists for this user'),
+    profileAlreadyVerified: Boom.badRequest('profile already verified'),
+    profileNotFound: Boom.notFound('profile does not exist'),
+    profileNotVerified: Boom.badRequest('profile not verified'),
     uploadNotFound: Boom.notFound('upload does not exist')
   }
 

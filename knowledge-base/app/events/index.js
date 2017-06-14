@@ -23,6 +23,12 @@ module.exports = {
   LEASE_DELETED: require('./lease-deleted'),
   LEASE_RESTORED: require('./lease-updated'),
   LEASE_UPDATED: require('./lease-updated'),
+  PROFILE_CITIZENSHIP_UNVERIFIED: require('./profile-citizenship-unverified'),
+  PROFILE_CITIZENSHIP_VERIFIED: require('./profile-citizenship-verified'),
+  PROFILE_CREATED: require('./profile-created'),
+  PROFILE_IDENTITY_UNVERIFIED: require('./profile-identity-unverified'),
+  PROFILE_IDENTITY_VERIFIED: require('./profile-identity-verified'),
+  PROFILE_UPDATED: require('./profile-updated'),
   UPLOAD_CREATED: require('./upload-created'),
   UPLOAD_DELETED: require('./upload-deleted'),
   UPLOAD_RESTORED: require('./upload-restored')

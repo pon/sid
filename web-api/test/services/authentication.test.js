@@ -83,8 +83,7 @@ describe('authentication plugin', () => {
     it('should successfully register a new user and log them in', () => {
       const emailerMock = sinon.mock(server.plugins.emailer)
       emailerMock.expects('sendEmailVerification').once().withArgs('john@example.com', {
-        verificationToken: sinon.match.string,
-        firstName: 'John'
+        verificationToken: sinon.match.string
       })
       .returns(P.resolve())
 
@@ -92,8 +91,6 @@ describe('authentication plugin', () => {
         method: 'POST',
         url: '/register',
         payload: {
-          first_name: 'John',
-          last_name: 'Doe',
           email: 'john@example.com',
           password: 'password'
         }
@@ -128,14 +125,12 @@ describe('authentication plugin', () => {
     it('should allow password reset and change', () => {
       const emailerMock = sinon.mock(server.plugins.emailer)
       emailerMock.expects('sendPasswordReset').once().withArgs('john@example.com', {
-        resetToken: sinon.match.string,
-        firstName: 'John'
+        resetToken: sinon.match.string
       })
       .returns(P.resolve())
 
       emailerMock.expects('sendEmailVerification').once().withArgs('john@example.com', {
-        verificationToken: sinon.match.string,
-        firstName: 'John'
+        verificationToken: sinon.match.string
       })
       .returns(P.resolve())
 
@@ -143,8 +138,6 @@ describe('authentication plugin', () => {
         method: 'POST',
         url: '/register',
         payload: {
-          first_name: 'John',
-          last_name: 'Doe',
           email: 'john@example.com',
           password: 'password'
         }
@@ -227,8 +220,6 @@ describe('authentication plugin', () => {
         method: 'POST',
         url: '/register',
         payload: {
-          first_name: 'John',
-          last_name: 'Doe',
           email: 'john@example.com',
           password: 'password'
         }
@@ -238,8 +229,6 @@ describe('authentication plugin', () => {
           method: 'POST',
           url: '/register',
           payload: {
-            first_name: 'John',
-            last_name: 'Doe',
             email: 'john@example.com',
             password: 'password'
           }
@@ -255,8 +244,6 @@ describe('authentication plugin', () => {
         method: 'POST',
         url: '/register',
         payload: {
-          first_name: 'John',
-          last_name: 'Doe',
           email: 'john@example.com',
           password: 'password'
         }
@@ -281,8 +268,6 @@ describe('authentication plugin', () => {
         method: 'POST',
         url: '/register',
         payload: {
-          first_name: 'John',
-          last_name: 'Doe',
           email: 'john@example.com',
           password: 'password'
         }
@@ -305,7 +290,6 @@ describe('authentication plugin', () => {
     it('should resend an email verification', () => {
       const emailerMock = sinon.mock(server.plugins.emailer)
       emailerMock.expects('sendEmailVerification').twice().withArgs('john@example.com', {
-        firstName: 'John',
         verificationToken: sinon.match.string
       })
       .returns(P.resolve())
@@ -314,8 +298,6 @@ describe('authentication plugin', () => {
         method: 'POST',
         url: '/register',
         payload: {
-          first_name: 'John',
-          last_name: 'Doe',
           email: 'john@example.com',
           password: 'password'
         }
@@ -355,7 +337,6 @@ describe('authentication plugin', () => {
         credentials: {
           id: '1',
           email: 'john@example.com',
-          first_name: 'John',
           verified: true
         }
       })
@@ -367,8 +348,6 @@ describe('authentication plugin', () => {
     it('should verify a user when email verification endpoint is hit', () => {
       let user
       return server.plugins.db.models.User.create({
-        first_name: 'John',
-        last_name: 'Doe',
         email: 'john@example.com',
         password: 'password'
       })

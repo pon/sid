@@ -100,8 +100,6 @@ exports.register = (server, options, next) => {
           })
           .then(hash => {
             return User.create({
-              first_name: request.payload.first_name,
-              last_name: request.payload.last_name,
               email: request.payload.email,
               password: hash
             })
@@ -118,8 +116,7 @@ exports.register = (server, options, next) => {
           })
           .then(verification => {
             return server.plugins.emailer.sendEmailVerification(user.email, {
-              verificationToken: verification.token,
-              firstName: user.first_name
+              verificationToken: verification.token
             })
           })
           .then(() => {
@@ -135,8 +132,6 @@ exports.register = (server, options, next) => {
         },
         validate: {
           payload: {
-            first_name: server.plugins.schemas.firstName,
-            last_name: server.plugins.schemas.lastName,
             email: server.plugins.schemas.email,
             password: server.plugins.schemas.password
           }
@@ -161,8 +156,7 @@ exports.register = (server, options, next) => {
           })
           .then(verification => {
             return server.plugins.emailer.sendEmailVerification(user.email, {
-              verificationToken: verification.token,
-              firstName: user.first_name
+              verificationToken: verification.token
             })
           })
           .then(() => {
@@ -230,8 +224,7 @@ exports.register = (server, options, next) => {
           })
           .then(reset => {
             return server.plugins.emailer.sendPasswordReset(user.email, {
-              resetToken: reset.token,
-              firstName: user.first_name
+              resetToken: reset.token
             })
           })
           .then(() => {

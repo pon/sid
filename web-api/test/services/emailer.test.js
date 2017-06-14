@@ -41,14 +41,12 @@ describe('emailer service', () => {
         to: 'john@example.com',
         template: 'password-reset',
         data: {
-          firstName: 'John',
           resetToken: 'token'
         }
       })
       .returns(P.resolve())
 
       return server.plugins.emailer.sendPasswordReset('john@example.com', {
-        firstName: 'John',
         resetToken: 'token'
       })
       .then(() => {
@@ -72,14 +70,12 @@ describe('emailer service', () => {
         to: 'john@example.com',
         template: 'email-verification',
         data: {
-          firstName: 'John',
           verificationToken: 'token'
         }
       })
       .returns(P.resolve())
 
       return server.plugins.emailer.sendEmailVerification('john@example.com', {
-        firstName: 'John',
         verificationToken: 'token'
       })
       .then(() => {

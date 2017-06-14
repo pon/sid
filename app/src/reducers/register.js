@@ -25,8 +25,6 @@ const fetchRegister = payload => {
   return fetch('http://localhost:4000/register', {
     method: 'POST',
     body: JSON.stringify({
-      first_name: payload.firstName,
-      last_name: payload.lastName,
       email: payload.email,
       password: payload.password
     })

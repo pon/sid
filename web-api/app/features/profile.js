@@ -5,8 +5,8 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        const {id, first_name, last_name, email} = request.auth.credentials
-        reply({id, first_name, last_name, email})
+        const {id, email} = request.auth.credentials
+        reply({id, email})
       }
     }
   }])

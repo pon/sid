@@ -17,8 +17,6 @@ describe('profile plugin', () => {
       url: '/users/me',
       credentials: {
         id: '1',
-        first_name: 'John',
-        last_name: 'Doe',
         email: 'john@example.com'
       }
     })
@@ -26,8 +24,6 @@ describe('profile plugin', () => {
       res.statusCode.should.equal(200)
       res.result.should.deep.equal({
         id: '1',
-        first_name: 'John',
-        last_name: 'Doe',
         email: 'john@example.com'
       })
     })

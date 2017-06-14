@@ -20,14 +20,6 @@ export class Profile extends Component {
             <small>User ID &nbsp;</small>
             {user.id}
           </h4>
-          <h4> 
-            <small>First Name &nbsp;</small>
-            {user.first_name}
-          </h4>
-          <h4>
-            <small>Last Name &nbsp;</small>
-            {user.last_name}
-          </h4>
           <h4>
             <small>Email &nbsp;</small>
             {user.email}
