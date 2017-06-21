@@ -131,6 +131,7 @@ class KnowledgeBaseClient {
 
   createAddress(address) {
     return this._post('/addresses', {body: address, json: true})
+    .then(res => res.body)
   }
 
   deleteAddress(addressId) {
@@ -147,6 +148,7 @@ class KnowledgeBaseClient {
 
   createEmployment(employment) {
     return this._post('/employments', {body: employment, json: true})
+    .then(res => res.body)
   }
 
   updateEmployment(employmentId, updates) {
@@ -184,6 +186,7 @@ class KnowledgeBaseClient {
 
   createLease(lease) {
     return this._post('/leases', {body: lease, json: true})
+    .then(res => res.body)
   }
 
   updateLease(leaseId, updates) {
@@ -196,6 +199,14 @@ class KnowledgeBaseClient {
       asOf ? {json: true, as_of: asOf} : {json: true}
     )
     .then(res => res.body)
+    .then(lease => {
+      if (!lease.address_id) return lease
+      return this.getAddress(lease.address_id)
+      .then(address => {
+        lease.address = address
+        return lease
+      })
+    })
   }
 
   deleteLease(leaseId) {
@@ -265,15 +276,29 @@ class KnowledgeBaseClient {
   }
 
   createApplication(application) {
-    return this._post('/applications', {body: application, json: true})
+    return this._post('/applications', {body: application, json: true}).then(res => res.body)
   }
 
   getApplication(applicationId, asOf) {
+    let application
     return this._get(
       `/applications/${applicationId}`,
       asOf ? {json: true, as_of: asOf} : {json: true}
     )
     .then(res => res.body)
+    .then(_application => {
+      application = _application
+      return P.all([
+        _application.employment_id && this.getEmployment(_application.employment_id),
+        _application.lease_id && this.getLease(_application.lease_id)
+      ])
+      .spread((employment, lease) => {
+        if (employment) application.employment = employment
+        if (lease) application.lease = lease
+
+        return application
+      })
+    })
   }
 
   getApplicationEvents(applicationId) {
@@ -282,11 +307,11 @@ class KnowledgeBaseClient {
   }
 
   getUserApplications(userId) {
-    return this._get(`/users/${userId}/applications`).then(res => res.body)
+    return this._get(`/users/${userId}/applications`, {json: true}).then(res => res.body)
   }
 
   applicationApply(applicationId) {
-    return this._post(`/applications/${applicationId}/apply`)
+    return this._post(`/applications/${applicationId}/apply`, {json: true}).then(res => res.body)
   }
 
   applicationAttachCreditReport(applicationId, creditReportId) {
@@ -311,7 +336,7 @@ class KnowledgeBaseClient {
   }
 
   createProfile(profile) {
-    return this._post('/profiles', {body: profile, json: true})
+    return this._post('/profiles', {body: profile, json: true}).then(res => res.body)
   }
 
   getProfile(userId, asOf) {

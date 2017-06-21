@@ -95,6 +95,7 @@ exports.register = (server, options, next) => {
           return address.process(AddressCreatedEvent.type, AddressCreatedEvent.toJSON())
           .then(() => {
             server.emit('KB', AddressCreatedEvent)
+            return address
           })
         })
         .asCallback(reply)

@@ -95,6 +95,7 @@ exports.register = (server, options, next) => {
           return lease.process(LeaseCreatedEvent.type, LeaseCreatedEvent.toJSON())
           .then(() => {
             server.emit('KB', LeaseCreatedEvent)
+            return lease
           })
         })
         .asCallback(reply)

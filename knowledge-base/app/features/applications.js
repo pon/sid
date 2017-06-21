@@ -145,6 +145,7 @@ exports.register = (server, options, next) => {
           return application.process(ApplicationCreatedEvent.type, ApplicationCreatedEvent.toJSON())
           .then(() => {
             server.emit('KB', ApplicationCreatedEvent)
+            return application
           })
         })
         .asCallback(reply)
@@ -292,7 +293,6 @@ exports.register = (server, options, next) => {
         return Application.findOne({
           where: {id: request.params.applicationId, deleted_at: null},
           include: [
-            {model: CreditReport, where: {deleted_at: null}},
             {model: Employment, where: {deleted_at: null}},
             {model: Lease, where: {deleted_at: null}}
           ]
@@ -301,7 +301,7 @@ exports.register = (server, options, next) => {
           if (!application) throw server.plugins.errors.applicationNotFound
           else if (application.status !== 'APPLYING') {
             throw server.plugins.errors.applicationInvalidStatusToApply
-          } else if (!application.credit_report || !application.employment || !application.lease) {
+          } else if (!application.employment || !application.lease) {
             throw server.plugins.errors.applicationNotReadyToApply
           }
 
@@ -310,6 +310,7 @@ exports.register = (server, options, next) => {
           return application.process(ApplicationAppliedEvent.type, ApplicationAppliedEvent.toJSON())
           .then(() => {
             server.emit('KB', ApplicationAppliedEvent)
+            return application
           })
         })
       .asCallback(reply)

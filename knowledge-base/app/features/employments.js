@@ -84,6 +84,7 @@ exports.register = (server, options, next) => {
         return employment.process(EmploymentCreatedEvent.type, EmploymentCreatedEvent)
         .then(() => {
           server.emit('KB', EmploymentCreatedEvent)
+          return employment
         })
         .asCallback(reply)
       },

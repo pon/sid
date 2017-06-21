@@ -5,9 +5,10 @@ import styled from 'styled-components';
 export class App extends Component {
   render() {
     const ContentWrapper = styled.div`
-      height: calc(100% - 112px);
-      width: 500px;
+      height: calc(100% - 90px);
+      width: 100%;
       margin: 0 auto;
+      overflow: scroll;
     `;
 
     const Wrapper = styled.div`

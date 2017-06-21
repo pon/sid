@@ -34,74 +34,33 @@ const validate = values => {
   return errors;
 };
 
+const StepOneWrapper = styled.div`
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+`;
+
 const ApplyStepOneForm = props => {
-  const {handleSubmit, pristine, submitting, submitApplyStepOne, valid} = props;
-  const error = props.apply.get('error');
-  return (
-    <div>
-      <span>{error}</span>
-      <form onSubmit={handleSubmit(submitApplyStepOne)}>
-        <div>
-          <label>First Name</label>
-          <div>
-            <Field
-              name="first_name"
-              component={RenderField}
-              type="text"
-              placeholder="First Name"
-            />
-          </div>
-        </div>
-        <div>
-          <label>Last Name</label>
-          <div>
-            <Field
-              name="last_name"
-              component={RenderField}
-              type="text"
-              placeholder="Last Name"
-            />
-          </div>
-        </div>
-        <div>
-          <label>Email</label>
-          <div>
-            <Field
-              name="email"
-              component={RenderField}
-              type="email"
-              placeholder="Email"
-            />
-          </div>
-        </div>
-        <div>
-          <label>Password</label>
-          <div>
-            <Field
-              name="password"
-              component={RenderField}
-              type="password"
-              placeholder="Password"
-            />
-          </div>
-        </div>
-        <div>
-          <label>Confirm Password</label>
-          <div>
-            <Field
-              name="confirm_password"
-              component={RenderField}
-              type="password"
-              placeholder="Confirm Password"
-            />
-          </div>
-        </div>
-        <div>
-          <button type="submit" disabled={!valid || pristine || submitting}>Submit</button>
-        </div>
-      </form>
-    </div>
-  );
+  const {apply, handleSubmit, pristine, submitting, submitApplyStepOne, valid} = props;
+  const error = apply.get('error');
+return (
+  <StepOneWrapper>
+    <h2>Get Started</h2>
+    <form onSubmit={handleSubmit(submitApplyStepOne)} className="pure-form">
+      <fieldset className="pure-group">
+        <Field className="pure-input-1" name="first_name" component="input" type="text" placeholder="First Name" />
+        <Field className="pure-input-1" name="last_name" component="input" type="text" placeholder="Last Name" />
+        <Field className="pure-input-1" name="email" component="input" type="email" placeholder="Email" />
+      </fieldset>
+      
+      <fieldset className="pure-group">
+        <Field className="pure-input-1" name="password" component="input" type="password" placeholder="Password" />
+        <Field className="pure-input-1" name="confirm_password" component="input" type="password" placeholder="Confirm Password" />
+      </fieldset>
+      <button type="submit" disabled={!valid || pristine || submitting} className="pure-button pure-input-1 pure-button-primary pure-u-1">Submit</button>
+    </form>
+  </StepOneWrapper>
+);
 }
 
 export default reduxForm({
