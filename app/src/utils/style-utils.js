@@ -20,3 +20,8 @@ export const media = Object.keys(sizes).reduce((accumulator, label) => {
   `
   return accumulator
 }, {})
+
+export const constants = {
+  red: 'rgb(239, 61, 71)',
+  paleRed: 'rgba(239, 61, 71, 0.25)'
+}
