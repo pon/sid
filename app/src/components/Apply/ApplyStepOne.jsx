@@ -1,5 +1,6 @@
 import React from 'react';
 import {Field, reduxForm} from 'redux-form';
+import {connect} from 'react-redux';
 import styled from 'styled-components';
 
 import GroupedError from '../common/GroupedError';
@@ -43,13 +44,20 @@ const StepOneWrapper = styled.div`
   text-align: center;
 `;
 
-const ApplyStepOneForm = props => {
+const FormError = styled.div`
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: ${constants.red}
+`;
+
+let ApplyStepOneForm = props => {
   const {apply, handleSubmit, pristine, submitting, submitApplyStepOne, valid} = props;
   const error = apply.get('error');
   return (
     <StepOneWrapper>
       <h2>Get Started</h2>
       <form onSubmit={handleSubmit(submitApplyStepOne)} className="pure-form">
+        <FormError>{error}</FormError>
         <fieldset className="pure-group">
           <Field className="pure-input-1" name="first_name" component={StyledInput} type="text" placeholder="First Name" />
           <Field className="pure-input-1" name="last_name" component={StyledInput} type="text" placeholder="Last Name" />
@@ -70,8 +78,18 @@ const ApplyStepOneForm = props => {
   );
 }
 
-export default reduxForm({
+ApplyStepOneForm = reduxForm({
   form: 'apply-step-one',
   validate
 })(ApplyStepOneForm);
 
+ApplyStepOneForm = connect(
+  ({apply}) => {
+    const submittedValues = apply.get('submittedValues');
+    return {
+      initialValues: submittedValues
+    };
+  }
+)(ApplyStepOneForm);
+
+export default ApplyStepOneForm;

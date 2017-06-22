@@ -80,7 +80,8 @@ const fetchApplyStepOne = payload => {
     return {
       type: SUBMIT_APPLY_STEP_ONE_FAILURE,
       payload: {
-        error: error.message
+        error: error.message,
+        submittedValues: payload
       }
     };
   })
@@ -170,7 +171,8 @@ export default (state = initialState, {type, payload}) => {
     case SUBMIT_APPLY_STEP_ONE_FAILURE:
       return state
         .set('isSubmitting', false)
-        .set('error', payload.error);
+        .set('error', payload.error)
+        .set('submittedValues', payload.submittedValues);
     case SUBMIT_APPLY_STEP_TWO:
       payload.application_id = state.get('application').id
       return loop(
