@@ -106,7 +106,8 @@ const fetchApplyStepTwo = payload => {
     return {
       type: SUBMIT_APPLY_STEP_TWO_FAILURE,
       payload: {
-        error: error.message
+        error: error.message,
+        submittedValues: payload
       }
     };
   })
@@ -148,7 +149,8 @@ export default (state = initialState, {type, payload}) => {
       return state
         .set('isSubmitting', false)
         .set('application', payload.application)
-        .set('profile', payload.profile);
+        .set('profile', payload.profile)
+        .delete('error');
     case GET_APPLY_FAILURE:
       return state
         .set('isSubmitting', false)
@@ -167,7 +169,8 @@ export default (state = initialState, {type, payload}) => {
         .set('isAuthenticated', true)
         .set('isSubmitting', false)
         .set('application', payload.application)
-        .set('profile', payload.profile);
+        .set('profile', payload.profile)
+        .delete('error');
     case SUBMIT_APPLY_STEP_ONE_FAILURE:
       return state
         .set('isSubmitting', false)
@@ -186,12 +189,15 @@ export default (state = initialState, {type, payload}) => {
       return state
         .set('application', payload.application)
         .set('profile', payload.profile)
-        .set('isSubmitting', false);
+        .set('isSubmitting', false)
+        .delete('error');
     case SUBMIT_APPLY_STEP_TWO_FAILURE:
       return state
         .set('isSubmitting', false)
-        .set('error', payload.error);
+        .set('error', payload.error)
+        .set('submittedValues', payload.submittedValues);
     case SUBMIT_APPLY_STEP_THREE:
+      debugger;
       payload.application_id = state.get('application').id
       return loop(
         state.set('isSubmitting', true),
@@ -203,7 +209,8 @@ export default (state = initialState, {type, payload}) => {
     case SUBMIT_APPLY_STEP_THREE_SUCCESS:
       return state
         .set('application', payload)
-        .set('isSubmitting', false);
+        .set('isSubmitting', false)
+        .delete('error');
     case SUBMIT_APPLY_STEP_THREE_FAILURE:
       return state
         .set('isSubmitting', false)

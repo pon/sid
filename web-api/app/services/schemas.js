@@ -25,7 +25,6 @@ exports.register = (server, options, next) => {
       security_deposit: Joi.number().integer().min(0).required(),
       monthly_rent: Joi.number().integer().min(0).required(),
       start_date: Joi.date().required(),
-      end_date: Joi.date().required(),
       term_months: Joi.number().integer().min(1).required(),
       status: Joi.valid('CURRENT', 'FUTURE').required(),
       employer_name: Joi.string().max(255).required(),

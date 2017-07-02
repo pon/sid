@@ -1,11 +1,11 @@
 import React from 'react';
-import {Field, reduxForm} from 'redux-form';
+import {Field, reduxForm, SubmissionError} from 'redux-form';
 import {connect} from 'react-redux';
 import styled from 'styled-components';
 
-import GroupedError from '../common/GroupedError';
-import RenderField from '../common/RenderField';
-import StyledInput from '../common/StyledInput';
+import RaisedButton from 'material-ui/RaisedButton';
+import {TextField} from 'redux-form-material-ui';
+
 import {constants} from '../../utils/style-utils';
 
 const validate = values => {
@@ -56,23 +56,15 @@ let ApplyStepOneForm = props => {
   return (
     <StepOneWrapper>
       <h2>Get Started</h2>
-      <form onSubmit={handleSubmit(submitApplyStepOne)} className="pure-form">
+      <form onSubmit={handleSubmit(submitApplyStepOne)}>
         <FormError>{error}</FormError>
-        <fieldset className="pure-group">
-          <Field className="pure-input-1" name="first_name" component={StyledInput} type="text" placeholder="First Name" />
-          <Field className="pure-input-1" name="last_name" component={StyledInput} type="text" placeholder="Last Name" />
-          <Field className="pure-input-1" name="email" component={StyledInput} type="email" placeholder="Email" />
-        </fieldset>
-        
-        <fieldset className="pure-group">
-          <Field className="pure-input-1" name="password" component={StyledInput} type="password" placeholder="Password" />
-          <Field className="pure-input-1" name="confirm_password" component={StyledInput} type="password" placeholder="Confirm Password" />
-        </fieldset>
-
-        <Field name="password" component={GroupedError} />
-        <Field name="confirm_password" component={GroupedError} />
-
-        <button type="submit" disabled={!valid || pristine || submitting} className="pure-button pure-input-1 pure-button-primary pure-u-1">Submit</button>
+        <Field name="first_name" fullWidth={true} component={TextField} hintText="First Name" floatingLabelText="First Name"/>
+        <Field name="last_name" fullWidth={true} component={TextField} hintText="Last Name" floatingLabelText="Last Name"/>
+        <Field name="email" fullWidth={true} component={TextField} hintText="Email" floatingLabelText="Email" />
+        <Field name="password" fullWidth={true} component={TextField} type="password" hintText="Password" floatingLabelText="Password" />
+        <Field name="confirm_password" fullWidth={true} component={TextField} type="password" hintText="Confirm Password" floatingLabelText="Confirm Password" />
+        <br />
+        <RaisedButton label="Submit" primary={true} disabled={!valid || pristine || submitting} type="submit"/>
       </form>
     </StepOneWrapper>
   );

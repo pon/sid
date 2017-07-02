@@ -1,5 +1,6 @@
-const Boom  = require('boom')
-const P     = require('bluebird')
+const Boom    = require('boom')
+const moment  = require('moment')
+const P       = require('bluebird')
 
 exports.register = (server, options, next) => {
 
@@ -117,6 +118,8 @@ exports.register = (server, options, next) => {
             zip_code: request.payload.zip_code
           })
         ]).spread((_profile, address) => {
+          const end_date = moment(request.payload.start_date)
+                            .add(request.payload.term_months, 'months')
           return P.all([
             KBClient.createLease({
               user_id: request.auth.credentials.id,
@@ -124,7 +127,7 @@ exports.register = (server, options, next) => {
               security_deposit: request.payload.security_deposit,
               monthly_rent: request.payload.monthly_rent,
               start_date: request.payload.start_date,
-              end_date: request.payload.end_date,
+              end_date: end_date,
               term_months: request.payload.term_months
             }),
             KBClient.createEmployment({

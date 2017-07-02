@@ -18,13 +18,16 @@ export class Apply extends Component {
 
     const application = this.props.apply.get('application');
 
-    if (!this.props.apply.get('profile')) {
-      applyStep = <ApplyStepOneForm apply={this.props.apply} submitApplyStepOne={this.props.submitApplyStepOne}/>;
-    } else if (application && (!application.employment || !application.lease)) {
-      applyStep = <ApplyStepTwoForm apply={this.props.apply} submitApplyStepTwo={this.props.submitApplyStepTwo}/>;
-    } else {
-      applyStep = <ApplyStepThreeForm apply={this.props.apply} submitApplyStepThree={this.props.submitApplyStepThree}/>;
-    }
+    // if (!this.props.apply.get('profile')) {
+    //   applyStep = <ApplyStepOneForm apply={this.props.apply} submitApplyStepOne={this.props.submitApplyStepOne}/>;
+    // } else if (application && (!application.employment || !application.lease)) {
+    //   applyStep = <ApplyStepTwoForm apply={this.props.apply} submitApplyStepTwo={this.props.submitApplyStepTwo}/>;
+    // } else {
+    //   applyStep = <ApplyStepThreeForm apply={this.props.apply} submitApplyStepThree={this.props.submitApplyStepThree}/>;
+    // }
+
+    applyStep = <ApplyStepThreeForm apply={this.props.apply} submitApplyStepThree={this.props.submitApplyStepThree}/>;
+
 
     const ApplyWrapper = styled.div`
       padding-left: 25%;

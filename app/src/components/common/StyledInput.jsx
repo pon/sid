@@ -1,13 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, {Component} from 'react';
 
 import {constants} from '../../utils/style-utils';
 
-const StyledInput = styled.input`
-  background: ${({meta: {touched, error}}) => touched && error && constants.paleRed};
-`;
-
-export default ({input, label, type, meta, className, placeholder}) => (
-  <StyledInput {...input} type={type} meta={meta} className={className} placeholder={placeholder}></StyledInput>
-)
+export default class extends Component {
+  render() {
+    const {input, label, type, meta, className, placeholder} = this.props;
+    const {touched, error} = meta;
+    const styles = {
+      background: touched && error && constants.paleRed
+    };
+    return <input {...input} type={type} className={className} placeholder={placeholder} style={styles}></input>
+  }
+}
 
