@@ -14,13 +14,25 @@ module.exports = db => {
       allowNull: false
     },
     credit_report_id: {type: Sequelize.UUID, references: {model: 'credit_reports', key: 'id'}},
-    employment_id: {type: Sequelize.UUID, references: {model: 'employments', key: 'id'}},
     lease_id: {type: Sequelize.UUID, references: {model: 'leases', key: 'id'}},
     deleted_at: {type: Sequelize.DATE}
   }, {
     paranoid: false,
     deletedAt: false,
     instanceMethods: {
+      toJSON: function () {
+        return {
+          id: this.id,
+          user_id: this.user_id,
+          status: this.status,
+          credit_report_id: this.credit_report_id,
+          lease_id: this.lease_id,
+          income_ids: this.incomes ? this.incomes.map(income => income.id) : this.income_ids,
+          created_at: this.created_at,
+          updated_at: this.updated_at,
+          deleted_at: this.deleted_at
+        }
+      },
       process: function (eventType, event, inMemory = false) {
         switch (eventType) {
           case 'APPLICATION_CREATED':
@@ -28,7 +40,6 @@ module.exports = db => {
             this.user_id = event.user_id
             this.status = event.status
             this.credit_report_id = event.credit_report_id
-            this.employment_id = event.employment_id
             this.lease_id = event.lease_id
             if (!inMemory) return this.save()
             break
@@ -36,12 +47,16 @@ module.exports = db => {
             this.credit_report_id = event.credit_report_id
             if (!inMemory) return this.save()
             break
-          case 'APPLICATION_EMPLOYMENT_ATTACHED':
-            this.employment_id = event.employment_id
-            if (!inMemory) return this.save()
-            break
           case 'APPLICATION_LEASE_ATTACHED':
             this.lease_id = event.lease_id
+            if (!inMemory) return this.save()
+            break
+          case 'APPLICATION_INCOMES_ATTACHED':
+            this.income_ids = this.income_ids || []
+            event.income_ids.map(incomeId => {
+              this.income_ids.push(incomeId)
+              this.addIncome(incomeId)
+            })
             if (!inMemory) return this.save()
             break
           case 'APPLICATION_APPLIED':

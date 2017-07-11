@@ -1,48 +1,40 @@
 const Sequelize = require('sequelize')
 
 module.exports = db => {
-  return db.define('employment', {
-    id: {type: Sequelize.UUID, defaultValue: Sequelize.UUIDV1, primaryKey: true},
+  return db.define('income', {
+    id: {primaryKey: true, type: Sequelize.UUID, defaultValue: Sequelize.UUIDV1},
     user_id: {type: Sequelize.STRING(255), allowNull: false},
-    status: {type: Sequelize.ENUM('CURRENT', 'FUTURE'), allowNull: false},
-    employer_name: {type: Sequelize.STRING(255), allowNull: false},
-    start_month: {type:Sequelize.INTEGER, allowNull: false},
-    start_year: {type: Sequelize.INTEGER, allowNull: false},
-    is_self_employed: {type: Sequelize.BOOLEAN, allowNull: false},
-    self_employed_details: {type: Sequelize.JSON},
+    income_type: {
+      type: Sequelize.ENUM('SALARY', 'SELF_EMPLOYED', 'RENTAL',
+        'SOCIAL_SECURITY_PENSION', 'DISABILITY', 'CHILD_SUPPORT_ALIMONY', 'K1'),
+      allowNull: false
+    },
+    employer_name: {type: Sequelize.STRING(255)},
     stated_income: {type: Sequelize.INTEGER, allowNull: false},
     verified_income: {type: Sequelize.INTEGER},
     verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},
-    verified_at: Sequelize.DATE,
-    deleted_at: Sequelize.DATE
+    verified_at: {type: Sequelize.DATE},
+    deleted_at: {type: Sequelize.DATE}
   }, {
     paranoid: false,
     deletedAt: false,
     instanceMethods: {
       process: function (eventType, event, inMemory = false) {
         switch (eventType) {
-          case 'EMPLOYMENT_CREATED':
+          case 'INCOME_CREATED':
             this.id = event.id
             this.user_id = event.user_id
-            this.status = event.status
+            this.income_type = event.income_type
             this.employer_name = event.employer_name
-            this.is_self_employed = event.is_self_employed
-            this.self_employed_details = event.self_employed_details
             this.stated_income = event.stated_income
-            this.start_month = event.start_month
-            this.start_year = event.start_year
 
             if (!inMemory) return this.save()
             break
-          case 'EMPLOYMENT_UPDATED':
+          case 'INCOME_UPDATED':
             [
-              'status',
+              'income_type',
               'employer_name',
-              'is_self_employed',
-              'self_employed_details',
-              'stated_income',
-              'start_month',
-              'start_year'
+              'stated_income'
             ].forEach(key => {
               if (event[key] !== undefined) {
                 this[key] = event[key]
@@ -50,21 +42,21 @@ module.exports = db => {
             })
             if (!inMemory) return this.save()
             break
-          case 'EMPLOYMENT_DELETED':
+          case 'INCOME_DELETED':
             this.deleted_at = event.deleted_at
             if (!inMemory) return this.save()
             break
-          case 'EMPLOYMENT_RESTORED':
+          case 'INCOME_RESTORED':
             this.deleted_at = null
             if (!inMemory) return this.save()
             break
-          case 'EMPLOYMENT_VERIFIED':
+          case 'INCOME_VERIFIED':
             this.verified_income = event.verified_income
             this.verified_at = event.verified_at
             this.verified = true
             if (!inMemory) return this.save()
             break
-          case 'EMPLOYMENT_UNVERIFIED':
+          case 'INCOME_UNVERIFIED':
             this.verified_income = null
             this.verified_at = null
             this.verified = false

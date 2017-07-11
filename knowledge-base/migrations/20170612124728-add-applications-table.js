@@ -13,7 +13,6 @@ module.exports = {
         allowNull: false
       },
       credit_report_id: {type: Sequelize.UUID, references: {model: 'credit_reports', key: 'id'}},
-      employment_id: {type: Sequelize.UUID, references: {model: 'employments', key: 'id'}},
       lease_id: {type: Sequelize.UUID, references: {model: 'leases', key: 'id'}},
       created_at: {type: Sequelize.DATE, allowNull: false},
       updated_at: {type: Sequelize.DATE, allowNull: false},

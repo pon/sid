@@ -7,7 +7,7 @@ exports.register = (server, options, next) => {
 
   const Application   = server.plugins.db.models.Application
   const CreditReport  = server.plugins.db.models.CreditReport
-  const Employment    = server.plugins.db.models.Employment
+  const Income        = server.plugins.db.models.Income
   const Event         = server.plugins.db.models.Event
   const Lease         = server.plugins.db.models.Lease
 
@@ -17,16 +17,22 @@ exports.register = (server, options, next) => {
     config:{
       tags: ['api'],
       handler: (request, reply) => {
+        let application
         return P.resolve()
         .then(() => {
           if (!request.query.as_of) {
             return Application.findOne({
-              where: {id: request.params.applicationId, deleted_at: null}
+              where: {id: request.params.applicationId, deleted_at: null},
             })
-            .then(application => {
-              if (!application) throw server.plugins.errors.applicationNotFound
+            .then(_application => {
+              if (!_application) throw server.plugins.errors.applicationNotFound
 
-              return application
+              application = _application
+              return application.getIncomes()
+              .then(incomes => {
+                application.incomes = incomes
+                return application
+              })
             })
           }
 
@@ -55,10 +61,13 @@ exports.register = (server, options, next) => {
               (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
           }
 
-          if (application.employment_id) {
-            application.employment = `/employments/${application.employment_id}`
-            application.employment = application.employment +
-              (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
+          if (application.income_ids) {
+            application.incomes = application.income_ids.map(incomeId => {
+              let income =  `/incomes/${incomeId}`
+              income = income +
+                (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
+              return income
+            })
           }
 
           if (application.lease_id) {
@@ -200,38 +209,44 @@ exports.register = (server, options, next) => {
     }
   }, {
     method: 'POST',
-    path: '/applications/{applicationId}/attach_employment',
+    path: '/applications/{applicationId}/attach_incomes',
     config: {
       tags: ['api'],
       handler: (request, reply) => {
         let application
+        let incomeIds
         return Application.findOne({where: {id: request.params.applicationId, deleted_at: null}})
         .then(_application => {
           application = _application
           if (!application) throw server.plugins.errors.applicationNotFound
 
-          return Employment.findOne({
-            where: {
-              id: request.payload.employment_id,
-              user_id: application.user_id,
-              deleted_at: null
-            }
+          incomeIds = Array.isArray(request.payload.income_ids) ? request.payload.income_ids : [request.payload.income_ids];
+          return P.map(incomeIds, incomeId => {
+            return Income.findOne({
+              where: {
+                id: incomeId,
+                user_id: application.user_id,
+                deleted_at: null
+              }
+            })
+            .then(income => {
+              if (!income) throw server.plugins.errors.incomeNotFound
+              return income
+            })
           })
         })
-        .then(employment => {
-          if (!employment) throw server.plugins.errors.employmentNotFound
-
-          const ApplicationAttachEmploymentEvent = new Events.APPLICATION_EMPLOYMENT_ATTACHED(
+        .then(incomes => {
+          const ApplicationAttachIncomesEvent = new Events.APPLICATION_INCOMES_ATTACHED(
             request.params.applicationId,
-            request.payload.employment_id
+            incomeIds
           )
 
           return application.process(
-            ApplicationAttachEmploymentEvent.type,
-            ApplicationAttachEmploymentEvent.toJSON()
+            ApplicationAttachIncomesEvent.type,
+            ApplicationAttachIncomesEvent.toJSON()
           )
           .then(() => {
-            server.emit('KB', ApplicationAttachEmploymentEvent)
+            server.emit('KB', ApplicationAttachIncomesEvent)
           })
         })
         .asCallback(reply)

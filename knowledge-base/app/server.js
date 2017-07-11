@@ -58,7 +58,7 @@ server.register([
       options: {events: require('./events')}
     },
     {
-      register: require('./features/employments'),
+      register: require('./features/incomes'),
       options: {events: require('./events')}
     },
     {

@@ -21,8 +21,19 @@ module.exports = function (db) {
   modelsExport.Application.belongsTo(modelsExport.CreditReport, {foreignKey: 'credit_report_id'})
   modelsExport.CreditReport.hasMany(modelsExport.Application, {foreignKey: 'credit_report_id'})
 
-  modelsExport.Application.belongsTo(modelsExport.Employment, {foreignKey: 'employment_id'})
-  modelsExport.Employment.hasMany(modelsExport.Application, {foreignKey: 'employment_id'})
+  modelsExport.Application.belongsToMany(modelsExport.Income, {
+    as: 'Incomes',
+    through: modelsExport.ApplicationIncome,
+    foreignKey: 'application_id',
+    otherKey: 'income_id'
+  })
+
+  modelsExport.Income.belongsToMany(modelsExport.Application, {
+    as: 'Applications',
+    through: modelsExport.ApplicationIncome,
+    foreignKey: 'income_id',
+    otherKey: 'application_id'
+  })
 
   modelsExport.Application.belongsTo(modelsExport.Lease, {foreignKey: 'lease_id'})
   modelsExport.Lease.hasMany(modelsExport.Application, {foreignKey: 'lease_id'})

@@ -20,8 +20,8 @@ exports.register = (server, options, next) => {
     applicationAttachCreditReport: Joi.object().keys({
       credit_report_id: Joi.string().max(255).required()
     }),
-    applicationAttachEmployment: Joi.object().keys({
-      employment_id: Joi.string().max(255).required()
+    applicationAttachIncome: Joi.object().keys({
+      income_ids: Joi.array().items(Joi.string().max(255).required())
     }),
     applicationAttachLease: Joi.object().keys({
       lease_id: Joi.string().max(255).required()
@@ -37,26 +37,24 @@ exports.register = (server, options, next) => {
       raw_credit_report: Joi.object().required(),
       fico_score: Joi.number().integer().required()
     }),
-    employmentCreate: Joi.object().keys({
+    incomeCreate: Joi.object().keys({
       user_id: Joi.string().max(255).required(),
-      status: Joi.valid('CURRENT', 'FUTURE').required(),
-      employer_name: Joi.string().max(255).required(),
-      start_month: Joi.number().integer().min(1).max(12).required(),
-      start_year: Joi.number().integer().min(1900).required(),
-      is_self_employed: Joi.boolean().required(),
-      self_employed_details: Joi.object(),
+      income_type: Joi.valid(
+        'SALARY', 'SELF_EMPLOYED', 'RENTAL', 'SOCIAL_SECURITY_PENSION',
+        'DISABILITY', 'CHILD_SUPPORT_ALIMONY', 'K1'
+      ).required(),
+      employer_name: Joi.string().max(255),
       stated_income: Joi.number().integer().required()
     }),
-    employmentUpdate: Joi.object().keys({
-      status: Joi.valid('CURRENT', 'FUTURE'),
+    incomeUpdate: Joi.object().keys({
+      income_type: Joi.valid(
+        'SALARY', 'SELF_EMPLOYED', 'RENTAL', 'SOCIAL_SECURITY_PENSION',
+        'DISABILITY', 'CHILD_SUPPORT_ALIMONY', 'K1'
+      ),
       employer_name: Joi.string().max(255),
-      start_month: Joi.number().integer().min(1).max(12),
-      start_year: Joi.number().integer().min(1900),
-      is_self_employed: Joi.boolean(),
-      self_employed_details: Joi.object(),
       stated_income: Joi.number().integer()
     }),
-    employmentVerify: Joi.object().keys({
+    incomeVerify: Joi.object().keys({
       verified_income: Joi.number().integer().required()
     }),
     leaseCreate: Joi.object().keys({

@@ -1,6 +1,6 @@
 module.exports = {
   up: function (queryInterface, Sequelize) {
-    return queryInterface.createTable('employments', {
+    return queryInterface.createTable('incomes', {
       id: {
         primaryKey: true,
         type: Sequelize.UUID,
@@ -8,12 +8,8 @@ module.exports = {
         allowNull: false
       },
       user_id: {type: Sequelize.STRING(255), allowNull: false},
-      status: {type: Sequelize.ENUM('CURRENT', 'FUTURE'), allowNull: false},
-      employer_name: {type: Sequelize.STRING(255), allowNull: false},
-      start_month: {type: Sequelize.INTEGER, allowNull: false},
-      start_year: {type: Sequelize.INTEGER, allowNull: false},
-      is_self_employed: {type: Sequelize.BOOLEAN, allowNull: false},
-      self_employed_details: {type: Sequelize.JSON},
+      income_type: {type: Sequelize.ENUM('SALARY', 'SELF_EMPLOYED', 'RENTAL', 'SOCIAL_SECURITY_PENSION', 'DISABILITY', 'CHILD_SUPPORT_ALIMONY', 'K1'), allowNull: false},
+      employer_name: {type: Sequelize.STRING(255)},
       stated_income: {type: Sequelize.INTEGER, allowNull: false},
       verified_income: {type: Sequelize.INTEGER},
       verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},

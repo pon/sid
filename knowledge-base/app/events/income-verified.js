@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = class EmploymentVerified {
+module.exports = class IncomeVerified {
   constructor(id, verifiedIncome, verifiedAt) {
-    this._type = 'EMPLOYMENT_VERIFIED'
+    this._type = 'INCOME_VERIFIED'
     this._id = id
     this._verified_income = verifiedIncome
     this._verified_at = verifiedAt || new Date()
