@@ -89,7 +89,8 @@ exports.register = (server, options, next) => {
       date_of_birth: Joi.date()
     }),
     uploadCreate: Joi.object().keys({
-      user_id: Joi.string().max(255).required(),
+      application_id: Joi.string().max(255).required(),
+      category: Joi.string().max(255).required(),
       file: Joi.object().required()
     })
   }

@@ -49,7 +49,7 @@ exports.register = (server, options, next) => {
           const upload = Upload.build()
 
           const contentType = request.payload.file.hapi.headers['content-type']
-          const filePath = `${request.payload.user_id}/${upload.id}`
+          const filePath = `${request.payload.application_id}/${upload.id}`
 
           const uploadParams = {
             bucket: options.bucket,
@@ -62,10 +62,11 @@ exports.register = (server, options, next) => {
           .then(() => {
             const UploadCreatedEvent = new Events.UPLOAD_CREATED({
               id: upload.id,
-              user_id: request.payload.user_id,
+              application_id: request.payload.application_id,
               file_name: request.payload.file.hapi.filename,
               bucket_name: options.bucket,
               path: filePath,
+              category: request.payload.category,
               content_type: contentType
             })
 
@@ -132,11 +133,11 @@ exports.register = (server, options, next) => {
     }
   }, {
     method: 'GET',
-    path: '/users/{userId}/uploads',
+    path: '/applications/{applicationId}/uploads',
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Upload.findAll({where: {user_id: request.params.userId, deleted_at: null}})
+        return Upload.findAll({where: {application_id: request.params.applicationId, deleted_at: null}})
         .map(upload => {
           return {
             id: upload.id,

@@ -24,33 +24,39 @@ class FileUpload extends Component {
       return file;
     });
 
+    const uploadedFiles = this.state.uploadedFiles.concat(files);
+    this.props.input.onChange(uploadedFiles);
     this.setState({
-      uploadedFiles: this.state.uploadedFiles.concat(files)
+      uploadedFiles: uploadedFiles
     });
   }
 
   handleChange = (event, index, value) => this.setState({category: value});
   
   removeFile = (idxToRemove) => {
+    const uploadedFiles = this.state.uploadedFiles.reduce((agg, file, idx) => {
+      if (idx !== idxToRemove) {
+        agg.push(file);
+      }
+      return agg
+    }, []);
+
+    this.props.input.onChange(uploadedFiles);
+
     this.setState({
-      uploadedFiles: this.state.uploadedFiles.reduce((agg, file, idx) => {
-        if (idx !== idxToRemove) {
-          agg.push(file);
-        }
-        return agg
-      }, [])
+      uploadedFiles: uploadedFiles
     });
   }
 
   render() {
     const dropzoneStyle = {
       width: '100%',
-      'text-align': 'center',
-      'border-style': 'dashed',
-      'border-width': '1px',
-      'border-color': 'black',
+      textAlign: 'center',
+      borderStyle: 'dashed',
+      borderWidth: '1px',
+      borderColor: 'black',
       height: '200px',
-      'line-height': '200px'
+      lineHeight: '200px'
     };
 
     return (

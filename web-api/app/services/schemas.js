@@ -35,8 +35,8 @@ exports.register = (server, options, next) => {
       stated_income: Joi.number().integer().required()
     }),
     applyStepThree: Joi.object().keys({
-      application_id: Joi.string().max(255).required(),
-      credit_check_consent: Joi.valid(true)
+      // application_id: Joi.string().max(255).required(),
+      // files: Joi.object().required()
     })
   }
 

@@ -164,14 +164,21 @@ exports.register = (server, options, next) => {
     path: '/apply/step-three',
     config: {
       tags: ['api'],
-      handler: (request, reply) => {
-        return KBClient.applicationApply(request.payload.application_id)
-        .asCallback(reply)
+      payload: {
+        output: 'stream',
+        allow: 'multipart/form-data'
       },
-      validate: {
-        payload: server.plugins.schemas.applyStepThree,
-        options: {stripUnknown: true}
+      handler: (request, reply) => {
+        console.log(request.payload['files[]'])
+        console.log(request.payload['categories[]'])
+        reply()
+        // return KBClient.applicationApply(request.payload.application_id)
+        // .asCallback(reply)
       }
+      // validate: {
+      //   payload: server.plugins.schemas.applyStepThree,
+      //   options: {stripUnknown: true}
+      // }
     }
   }])
 

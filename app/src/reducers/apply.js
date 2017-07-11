@@ -114,12 +114,18 @@ const fetchApplyStepTwo = payload => {
 };
 
 const fetchApplyStepThree = payload => {
+  const formData = new FormData();
+  payload.files.forEach(file => {
+    formData.append('files[]', file);
+    formData.append('categories[]', file.category);
+  })
+  formData.append('application_id', payload.application_id);
   return fetch('http://localhost:4000/apply/step-three', {
     method: 'POST',
     headers: {
       Authorization: sessionStorage.getItem('jwtToken')
     },
-    body: JSON.stringify(payload)
+    body: formData
   })
   .then(handleError)
   .then(response => {
@@ -197,7 +203,6 @@ export default (state = initialState, {type, payload}) => {
         .set('error', payload.error)
         .set('submittedValues', payload.submittedValues);
     case SUBMIT_APPLY_STEP_THREE:
-      debugger;
       payload.application_id = state.get('application').id
       return loop(
         state.set('isSubmitting', true),

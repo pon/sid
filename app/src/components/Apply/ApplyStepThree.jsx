@@ -6,7 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FileUpload from '../common/FileUpload';
 
 const validate = values => {
-  console.log(values);
+  console.log('##values', values);
   const errors = {};
 
   return errors;
@@ -23,8 +23,7 @@ const ApplyStepThreeForm = props => {
       <form onSubmit={handleSubmit(submitApplyStepThree)}>
         <h4>Document Upload</h4>
 
-        <Field name="file" component="input" type="hidden" />
-        <FileUpload />
+        <Field name="files" type="file" component={FileUpload} />
 
         <RaisedButton fullWidth={true} label="Submit" primary={true} disabled={!valid || submitting} type="submit"/>
       </form>
