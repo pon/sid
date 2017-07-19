@@ -1,3 +1,4 @@
+const fs      = require('fs')
 const Joi     = require('joi')
 const P       = require('bluebird')
 const Request = require('request')
@@ -80,6 +81,9 @@ class KnowledgeBaseClient {
       return response
     })
     .finally(() => {
+      if (log.options && log.options.formData && log.options.formData.file) {
+        log.options.formData.file = '[REDACTED]'
+      }
       this.options.logger(log)
     })
   }
@@ -146,42 +150,19 @@ class KnowledgeBaseClient {
     return this._post(`/addresses/${addressId}/restore`)
   }
 
-  createEmployment(employment) {
-    return this._post('/employments', {body: employment, json: true})
-    .then(res => res.body)
+  createIncomes(incomes) {
+    return P.map(incomes, income => {
+      return this._post('/incomes', {body: income, json: true})
+      .then(res => res.body)
+    })
   }
 
-  updateEmployment(employmentId, updates) {
-    return this._patch(`/employments/${employmentId}`, {body: updates, json: true})
-  }
-
-  getEmployment(employmentId, asOf) {
+  getIncome(incomeId, asOf) {
     return this._get(
-      `/employments/${employmentId}`,
+      `/incomes/${incomeId}`,
       asOf ? {json: true, as_of: asOf} : {json: true}
     )
     .then(res => res.body)
-  }
-
-  deleteEmployment(employmentId) {
-    return this._delete(`/employments/${employmentId}`)
-  }
-
-  getEmploymentEvents(employmentId) {
-    return this._get(`/employments/${employmentId}/events`, {json: true})
-    .then(res => res.body)
-  }
-
-  restoreEmployment(employmentId) {
-    return this._post(`/employments/${employmentId}/restore`)
-  }
-
-  verifyEmployment(employmentId, body) {
-    return this._post(`/employments/${employmentId}/verify`, {body: body, json: true})
-  }
-
-  unverifyEmployment(employmentId) {
-    return this._post(`/employments/${employmentId}/unverify`)
   }
 
   createLease(lease) {
@@ -243,9 +224,22 @@ class KnowledgeBaseClient {
     .then(res => res.body)
   }
 
-  createUpload(userId, file) {
+  createUpload(applicationId, file, category) {
     return this._post('/uploads', {
-      formData: {user_id: userId, file: file}
+      formData: {
+        application_id: applicationId,
+        file: {
+          value:  fs.createReadStream(file.path),
+          options: {
+            filename: file.filename,
+            contentType: file.headers['content-type']
+          }
+        },
+        category: category
+      },
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
     })
   }
 
@@ -289,11 +283,13 @@ class KnowledgeBaseClient {
     .then(_application => {
       application = _application
       return P.all([
-        _application.employment_id && this.getEmployment(_application.employment_id),
+        _application.income_ids && P.map(_application.income_ids, incomeId => {
+          return this.getIncome(incomeId)
+        }),
         _application.lease_id && this.getLease(_application.lease_id)
       ])
-      .spread((employment, lease) => {
-        if (employment) application.employment = employment
+      .spread((incomes, lease) => {
+        if (incomes) application.incomes = incomes
         if (lease) application.lease = lease
 
         return application
@@ -324,6 +320,13 @@ class KnowledgeBaseClient {
   applicationAttachEmployment(applicationId, employmentId) {
     return this._post(`/applications/${applicationId}/attach_employment`, {
       body: {employment_id: employmentId},
+      json: true
+    })
+  }
+
+  applicationAttachIncomes(applicationId, incomeIds) {
+    return this._post(`/applications/${applicationId}/attach_incomes`, {
+      body: {income_ids: incomeIds},
       json: true
     })
   }

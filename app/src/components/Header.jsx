@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {push} from 'react-router';
-
 import styled from 'styled-components';
 import {media} from '../utils/style-utils';
 
@@ -44,14 +42,6 @@ export class Header extends Component {
     const LogInOut = styled(Item)`
       float: right;
     `;
-
-    const LogInOutClick = () => {
-      if (this.props.isAuthenticated) {
-        return this.props.submitLogout();
-      } else {
-        return push('/login');
-      }
-    }
 
     return (
       <StyledHeader>

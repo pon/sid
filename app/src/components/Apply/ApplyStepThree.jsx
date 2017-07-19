@@ -1,22 +1,19 @@
 import React from 'react';
 import {Field, reduxForm} from 'redux-form';
-import styled from 'styled-components';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import FileUpload from '../common/FileUpload';
 
 const validate = values => {
-  console.log('##values', values);
   const errors = {};
 
   return errors;
 };
 
 const ApplyStepThreeForm = props => {
-  const {apply, handleSubmit, submitting, submitApplyStepThree, valid} = props;
-  const error = apply.get('error');
+  const {handleSubmit, submitting, submitApplyStepThree, valid} = props;
 
-  const wrapperStyles = {width: '60%', margin: '0 auto', 'margin-bottom': '1em'};
+  const wrapperStyles = {width: '60%', margin: '0 auto', marginBottom: '1em'};
 
   return (
     <div style={wrapperStyles}>

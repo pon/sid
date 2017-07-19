@@ -1,4 +1,5 @@
 const Boom    = require('boom')
+const fs      = require('fs')
 const moment  = require('moment')
 const P       = require('bluebird')
 
@@ -102,7 +103,13 @@ exports.register = (server, options, next) => {
     path: '/apply/step-two',
     config: {
       tags: ['api'],
+      payload: {
+        allow: 'multipart/form-data'
+      },
       handler: (request, reply) => {
+        if (!Array.isArray(request.payload.incomes)) {
+          request.payload.incomes = [request.payload.incomes]
+        }
         let application
         return P.all([
           KBClient.updateProfile(request.auth.credentials.id, {
@@ -130,19 +137,18 @@ exports.register = (server, options, next) => {
               end_date: end_date,
               term_months: request.payload.term_months
             }),
-            KBClient.createEmployment({
-              user_id: request.auth.credentials.id,
-              status: request.payload.status,
-              employer_name: request.payload.employer_name,
-              start_month: request.payload.start_month,
-              start_year: request.payload.start_year,
-              is_self_employed: request.payload.is_self_employed,
-              stated_income: request.payload.stated_income
-            })
+            KBClient.createIncomes(request.payload.incomes.map(income => {
+              return {
+                user_id: request.auth.credentials.id,
+                income_type: income.income_type,
+                employer_name: income.employer_name !== '' ? income.employer_name : undefined,
+                stated_income: income.stated_income
+              }
+            }))
           ])
-        }).spread((lease, employment) => {
+        }).spread((lease, incomes) => {
           return P.all([
-            KBClient.applicationAttachEmployment(request.payload.application_id, employment.id),
+            KBClient.applicationAttachIncomes(request.payload.application_id, incomes.map(income => income.id)),
             KBClient.applicationAttachLease(request.payload.application_id, lease.id)
           ])
         })
@@ -165,20 +171,36 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       payload: {
-        output: 'stream',
-        allow: 'multipart/form-data'
+        output: 'file',
+        allow: 'multipart/form-data',
+        parse: true
       },
       handler: (request, reply) => {
-        console.log(request.payload['files[]'])
-        console.log(request.payload['categories[]'])
-        reply()
-        // return KBClient.applicationApply(request.payload.application_id)
-        // .asCallback(reply)
+        if (!Array.isArray(request.payload.files)) {
+          request.payload.files = [request.payload.files]
+          request.payload.categories = [request.payload.categories]
+        }
+
+        return P.map(request.payload.files, (file, idx) => {
+          return KBClient.createUpload(request.payload.application_id, file, request.payload.categories[idx])
+          .tap(() => {
+            if (fs.existsSync(file.path)) {
+              fs.unlinkSync(file.path)
+            }
+          })
+        })
+        .then(() => {
+          return P.props({
+            application: KBClient.getApplication(request.payload.application_id),
+            profile: KBClient.getProfile(request.auth.credentials.id)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        payload: server.plugins.schemas.applyStepThree,
+        options: {stripUnknown: true}
       }
-      // validate: {
-      //   payload: server.plugins.schemas.applyStepThree,
-      //   options: {stripUnknown: true}
-      // }
     }
   }])
 

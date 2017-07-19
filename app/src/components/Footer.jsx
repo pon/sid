@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import {media} from '../utils/style-utils';
 
 export default () => {
   const StyledFooter = styled.footer`

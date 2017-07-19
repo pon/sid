@@ -6,7 +6,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 export class App extends Component {
 
-  componentDidMount() {
+  componentWillMount() {
     injectTapEventPlugin();
   }
 

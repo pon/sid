@@ -70,6 +70,15 @@ exports.register = (server, options, next) => {
             })
           }
 
+          if (application.upload_ids) {
+            application.uploads = application.upload_ids.map(uploadId => {
+              let upload =  `/uploads/${uploadId}`
+              upload = upload +
+                (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
+              return upload
+            })
+          }
+
           if (application.lease_id) {
             application.lease = `/leases/${application.lease_id}`
             application.lease = application.lease +

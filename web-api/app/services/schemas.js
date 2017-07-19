@@ -1,6 +1,16 @@
 const Joi = require('joi')
 
 exports.register = (server, options, next) => {
+
+  const incomeSchema = Joi.object().keys({
+    income_type: Joi.valid(
+      'SALARY', 'SELF_EMPLOYED', 'RENTAL', 'SOCIAL_SECURITY_PENSION',
+      'DISABILITY', 'CHILD_SUPPORT_ALIMONY', 'K1'
+    ).required(),
+    employer_name: Joi.string().allow('').max(255).optional(),
+    stated_income: Joi.number().integer().required()
+  })
+
   const schemas = {
     email: Joi.string().email().required(),
     password: Joi.string().required().min(8),
@@ -15,8 +25,6 @@ exports.register = (server, options, next) => {
     }),
     applyStepTwo: Joi.object().keys({
       application_id: Joi.string().max(255).required(),
-      date_of_birth: Joi.date().required(),
-      citizenship: Joi.valid('US_CITIZEN', 'PERM_RESIDENT', 'NON_PERM_RESIDENT').required(),
       street_one: Joi.string().max(255).required(),
       street_two: Joi.string().max(255),
       city: Joi.string().max(255).required(),
@@ -26,17 +34,12 @@ exports.register = (server, options, next) => {
       monthly_rent: Joi.number().integer().min(0).required(),
       start_date: Joi.date().required(),
       term_months: Joi.number().integer().min(1).required(),
-      status: Joi.valid('CURRENT', 'FUTURE').required(),
-      employer_name: Joi.string().max(255).required(),
-      start_month: Joi.number().integer().min(1).max(12).required(),
-      start_year: Joi.number().integer().min(1900).required(),
-      is_self_employed: Joi.boolean().default(false),
-      self_employed_details: Joi.object(),
-      stated_income: Joi.number().integer().required()
+      incomes: [Joi.array().items(incomeSchema), incomeSchema]
     }),
     applyStepThree: Joi.object().keys({
-      // application_id: Joi.string().max(255).required(),
-      // files: Joi.object().required()
+      application_id: Joi.string().max(255).required(),
+      files: Joi.object().required(),
+      categories: [Joi.array().items(Joi.string()), Joi.string()]
     })
   }
 

@@ -88,12 +88,23 @@ const fetchApplyStepOne = payload => {
 };
 
 const fetchApplyStepTwo = payload => {
+  const formData = new FormData();
+  Object.keys(payload).forEach(key => {
+    if (key === 'incomes') {
+      payload[key].forEach(income => {
+        formData.append('incomes', JSON.stringify(income));
+      });
+    } else {
+      formData.append(key, payload[key]);
+    }
+  });
+
   return fetch('http://localhost:4000/apply/step-two', {
     method: 'POST',
     headers: {
       Authorization: sessionStorage.getItem('jwtToken')
     },
-    body: JSON.stringify(payload)
+    body: formData
   })
   .then(handleError)
   .then(response => {
@@ -116,8 +127,8 @@ const fetchApplyStepTwo = payload => {
 const fetchApplyStepThree = payload => {
   const formData = new FormData();
   payload.files.forEach(file => {
-    formData.append('files[]', file);
-    formData.append('categories[]', file.category);
+    formData.append('files', file);
+    formData.append('categories', file.category);
   })
   formData.append('application_id', payload.application_id);
   return fetch('http://localhost:4000/apply/step-three', {

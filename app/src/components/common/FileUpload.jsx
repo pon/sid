@@ -8,9 +8,7 @@ import ActionDelete from 'material-ui/svg-icons/action/delete';
 class FileUpload extends Component {
   constructor() {
     super();
-    this.state = {uploadedFiles: []}
-    this.state.category = null;
-    this.state.error = null;
+    this.state = {uploadedFiles: [], category: '', error: null};
   }
   
   onDrop = files => {
@@ -61,7 +59,6 @@ class FileUpload extends Component {
 
     return (
       <div>
-        <span>{this.state.error}</span>
         <SelectField fullWidth={true} floatingLabelText="Type" value={this.state.category} onChange={this.handleChange}>
           <MenuItem value="PAYSTUB" primaryText="Pay Stub" />
           <MenuItem value="ID" primaryText="ID" />

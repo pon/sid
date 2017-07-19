@@ -1,5 +1,5 @@
 import React from 'react';
-import {Field, reduxForm, SubmissionError} from 'redux-form';
+import {Field, reduxForm} from 'redux-form';
 import {connect} from 'react-redux';
 import styled from 'styled-components';
 
@@ -31,7 +31,7 @@ const validate = values => {
     errors.password = 'Must be at least 8 characters';
   } else if (!values.confirm_password) {
     errors.confirm_password = '';
-  } else if (values.password != values.confirm_password) {
+  } else if (values.password !== values.confirm_password) {
     errors.confirm_password = 'Passwords must match';
   }
 
@@ -77,9 +77,8 @@ ApplyStepOneForm = reduxForm({
 
 ApplyStepOneForm = connect(
   ({apply}) => {
-    const submittedValues = apply.get('submittedValues');
     return {
-      initialValues: submittedValues
+      initialValues: apply.get('submittedValues')
     };
   }
 )(ApplyStepOneForm);

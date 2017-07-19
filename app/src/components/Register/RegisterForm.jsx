@@ -1,6 +1,5 @@
 import React from 'react';
 import {Field, reduxForm} from 'redux-form';
-import styled from 'styled-components';
 
 import RenderField from '../common/RenderField';
 
@@ -19,7 +18,7 @@ const validate = values => {
     errors.password = 'Must be at least 8 characters';
   } else if (!values.confirmPassword) {
     errors.confirmPassword = 'Required';
-  } else if (values.password != values.confirmPassword) {
+  } else if (values.password !== values.confirmPassword) {
     errors.confirmPassword = 'Must match password';
   }
 

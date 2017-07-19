@@ -12,7 +12,7 @@ const validate = values => {
     errors.newPassword = 'Must be at least 8 characters';
   } else if (!values.newPasswordConfirmation) {
     errors.newPasswordConfirmation = 'Required';
-  } else if (values.newPassword != values.newPasswordConfirmation) {
+  } else if (values.newPassword !== values.newPasswordConfirmation) {
     errors.newPasswordConfirmation = 'Must match password';
   }
 
@@ -20,7 +20,7 @@ const validate = values => {
 }
 
 const ResetPasswordForm= props => {
-  const {handleSubmit, pristine, submitting, submitResetPassword, token, valid} = props;
+  const {handleSubmit, pristine, submitting, submitResetPassword, valid} = props;
   const error = props.resetPassword.get('error');
   return (
     <div>
