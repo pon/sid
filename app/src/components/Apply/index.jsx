@@ -10,13 +10,15 @@ import {
 
 import EmailIcon from 'material-ui/svg-icons/communication/email';
 import FileUploadIcon from 'material-ui/svg-icons/file/file-upload';
-import InsertDriveIcon from 'material-ui/svg-icons/editor/insert-drive-file';
+import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle';
+import PersonIcon from 'material-ui/svg-icons/social/person';
 import {blue500} from 'material-ui/styles/colors';
 
 import ApplyStepOneForm from './ApplyStepOne';
 import ApplyStepTwoForm from './ApplyStepTwo';
 import ApplyStepThreeForm from './ApplyStepThree';
-import {getApply, submitApplyStepOne, submitApplyStepTwo, submitApplyStepThree} from '../../reducers/apply';
+import ApplyStepFourForm from './ApplyStepFour';
+import {getApply, submitApplyStepOne, submitApplyStepTwo, submitApplyStepThree, submitApplyStepFour} from '../../reducers/apply';
 
 export class Apply extends Component {
 
@@ -30,15 +32,20 @@ export class Apply extends Component {
 
     const application = this.props.apply.get('application');
 
-    if (!this.props.apply.get('profile')) {
+    if (application && application.status !== 'APPLYING') {
+      applyStep = <h1>Done</h1>;
+    } else if (!this.props.apply.get('profile')) {
       applyStepIndex = 0;
       applyStep = <ApplyStepOneForm apply={this.props.apply} submitApplyStepOne={this.props.submitApplyStepOne}/>;
     } else if (application && (application.incomes.length === 0 || !application.lease)) {
       applyStepIndex = 1;
       applyStep = <ApplyStepTwoForm apply={this.props.apply} submitApplyStepTwo={this.props.submitApplyStepTwo}/>;
-    } else {
+    } else if (application && application.uploads.length === 0) {
       applyStepIndex = 2;
       applyStep = <ApplyStepThreeForm apply={this.props.apply} submitApplyStepThree={this.props.submitApplyStepThree}/>;
+    } else {
+      applyStepIndex = 3;
+      applyStep = <ApplyStepFourForm apply={this.props.apply} submitApplyStepFour={this.props.submitApplyStepFour}/>;
     }
 
     const ApplyWrapper = styled.div`
@@ -53,10 +60,13 @@ export class Apply extends Component {
             <StepLabel icon={<EmailIcon color={applyStepIndex === 0 ? blue500 : ''}/>}>Register</StepLabel>
           </Step>
           <Step>
-            <StepLabel icon={<InsertDriveIcon color={applyStepIndex === 1 ? blue500 : ''}/>}>Application</StepLabel>
+            <StepLabel icon={<PersonIcon color={applyStepIndex === 1 ? blue500 : ''}/>}>Application</StepLabel>
           </Step>
           <Step>
             <StepLabel icon={<FileUploadIcon color={applyStepIndex === 2 ? blue500 : ''}/>}>Document Upload</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel icon={<CheckCircleIcon color={applyStepIndex === 3 ? blue500 : ''}/>}>Confirm</StepLabel>
           </Step>
         </Stepper>
         {applyStep}
@@ -81,6 +91,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   submitApplyStepThree: payload => {
     return dispatch(submitApplyStepThree(payload));
+  },
+  submitApplyStepFour: payload => {
+    return dispatch(submitApplyStepFour(payload));
   }
 })
 

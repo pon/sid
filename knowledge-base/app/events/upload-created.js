@@ -4,7 +4,7 @@ module.exports = class UploadCreated {
   constructor(args) {
     this._type = 'UPLOAD_CREATED'
     this._id = args.id
-    this._application_id = args.application_id
+    this._user_id = args.user_id
     this._file_name = args.file_name
     this._bucket_name = args.bucket_name
     this._path =args.path
@@ -15,7 +15,7 @@ module.exports = class UploadCreated {
   toJSON() {
     return {
       id: this._id,
-      application_id: this._application_id,
+      user_id: this._user_id,
       file_name: this._file_name,
       bucket_name: this._bucket_name,
       path: this._path,
@@ -30,7 +30,7 @@ module.exports = class UploadCreated {
   // Basic Getters
   get id() {return this._id}
   get type() {return this._type}
-  get application_id() {return this._application_id}
+  get user_id() {return this._user_id}
   get file_name() {return this._file_name}
   get bucket_name() {return this._bucket_name}
   get path() {return this._path}

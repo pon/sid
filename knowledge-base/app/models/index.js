@@ -35,6 +35,20 @@ module.exports = function (db) {
     otherKey: 'application_id'
   })
 
+  modelsExport.Application.belongsToMany(modelsExport.Upload, {
+    as: 'Uploads',
+    through: modelsExport.ApplicationUpload,
+    foreignKey: 'application_id',
+    otherKey: 'upload_id'
+  })
+
+  modelsExport.Upload.belongsToMany(modelsExport.Application, {
+    as: 'Applications',
+    through: modelsExport.ApplicationUpload,
+    foreignKey: 'upload_id',
+    otherKey: 'application_id'
+  })
+
   modelsExport.Application.belongsTo(modelsExport.Lease, {foreignKey: 'lease_id'})
   modelsExport.Lease.hasMany(modelsExport.Application, {foreignKey: 'lease_id'})
 

@@ -7,7 +7,7 @@ module.exports = {
         defaultValue: Sequelize.UUIDV1,
         allowNull: false
       },
-      application_id: {type: Sequelize.STRING(255), allowNull: false},
+      user_id: {type: Sequelize.STRING(255), allowNull: false},
       file_name: {type: Sequelize.STRING(255), allowNull: false},
       bucket_name: {type: Sequelize.STRING(255), allowNull: false},
       path: {type: Sequelize.STRING(255), allowNull: false},

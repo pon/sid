@@ -16,6 +16,10 @@ const SUBMIT_APPLY_STEP_TWO_FAILURE = 'SUBMIT_APPLY_STEP_TWO_FAILURE';
 const SUBMIT_APPLY_STEP_THREE = 'SUBMIT_APPLY_STEP_THREE';
 const SUBMIT_APPLY_STEP_THREE_SUCCESS = 'SUBMIT_APPLY_STEP_THREE_SUCCESS';
 const SUBMIT_APPLY_STEP_THREE_FAILURE = 'SUBMIT_APPLY_STEP_THREE_FAILURE';
+const SUBMIT_APPLY_STEP_FOUR = 'SUBMIT_APPLY_STEP_FOUR';
+const SUBMIT_APPLY_STEP_FOUR_SUCCESS = 'SUBMIT_APPLY_STEP_FOUR_SUCCESS';
+const SUBMIT_APPLY_STEP_FOUR_FAILURE = 'SUBMIT_APPLY_STEP_FOUR_FAILURE';
+
 
 // CREATORS
 export const getApply = () => ({
@@ -35,7 +39,12 @@ export const submitApplyStepTwo = payload => ({
 export const submitApplyStepThree = payload => ({
   type: SUBMIT_APPLY_STEP_THREE,
   payload
-})
+});
+
+export const submitApplyStepFour = payload => ({
+  type: SUBMIT_APPLY_STEP_FOUR,
+  payload
+});
 
 // REDUCER
 export const initialState = Immutable.fromJS({
@@ -155,6 +164,34 @@ const fetchApplyStepThree = payload => {
   })
 };
 
+const fetchApplyStepFour = payload => {
+  console.log(payload);
+  return fetch('http://localhost:4000/apply/step-four', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {
+      Authorization: sessionStorage.getItem('jwtToken')
+    }
+  })
+  .then(handleError)
+  .then(response => {
+    return {
+      type: SUBMIT_APPLY_STEP_FOUR_SUCCESS,
+      payload: response
+    };
+  })
+  .catch(error => {
+    return {
+      type: SUBMIT_APPLY_STEP_FOUR_FAILURE,
+      payload: {
+        error: error.message,
+        submittedValues: payload
+      }
+    };
+  })
+};
+
+
 export default (state = initialState, {type, payload}) => {
   switch (type) {
     case GET_APPLY:
@@ -224,10 +261,29 @@ export default (state = initialState, {type, payload}) => {
       )
     case SUBMIT_APPLY_STEP_THREE_SUCCESS:
       return state
-        .set('application', payload)
+        .set('application', payload.application)
+        .set('profile', payload.profile)
         .set('isSubmitting', false)
         .delete('error');
     case SUBMIT_APPLY_STEP_THREE_FAILURE:
+      return state
+        .set('isSubmitting', false)
+        .set('error', payload.error);
+    case SUBMIT_APPLY_STEP_FOUR:
+      payload.application_id = state.get('application').id
+      return loop(
+        state.set('isSubmitting', true),
+        Effects.promise(
+          fetchApplyStepFour,
+          payload
+        )
+      )
+    case SUBMIT_APPLY_STEP_FOUR_SUCCESS:
+      return state
+        .set('application', payload)
+        .set('isSubmitting', false)
+        .delete('error');
+    case SUBMIT_APPLY_STEP_FOUR_FAILURE:
       return state
         .set('isSubmitting', false)
         .set('error', payload.error);

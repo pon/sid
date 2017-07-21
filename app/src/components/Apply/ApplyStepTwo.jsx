@@ -39,6 +39,12 @@ const validate = values => {
     errors.incomes = 'You must provide at least one income.';
   }
 
+  if (!values.years_of_employment) {
+    errors.years_of_employment = 'Required';
+  } else if (!Number.isInteger(parseInt(values.years_of_employment, 10))) {
+    errors.years_of_employment = 'Invalid Years of Employment';
+  }
+
   return errors;
 };
 
@@ -137,6 +143,7 @@ let ApplyStepTwoForm= props => {
 
         <h3>Income &amp; Employment</h3>
         <Field name="incomes" component={IncomeForm} />
+        <Field name="years_of_employment" fullWidth={true} component={TextField} type="number" hintText="Total Years of Employment" />
 
         <div style={{textAlign: 'center'}}>
           <RaisedButton label="Submit" primary={true} disabled={!valid || pristine || submitting} type="submit"/>

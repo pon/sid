@@ -34,12 +34,17 @@ exports.register = (server, options, next) => {
       monthly_rent: Joi.number().integer().min(0).required(),
       start_date: Joi.date().required(),
       term_months: Joi.number().integer().min(1).required(),
-      incomes: [Joi.array().items(incomeSchema), incomeSchema]
+      incomes: [Joi.array().items(incomeSchema), incomeSchema],
+      years_of_employment: Joi.number().integer().min(0).required()
     }),
     applyStepThree: Joi.object().keys({
       application_id: Joi.string().max(255).required(),
-      files: Joi.object().required(),
+      files: Joi.any(),
       categories: [Joi.array().items(Joi.string()), Joi.string()]
+    }),
+    applyStepFour: Joi.object().keys({
+      application_id: Joi.string().max(255).required(),
+      social_security_number: Joi.string().length(9).required()
     })
   }
 

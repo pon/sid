@@ -20,8 +20,11 @@ exports.register = (server, options, next) => {
     applicationAttachCreditReport: Joi.object().keys({
       credit_report_id: Joi.string().max(255).required()
     }),
-    applicationAttachIncome: Joi.object().keys({
-      income_ids: Joi.array().items(Joi.string().max(255).required())
+    applicationAttachIncomes: Joi.object().keys({
+      income_ids: [Joi.array().items(Joi.string().max(255).required()), Joi.string().max(255).required()]
+    }),
+    applicationAttachUploads: Joi.object().keys({
+      upload_ids: [Joi.array().items(Joi.string().max(255).required()), Joi.string().max(255).required()]
     }),
     applicationAttachLease: Joi.object().keys({
       lease_id: Joi.string().max(255).required()
@@ -78,16 +81,20 @@ exports.register = (server, options, next) => {
       first_name: Joi.string().max(255).required(),
       last_name: Joi.string().max(255).required(),
       citizenship: Joi.valid('US_CITIZEN', 'PERM_RESIDENT', 'NON_PERM_RESIDENT'),
-      date_of_birth: Joi.date()
+      date_of_birth: Joi.date(),
+      years_of_employment: Joi.number().integer().min(0),
+      social_security_number: Joi.string().length(9),
     }),
     profileUpdate: Joi.object().keys({
       first_name: Joi.string().max(255),
       last_name: Joi.string().max(255),
       citizenship: Joi.valid('US_CITIZEN', 'PERM_RESIDENT', 'NON_PERM_RESIDENT'),
-      date_of_birth: Joi.date()
+      date_of_birth: Joi.date(),
+      years_of_employment: Joi.number().integer().min(0),
+      social_security_number: Joi.string().length(9)
     }),
     uploadCreate: Joi.object().keys({
-      application_id: Joi.string().max(255).required(),
+      user_id: Joi.string().max(255).required(),
       category: Joi.string().max(255).required(),
       file: Joi.object().required()
     })

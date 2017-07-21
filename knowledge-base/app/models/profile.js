@@ -12,6 +12,8 @@ module.exports = db => {
     identity_verified_at: {type: Sequelize.DATE},
     citizenship_verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},
     citizenship_verified_at: {type: Sequelize.DATE},
+    years_of_employment: {type: Sequelize.INTEGER},
+    social_security_number: {type: Sequelize.STRING(9)},
     deleted_at: Sequelize.DATE
   }, {
     paranoid: false,
@@ -26,10 +28,19 @@ module.exports = db => {
             this.last_name = event.last_name
             this.citizenship = event.citizenship
             this.date_of_birth = event.date_of_birth
+            this.years_of_employment = event.years_of_employment
+            this.social_security_number = event.social_security_number
             if (!inMemory) return this.save()
             break
           case 'PROFILE_UPDATED':
-            ['first_name', 'last_name', 'citizenship', 'date_of_birth'].forEach(key => {
+            [
+              'first_name',
+              'last_name',
+              'citizenship',
+              'date_of_birth',
+              'years_of_employment',
+              'social_security_number'
+            ].forEach(key => {
               if (event[key] !== undefined) {
                 this[key] = event[key]
               }

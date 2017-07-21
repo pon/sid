@@ -10,6 +10,7 @@ exports.register = (server, options, next) => {
   const Income        = server.plugins.db.models.Income
   const Event         = server.plugins.db.models.Event
   const Lease         = server.plugins.db.models.Lease
+  const Upload        = server.plugins.db.models.Upload
 
   server.route([{
     method: 'GET',
@@ -28,9 +29,13 @@ exports.register = (server, options, next) => {
               if (!_application) throw server.plugins.errors.applicationNotFound
 
               application = _application
-              return application.getIncomes()
-              .then(incomes => {
+              return P.all([
+                application.getIncomes(),
+                application.getUploads()
+              ])
+              .spread((incomes, uploads) => {
                 application.incomes = incomes
+                application.uploads = uploads
                 return application
               })
             })
@@ -64,8 +69,7 @@ exports.register = (server, options, next) => {
           if (application.income_ids) {
             application.incomes = application.income_ids.map(incomeId => {
               let income =  `/incomes/${incomeId}`
-              income = income +
-                (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
+              income = income + (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
               return income
             })
           }
@@ -73,8 +77,7 @@ exports.register = (server, options, next) => {
           if (application.upload_ids) {
             application.uploads = application.upload_ids.map(uploadId => {
               let upload =  `/uploads/${uploadId}`
-              upload = upload +
-                (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
+              upload = upload + (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
               return upload
             })
           }
@@ -261,7 +264,56 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
-        payload: server.plugins.schemas.applicationAttachEmployment,
+        payload: server.plugins.schemas.applicationAttachIncomes,
+        options: {stripUnknown: true}
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/applications/{applicationId}/attach_uploads',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        let application
+        let uploadIds
+        return Application.findOne({where: {id: request.params.applicationId, deleted_at: null}})
+        .then(_application => {
+          application = _application
+          if (!application) throw server.plugins.errors.applicationNotFound
+
+          uploadIds = Array.isArray(request.payload.upload_ids) ? request.payload.upload_ids : [request.payload.upload_ids];
+          return P.map(uploadIds, uploadId => {
+            return Upload.findOne({
+              where: {
+                id: uploadId,
+                user_id: application.user_id,
+                deleted_at: null
+              }
+            })
+            .then(upload => {
+              if (!upload) throw server.plugins.errors.uploadNotFound
+              return upload
+            })
+          })
+        })
+        .then(uploads => {
+          const ApplicationAttachUploadsEvent = new Events.APPLICATION_UPLOADS_ATTACHED(
+            request.params.applicationId,
+            uploadIds
+          )
+
+          return application.process(
+            ApplicationAttachUploadsEvent.type,
+            ApplicationAttachUploadsEvent.toJSON()
+          )
+          .then(() => {
+            server.emit('KB', ApplicationAttachUploadsEvent)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        payload: server.plugins.schemas.applicationAttachUploads,
         options: {stripUnknown: true}
       }
     }
@@ -315,18 +367,12 @@ exports.register = (server, options, next) => {
       tags: ['api'],
       handler: (request, reply) => {
         return Application.findOne({
-          where: {id: request.params.applicationId, deleted_at: null},
-          include: [
-            {model: Employment, where: {deleted_at: null}},
-            {model: Lease, where: {deleted_at: null}}
-          ]
+          where: {id: request.params.applicationId, deleted_at: null}
         })
         .then(application => {
           if (!application) throw server.plugins.errors.applicationNotFound
           else if (application.status !== 'APPLYING') {
             throw server.plugins.errors.applicationInvalidStatusToApply
-          } else if (!application.employment || !application.lease) {
-            throw server.plugins.errors.applicationNotReadyToApply
           }
 
           const ApplicationAppliedEvent = new Events.APPLICATION_APPLIED(application.id)

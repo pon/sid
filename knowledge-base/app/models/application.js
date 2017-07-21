@@ -28,6 +28,7 @@ module.exports = db => {
           credit_report_id: this.credit_report_id,
           lease_id: this.lease_id,
           income_ids: this.incomes ? this.incomes.map(income => income.id) : this.income_ids,
+          upload_ids: this.uploads ? this.uploads.map(upload => upload.id) : this.upload_ids,
           created_at: this.created_at,
           updated_at: this.updated_at,
           deleted_at: this.deleted_at
@@ -56,6 +57,14 @@ module.exports = db => {
             event.income_ids.map(incomeId => {
               this.income_ids.push(incomeId)
               this.addIncome(incomeId)
+            })
+            if (!inMemory) return this.save()
+            break
+          case 'APPLICATION_UPLOADS_ATTACHED':
+            this.upload_ids = this.upload_ids || []
+            event.upload_ids.map(uploadId => {
+              this.upload_ids.push(uploadId)
+              this.addUpload(uploadId)
             })
             if (!inMemory) return this.save()
             break

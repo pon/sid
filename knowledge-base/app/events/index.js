@@ -10,6 +10,7 @@ module.exports = {
   APPLICATION_INCOMES_ATTACHED: require('./application-incomes-attached'),
   APPLICATION_LEASE_ATTACHED: require('./application-lease-attached'),
   APPLICATION_RESTORED: require('./application-restored'),
+  APPLICATION_UPLOADS_ATTACHED: require('./application-uploads-attached'),
   CREDIT_REPORT_CREATED: require('./credit-report-created'),
   CREDIT_REPORT_DELETED: require('./credit-report-deleted'),
   CREDIT_REPORT_RESTORED: require('./credit-report-restored'),

@@ -16,6 +16,8 @@ module.exports = {
       identity_verified_at: {type: Sequelize.DATE},
       citizenship_verified: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},
       citizenship_verified_at: {type: Sequelize.DATE},
+      years_of_employment: {type: Sequelize.INTEGER},
+      social_security_number: {type: Sequelize.STRING(0)},
       created_at: {type: Sequelize.DATE, allowNull: false},
       updated_at: {type: Sequelize.DATE, allowNull: false},
       deleted_at: {type: Sequelize.DATE}

@@ -49,7 +49,7 @@ exports.register = (server, options, next) => {
           const upload = Upload.build()
 
           const contentType = request.payload.file.hapi.headers['content-type']
-          const filePath = `${request.payload.application_id}/${upload.id}`
+          const filePath = `${request.payload.user_id}/${upload.id}`
 
           const uploadParams = {
             bucket: options.bucket,
@@ -62,7 +62,7 @@ exports.register = (server, options, next) => {
           .then(() => {
             const UploadCreatedEvent = new Events.UPLOAD_CREATED({
               id: upload.id,
-              application_id: request.payload.application_id,
+              user_id: request.payload.user_id,
               file_name: request.payload.file.hapi.filename,
               bucket_name: options.bucket,
               path: filePath,
@@ -73,6 +73,7 @@ exports.register = (server, options, next) => {
             return upload.process(UploadCreatedEvent.type, UploadCreatedEvent.toJSON())
             .then(() => {
               server.emit('KB', UploadCreatedEvent)
+              return upload
             })
           })
         })

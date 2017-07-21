@@ -22,7 +22,6 @@ exports.register = (server, options, next) => {
           }
 
           return KBClient.getUserApplications(request.auth.credentials.id)
-          .filter(app => app.status === 'APPLYING')
           .then(apps => apps[0])
           .then(app => {
             if (!app) return null
@@ -114,7 +113,8 @@ exports.register = (server, options, next) => {
         return P.all([
           KBClient.updateProfile(request.auth.credentials.id, {
             date_of_birth: request.payload.date_of_birth,
-            citizenship: request.payload.citizenship
+            citizenship: request.payload.citizenship,
+            years_of_employment: request.payload.years_of_employment
           }),
           KBClient.createAddress({
             user_id: request.auth.credentials.id,
@@ -182,12 +182,39 @@ exports.register = (server, options, next) => {
         }
 
         return P.map(request.payload.files, (file, idx) => {
-          return KBClient.createUpload(request.payload.application_id, file, request.payload.categories[idx])
+          return KBClient.createUpload(request.auth.credentials.id, file, request.payload.categories[idx])
           .tap(() => {
             if (fs.existsSync(file.path)) {
               fs.unlinkSync(file.path)
             }
           })
+        })
+        .then(uploads => {
+          return KBClient.applicationAttachUploads(request.payload.application_id, uploads.map(upload => upload.id))
+        }).then(() => {
+          return P.props({
+            application: KBClient.getApplication(request.payload.application_id),
+            profile: KBClient.getProfile(request.auth.credentials.id)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        payload: server.plugins.schemas.applyStepThree,
+        options: {stripUnknown: true}
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/apply/step-four',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return KBClient.updateProfile(request.auth.credentials.id, {
+          social_security_number: request.payload.social_security_number
+        })
+        .then(() => {
+          return KBClient.applicationApply(request.payload.application_id)
         })
         .then(() => {
           return P.props({
@@ -198,7 +225,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
-        payload: server.plugins.schemas.applyStepThree,
+        payload: server.plugins.schemas.applyStepFour,
         options: {stripUnknown: true}
       }
     }

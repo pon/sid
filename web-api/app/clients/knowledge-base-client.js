@@ -224,10 +224,10 @@ class KnowledgeBaseClient {
     .then(res => res.body)
   }
 
-  createUpload(applicationId, file, category) {
+  createUpload(userId, file, category) {
     return this._post('/uploads', {
       formData: {
-        application_id: applicationId,
+        user_id: userId,
         file: {
           value:  fs.createReadStream(file.path),
           options: {
@@ -237,10 +237,9 @@ class KnowledgeBaseClient {
         },
         category: category
       },
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
+      json: true
     })
+    .then(res => res.body)
   }
 
   deleteUpload(uploadId) {
@@ -327,6 +326,13 @@ class KnowledgeBaseClient {
   applicationAttachIncomes(applicationId, incomeIds) {
     return this._post(`/applications/${applicationId}/attach_incomes`, {
       body: {income_ids: incomeIds},
+      json: true
+    })
+  }
+
+  applicationAttachUploads(applicationId, uploadIds) {
+    return this._post(`/applications/${applicationId}/attach_uploads`, {
+      body: {upload_ids: uploadIds},
       json: true
     })
   }
