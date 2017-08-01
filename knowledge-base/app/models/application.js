@@ -10,7 +10,7 @@ module.exports = db => {
     },
     user_id: {type: Sequelize.STRING(255), allowNull: false},
     status: {
-      type: Sequelize.ENUM('APPLYING', 'VERIFYING', 'UNDERWRITING', 'APPROVED', 'DECLINED'),
+      type: Sequelize.ENUM('APPLYING', 'VERIFYING', 'TIMED_OUT', 'UNDERWRITING', 'APPROVED', 'DECLINED'),
       allowNull: false
     },
     credit_report_id: {type: Sequelize.UUID, references: {model: 'credit_reports', key: 'id'}},
@@ -69,6 +69,38 @@ module.exports = db => {
             if (!inMemory) return this.save()
             break
           case 'APPLICATION_APPLIED':
+            this.status = 'VERIFYING'
+            if (!inMemory) return this.save()
+            break
+          case 'APPLICATION_COMPLETED_VERIFICATION':
+            this.status = 'UNDERWRITING'
+            if (!inMemory) return this.save()
+            break
+          case 'APPLICATION_REVERIFIED':
+            this.status = 'VERIFYING'
+             if (!inMemory) return this.save()
+            break
+          case 'APPLICATION_TIMED_OUT':
+            this.status = 'TIMED_OUT'
+            if (!inMemory) return this.save()
+            break
+          case 'APPLICATION_DECLINED':
+            this.status = 'DECLINED'
+            if (!inMemory) return this.save()
+            break
+          case 'APPLICATION_UNDECLINED':
+            this.status = 'UNDERWRITING'
+            if (!inMemory) return this.save()
+            break
+          case 'APPLICATION_APPROVED':
+            this.status = 'APPROVED'
+            if (!inMemory) return this.save()
+            break
+          case 'APPLICATION_UNAPPROVED':
+            this.status = 'UNDERWRITING'
+            if (!inMemory) return this.save()
+            break
+          case 'APPLICATION_UNTIMED_OUT':
             this.status = 'VERIFYING'
             if (!inMemory) return this.save()
             break

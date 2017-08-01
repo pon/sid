@@ -1,0 +1,23 @@
+'use strict';
+
+module.exports = class ApplicationApproved {
+  constructor(id, approvedAt) {
+    this._type = 'APPLICATION_APPROVED'
+    this._id = id
+    this._approved_at = approvedAt || new Date()
+  }
+
+  toJSON() {
+    return {
+      approved_at: this._approved_at
+    }
+  }
+
+  // Aggregate ID
+  get aggregateId() {return this._id}
+
+  // Basic Getters
+  get id() {return this._id}
+  get type() {return this._type}
+  get approved_at() {return this._approved_at}
+}

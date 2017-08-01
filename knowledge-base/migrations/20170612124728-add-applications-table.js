@@ -9,7 +9,7 @@ module.exports = {
       },
       user_id: {type: Sequelize.STRING(255), allowNull: false},
       status: {
-        type: Sequelize.ENUM('APPLYING', 'VERIFYING', 'UNDERWRITING', 'APPROVED', 'DECLINED'),
+        type: Sequelize.ENUM('APPLYING', 'VERIFYING', 'TIMED_OUT', 'UNDERWRITING', 'APPROVED', 'DECLINED'),
         allowNull: false
       },
       credit_report_id: {type: Sequelize.UUID, references: {model: 'credit_reports', key: 'id'}},

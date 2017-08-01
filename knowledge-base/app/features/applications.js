@@ -386,6 +386,218 @@ exports.register = (server, options, next) => {
       .asCallback(reply)
       }
     }
+  }, {
+    method: 'POST',
+    path: '/applications/{applicationId}/complete-verification',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Application.findOne({
+          where: {id: request.params.applicationId, deleted_at: null}
+        })
+        .then(application => {
+          if (!application) throw server.plugins.errors.applicationNotFound
+          else if (application.status !== 'VERIFYING') {
+            throw server.plugins.errors.applicationInvalidStatusToCompleteVerification
+          }
+
+          const ApplicationCompletedVerificationEvent =
+            new Events.APPLICATION_COMPLETED_VERIFICATION(application.id)
+
+          return application.process(
+            ApplicationCompletedVerificationEvent.type,
+            ApplicationCompletedVerificationEvent.toJSON()
+          )
+          .then(() => {
+            server.emit('KB', ApplicationCompletedVerificationEvent)
+            return application
+          })
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/applications/{applicationId}/re-verify',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Application.findOne({
+          where: {id: request.params.applicationId, deleted_at: null}
+        })
+        .then(application => {
+          if (!application) throw server.plugins.errors.applicationNotFound
+          else if (application.status !== 'UNDERWRITING') {
+            throw server.plugins.errors.applicationInvalidStatusToReverify
+          }
+
+          const ApplicationReverifiedEvent = new Events.APPLICATION_REVERIFIED(application.id)
+
+          return application.process(ApplicationReverifiedEvent.type, ApplicationReverifiedEvent.toJSON())
+          .then(() => {
+            server.emit('KB', ApplicationReverifiedEvent)
+            return application
+          })
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/applications/{applicationId}/time-out',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Application.findOne({
+          where: {id: request.params.applicationId, deleted_at: null}
+        })
+        .then(application => {
+          if (!application) throw server.plugins.errors.applicationNotFound
+          else if (application.status !== 'VERIFYING') {
+            throw server.plugins.errors.applicationInvalidStatusToTimeOut
+          }
+
+          const ApplicationTimedOutEvent= new Events.APPLICATION_TIMED_OUT(application.id)
+
+          return application.process(ApplicationTimedOutEvent.type, ApplicationTimedOutEvent.toJSON())
+          .then(() => {
+            server.emit('KB', ApplicationTimedOutEvent)
+            return application
+          })
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/applications/{applicationId}/untime-out',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Application.findOne({
+          where: {id: request.params.applicationId, deleted_at: null}
+        })
+        .then(application => {
+          if (!application) throw server.plugins.errors.applicationNotFound
+          else if (application.status !== 'TIMED_OUT') {
+            throw server.plugins.errors.applicationInvalidStatusToUntimeOut
+          }
+
+          const ApplicationUntimedOut= new Events.APPLICATION_UNTIMED_OUT(application.id)
+
+          return application.process(ApplicationUntimedOut.type, ApplicationUntimedOut.toJSON())
+          .then(() => {
+            server.emit('KB', ApplicationUntimedOut)
+            return application
+          })
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/applications/{applicationId}/approve',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Application.findOne({
+          where: {id: request.params.applicationId, deleted_at: null}
+        })
+        .then(application => {
+          if (!application) throw server.plugins.errors.applicationNotFound
+          else if (application.status !== 'UNDERWRITING') {
+            throw server.plugins.errors.applicationInvalidStatusToApprove
+          }
+
+          const ApplicationApprovedEvent = new Events.APPLICATION_APPROVED(application.id)
+
+          return application.process(ApplicationApprovedEvent.type, ApplicationApprovedEvent.toJSON())
+          .then(() => {
+            server.emit('KB', ApplicationApprovedEvent)
+            return application
+          })
+        })
+      .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/applications/{applicationId}/unapprove',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Application.findOne({
+          where: {id: request.params.applicationId, deleted_at: null}
+        })
+        .then(application => {
+          if (!application) throw server.plugins.errors.applicationNotFound
+          else if (application.status !== 'APPROVED') {
+            throw server.plugins.errors.applicationInvalidStatusToUnapprove
+          }
+
+          const ApplicationUnunapprovedEvent = new Events.APPLICATION_UNAPPROVED(application.id)
+
+          return application.process(ApplicationUnunapprovedEvent.type, ApplicationUnunapprovedEvent.toJSON())
+          .then(() => {
+            server.emit('KB', ApplicationUnunapprovedEvent)
+            return application
+          })
+        })
+      .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/applications/{applicationId}/decline',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Application.findOne({
+          where: {id: request.params.applicationId, deleted_at: null}
+        })
+        .then(application => {
+          if (!application) throw server.plugins.errors.applicationNotFound
+          else if (application.status !== 'UNDERWRITING' && application.status !== 'VERIFYING') {
+            throw server.plugins.errors.applicationInvalidStatusToDecline
+          }
+
+          const ApplicationDeclinedEvent = new Events.APPLICATION_DECLINED(application.id)
+
+          return application.process(ApplicationDeclinedEvent.type, ApplicationDeclinedEvent.toJSON())
+          .then(() => {
+            server.emit('KB', ApplicationDeclinedEvent)
+            return application
+          })
+        })
+      .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/applications/{applicationId}/undecline',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Application.findOne({
+          where: {id: request.params.applicationId, deleted_at: null}
+        })
+        .then(application => {
+          if (!application) throw server.plugins.errors.applicationNotFound
+          else if (application.status !== 'DECLINED') {
+            throw server.plugins.errors.applicationInvalidStatusToUndecline
+          }
+
+          const ApplicationUndeclinedEvent = new Events.APPLICATION_UNDECLINED(application.id)
+
+          return application.process(ApplicationUndeclinedEvent.type, ApplicationUndeclinedEvent.toJSON())
+          .then(() => {
+            server.emit('KB', ApplicationUndeclinedEvent)
+            return application
+          })
+        })
+      .asCallback(reply)
+      }
+    }
   }])
 
   next()
