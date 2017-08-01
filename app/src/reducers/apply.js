@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import {Effects, loop} from 'redux-loop';
+import {push} from 'react-router-redux';
 
 import {handleError} from '../utils/fetcher-utils';
 
@@ -165,7 +166,6 @@ const fetchApplyStepThree = payload => {
 };
 
 const fetchApplyStepFour = payload => {
-  console.log(payload);
   return fetch('http://localhost:4000/apply/step-four', {
     method: 'POST',
     body: JSON.stringify(payload),
@@ -200,11 +200,18 @@ export default (state = initialState, {type, payload}) => {
         Effects.promise(fetchGetApply)
       )
     case GET_APPLY_SUCCESS:
-      return state
-        .set('isSubmitting', false)
-        .set('application', payload.application)
-        .set('profile', payload.profile)
-        .delete('error');
+      if (payload.application.status !== 'APPLYING') {
+        return loop(
+          state.set('isSubmitting', false), 
+          Effects.constant(push('/dashboard'))
+        );
+      } else {
+        return state
+          .set('isSubmitting', false)
+          .set('application', payload.application)
+          .set('profile', payload.profile)
+          .delete('error');
+      }
     case GET_APPLY_FAILURE:
       return state
         .set('isSubmitting', false)

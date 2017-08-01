@@ -5,7 +5,7 @@ import {syncHistoryWithStore} from 'react-router-redux';
 import initStore from './store';
 
 import {App} from './containers';
-import {Apply, ForgotPassword, Login, Profile, Register, ResetPassword} from './components';
+import {AdditionalUpload, Apply, Dashboard, ForgotPassword, Login, Profile, Register, ResetPassword} from './components';
 
 const store = initStore(browserHistory);
 const history = syncHistoryWithStore(browserHistory, store);
@@ -30,6 +30,8 @@ export default function routes () {
           <Router path="forgot-password" component={ForgotPassword} />
           <Router path="password-reset/:token" component={ResetPassword} />
           <Router path="apply" component={Apply} />
+          <Router path="dashboard" component={Dashboard} />
+          <Router path="upload/:application_id" component={AdditionalUpload} />
         </Route>
       </Router>
     </Provider>

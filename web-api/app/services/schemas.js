@@ -45,6 +45,11 @@ exports.register = (server, options, next) => {
     applyStepFour: Joi.object().keys({
       application_id: Joi.string().max(255).required(),
       social_security_number: Joi.string().length(9).required()
+    }),
+    additionalUploads: Joi.object().keys({
+      application_id: Joi.string().max(255).required(),
+      files: Joi.any(),
+      categories: [Joi.array().items(Joi.string()), Joi.string()]
     })
   }
 

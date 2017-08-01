@@ -86,7 +86,8 @@ server.register([
           emailVerificationExpiryHours: 48
         }
       },
-      require('./features/apply')
+      require('./features/apply'),
+      require('./features/additional-uploads')
     ], err => {
       if (err) throw err
       server.start(err => {

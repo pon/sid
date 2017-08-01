@@ -4,24 +4,23 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import FileUpload from '../common/FileUpload';
 
-const ApplyStepThreeForm = props => {
-  const {handleSubmit, submitting, submitApplyStepThree, valid} = props;
+const AdditionalUploadForm = props => {
+  const {handleSubmit, submitting, submitAdditionalUpload, valid} = props;
 
   const wrapperStyles = {width: '60%', margin: '0 auto', marginBottom: '1em'};
-
+  
   return (
     <div style={wrapperStyles}>
-      <form onSubmit={handleSubmit(submitApplyStepThree)}>
-        <h4>Document Upload</h4>
-
-        <Field name="files" type="file" component={FileUpload} />
+      <h2>Upload Additional Files</h2>
+      <form onSubmit={handleSubmit(submitAdditionalUpload)}>
+        <Field name="files" type="file" component={FileUpload} /> 
 
         <RaisedButton fullWidth={true} label="Submit" primary={true} disabled={!valid || submitting} type="submit"/>
       </form>
     </div>
-  );
+  )
 }
 
 export default reduxForm({
-  form: 'apply-step-three'
-})(ApplyStepThreeForm);
+  form: 'additional-upload'
+})(AdditionalUploadForm);

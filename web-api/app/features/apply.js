@@ -36,6 +36,25 @@ exports.register = (server, options, next) => {
       }
     }
   }, {
+    method: 'GET',
+    path: '/dashboard',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return P.resolve()
+        .then(() => {
+          return KBClient.getUserApplications(request.auth.credentials.id)
+          .then(apps => {
+            return P.props({
+              applications: P.map(apps, app => KBClient.getApplication(app.id)),
+              profile: KBClient.getProfile(request.auth.credentials.id)
+            })
+          })
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
     method: 'POST',
     path: '/apply/step-one',
     config: {
