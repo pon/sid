@@ -1,6 +1,5 @@
 const Boom    = require('boom')
 const fs      = require('fs')
-const moment  = require('moment')
 const P       = require('bluebird')
 
 exports.register = (server, options, next) => {

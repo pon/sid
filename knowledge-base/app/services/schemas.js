@@ -76,6 +76,20 @@ exports.register = (server, options, next) => {
       end_date: Joi.date(),
       term_months: Joi.number().integer().min(1)
     }),
+    loanOfferCreate: Joi.object().keys({
+      application_id: Joi.string().max(255).required(),
+      interest_rate: Joi.number().integer().min(0).required(),
+      term_in_months: Joi.number().integer().min(1).required(),
+      principal_amount: Joi.number().integer().min(0).required()
+    }),
+    loanOfferUpdate: Joi.object().keys({
+      interest_rate: Joi.number().integer().min(0),
+      term_in_months: Joi.number().integer().min(1),
+      principal_amount: Joi.number().integer().min(0)
+    }),
+    loanOfferSign: Joi.object().keys({
+      signature: Joi.string().max(255).required()
+    }),
     profileCreate: Joi.object().keys({
       user_id: Joi.string().max(255).required(),
       first_name: Joi.string().max(255).required(),

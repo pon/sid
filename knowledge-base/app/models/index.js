@@ -11,8 +11,7 @@ module.exports = function (db) {
 
     modelsExport[key] = models[model](db)
   })
-
-  modelsExport.Address.belongsTo(modelsExport.State, {foreignKey: 'state_id'})
+modelsExport.Address.belongsTo(modelsExport.State, {foreignKey: 'state_id'})
   modelsExport.State.hasMany(modelsExport.Address, {foreignKey: 'state_id'})
 
   modelsExport.Lease.belongsTo(modelsExport.Address, {foreignKey: 'address_id'})
@@ -51,6 +50,9 @@ module.exports = function (db) {
 
   modelsExport.Application.belongsTo(modelsExport.Lease, {foreignKey: 'lease_id'})
   modelsExport.Lease.hasMany(modelsExport.Application, {foreignKey: 'lease_id'})
+
+  modelsExport.LoanOffer.belongsTo(modelsExport.Application, {foreignKey: 'application_id'})
+  modelsExport.Application.hasMany(modelsExport.LoanOffer, {foreignKey: 'application_id'})
 
   return modelsExport
 }

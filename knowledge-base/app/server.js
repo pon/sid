@@ -85,6 +85,12 @@ server.register([
       }
     },
     {
+      register: require('./features/loan-offers'),
+      options: {
+        events: require('./events')
+      }
+    },
+    {
       register: require('./features/profiles'),
       options: {
         events: require('./events')
