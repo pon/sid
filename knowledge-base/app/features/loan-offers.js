@@ -76,21 +76,28 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findOne({where: {id: request.payload.applicationId, deleted_at: null}})
+        return Application.findOne({where: {id: request.payload.application_id, deleted_at: null}})
         .then(application => {
           if (!application) throw server.plugins.errors.applicationNotFound
 
-          const loanOffer = LoanOffer.build()
+          return LoanOffer.findAll({where: {application_id: request.payload.application_id, deleted_at: null}})
+          .then(offers => {
+            if (offers.length !== 0) {
+              throw server.plugins.errors.loanOfferAlreadyExists
+            }
 
-          request.payload.id = loanOffer.id
-          request.payload.expires_at = moment().add(7, 'days')
+            const loanOffer = LoanOffer.build()
 
-          const LoanOfferCreatedEvent = new Events.LOAN_OFFER_CREATED(request.payload)
+            request.payload.id = loanOffer.id
+            request.payload.expires_at = moment().add(7, 'days')
 
-          return loanOffer.process(LoanOfferCreatedEvent.type, LoanOfferCreatedEvent.toJSON())
-          .then(() => {
-            server.emit('KB', LoanOfferCreatedEvent)
-            return loanOffer
+            const LoanOfferCreatedEvent = new Events.LOAN_OFFER_CREATED(request.payload)
+
+            return loanOffer.process(LoanOfferCreatedEvent.type, LoanOfferCreatedEvent.toJSON())
+            .then(() => {
+              server.emit('KB', LoanOfferCreatedEvent)
+              return loanOffer
+            })
           })
         })
         .asCallback(reply)

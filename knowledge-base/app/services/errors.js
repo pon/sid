@@ -25,6 +25,7 @@ exports.register = (server, options, next) => {
     leaseAlreadyVerified: Boom.badRequest('lease already verified'),
     leaseNotFound: Boom.notFound('lease does not exist'),
     leaseNotVerified: Boom.badRequest('lease not verified'),
+    loanOfferAlreadyExists: Boom.badRequest('there is already a loan offer for this application'),
     loanOfferNotFound: Boom.notFound('loan offer does not exist'),
     loanOfferNotSignable: Boom.badRequest('must consent to esign before signing'),
     loanOfferAlreadySigned: Boom.badRequest('cannot perform action on a signed loan offer'),
