@@ -48,6 +48,20 @@ exports.register = (server, options, next) => {
     }
   }, {
     method: 'GET',
+    path: '/applications/{applicationId}/loan-offer',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return LoanOffer.findOne({where: {application_id: request.params.applicationId, deleted_at: null}})
+        .then(loanOffer => {
+          if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
+          return loanOffer
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'GET',
     path: '/loan-offers/{loanOfferId}/events',
     config: {
       tags: ['api'],
