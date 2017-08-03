@@ -1,5 +1,6 @@
 import AdditionalUpload from './AdditionalUpload';
 import Apply from './Apply';
+import Checkout from './Checkout';
 import Dashboard from './Dashboard';
 import Footer from './Footer.jsx';
 import ForgotPassword from './ForgotPassword';
@@ -12,6 +13,7 @@ import ResetPassword from './ResetPassword';
 export {
   AdditionalUpload,
   Apply,
+  Checkout,
   Dashboard,
   Footer,
   ForgotPassword,

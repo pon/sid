@@ -46,7 +46,8 @@ const submitLoginFetcher = payload => {
     return {
       type: SUBMIT_LOGIN_SUCCESS,
       payload: {
-        token: response.token
+        token: response.token,
+        nextPath: payload.nextPath
       }
     };
   })
@@ -76,9 +77,7 @@ export default (state = initialState, {type, payload}) => {
         state
           .set('isAuthenticated', true)
           .set('isSubmitting', false),
-        Effects.constant(push(
-          '/profile'
-        ))
+        Effects.constant(push(payload.nextPath))
       )
     case SUBMIT_LOGIN_FAILURE:
       state.set('isSubmitting', false);

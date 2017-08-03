@@ -50,6 +50,9 @@ const LoginForm = props => {
           </div>
         </div>
         <div>
+          <Field name="nextPath" component="input" type="hidden" />
+        </div>
+        <div>
           <button type="submit" disabled={!valid || pristine || submitting}>Login</button>
         </div>
       </form>

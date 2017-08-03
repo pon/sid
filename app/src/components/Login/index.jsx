@@ -7,14 +7,19 @@ import {submitLogin, submitLoginSuccess} from '../../reducers/login';
 export class Login extends Component {
   render () {
     return (
-      <LoginForm login={this.props.login} submitLogin={this.props.submitLogin}/>
+      <LoginForm {...this.props} />
     );
   }
 }
 
-const mapStateToProps = ({login}) => ({
-  login
-});
+const mapStateToProps = ({login}, ownProps) => {
+  return {
+    login,
+    initialValues: {
+      nextPath: ownProps.location.state.nextPathname
+    }
+  }
+};
 
 const mapDispatchToProps = dispatch => ({
   submitLogin: payload => {
