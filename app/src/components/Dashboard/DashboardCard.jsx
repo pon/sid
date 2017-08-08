@@ -15,6 +15,7 @@ export default (props) => {
       <CardActions style={{width: '100%', textAlign: 'right'}}>
         {props.application.status === 'APPLYING' && <FlatButton label="Continue Application" href="/apply" primary={true} />}
         {props.application.status === 'VERIFYING' && <FlatButton label="Upload Additional Documents" href={`/upload/${props.application.id}`} primary={true}/>}
+        {props.application.status === 'APPROVED' && <FlatButton label="Accept Loan Offer" href="/checkout" primary={true}></FlatButton>}
       </CardActions>
     </Card>
   );

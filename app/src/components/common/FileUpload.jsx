@@ -46,6 +46,12 @@ class FileUpload extends Component {
     });
   }
 
+  componentWillMount() {
+    if (this.props.categoryOverride) {
+      this.setState({category: this.props.categoryOverride});
+    }
+  }
+
   render() {
     const dropzoneStyle = {
       width: '100%',
@@ -59,13 +65,13 @@ class FileUpload extends Component {
 
     return (
       <div>
-        <SelectField fullWidth={true} floatingLabelText="Type" value={this.state.category} onChange={this.handleChange}>
+        {!this.props.categoryOverride && <SelectField fullWidth={true} floatingLabelText="Type" value={this.state.category} onChange={this.handleChange}>
           <MenuItem value="PAYSTUB" primaryText="Pay Stub" />
           <MenuItem value="ID" primaryText="ID" />
-        </SelectField>
+        </SelectField>}
 
         <Dropzone onDrop={this.onDrop.bind(this)} style={dropzoneStyle}>
-          <p>Upload Files Here...</p>
+          <p>{this.props.uploadMessage || 'Upload Files Here...'}</p>
         </Dropzone>
         <List>
           {

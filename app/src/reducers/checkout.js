@@ -22,5 +22,44 @@ export const initialState = Immutable.fromJS({
 
 // FETCHERS
 const fetchGetCheckout = () => {
+  return fetch(`http://localhost:4000/checkout`, {
+    method: 'GET',
+    headers: {
+      Authorization: sessionStorage.getItem('jwtToken')
+    }
+  })
+  .then(handleError)
+  .then(response => ({
+    type: GET_CHECKOUT_SUCCESS,
+    payload: response
+  }))
+  .catch(error => ({
+    type: GET_CHECKOUT_FAILURE,
+    payload: {
+      error: error.message
+    }
+  }));
+}
 
+export default (state = initialState, {type, payload}) => {
+  switch (type) {
+    case GET_CHECKOUT:
+      return loop(
+        state.set('isSubmitting', true),
+        Effects.promise(fetchGetCheckout)
+      )
+    case GET_CHECKOUT_SUCCESS:
+      return state
+        .set('isSubmitting', false)
+        .set('loan_offer', payload.loan_offer)
+        .set('payoff_details', payload.payoff_details)
+        .set('payment_account', payload.payment_account)
+        .delete('error');
+    case GET_CHECKOUT_FAILURE:
+      return state
+        .set('isSubmitting', false)
+        .set('error', payload.error);
+    default:
+      return state;
+  }
 }

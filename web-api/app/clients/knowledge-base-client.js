@@ -380,6 +380,11 @@ class KnowledgeBaseClient {
   profileUnverifyCitizenship(userId) {
     return this._post(`/users/${userId}/profile/unverify-citizenship`)
   }
+
+  getApplicationLoanOffer(applicationId) {
+    return this._get(`/applications/${applicationId}/loan-offer`, {json: true})
+    .then(res => res.body)
+  }
 }
 
 module.exports = KnowledgeBaseClient

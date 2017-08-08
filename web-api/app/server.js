@@ -87,7 +87,8 @@ server.register([
         }
       },
       require('./features/apply'),
-      require('./features/additional-uploads')
+      require('./features/additional-uploads'),
+      require('./features/checkout')
     ], err => {
       if (err) throw err
       server.start(err => {
