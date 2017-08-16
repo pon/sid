@@ -1,5 +1,5 @@
-web_api:
-  build: ./web-api
+app_api:
+  build: ./app-api
   ports:
     - "4000:4000"
   environment:
@@ -15,16 +15,16 @@ web_api:
     - EMAILER_QUEUE=emailer
     - KNOWLEDGE_BASE_URL=http://knowledge_base:5000
   volumes:
-    - ./web-api:/usr/src/app
+    - ./app-api:/usr/src/app
   volumes_from:
-    - web_api_node_modules
+    - app_api_node_modules
   links:
     - knowledge_base
     - pg
     - testpg
     - sqs
 
-web_api_node_modules:
+app_api_node_modules:
   image: busybox
   volumes:
     - /usr/src/app/node_modules

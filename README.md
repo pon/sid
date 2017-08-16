@@ -8,9 +8,10 @@ Reusable template for risk-based applications.
 The following components are included:
 
 - **app** - [React](https://github.com/facebookincubator/create-react-app) app for serving up the application flow
+- **app-api** - [Hapi.js](https://hapijs.com/) server for driving the application workflow (BFF + Auth)
 - **web** - Static [Nginx](https://www.nginx.com/) server for landing pages and marketing stuff
-- **web-api** - [Hapi.js](https://hapijs.com/) server for driving the application workflow (BFF + Auth)
 - **emailer** - SQS task consumer for sending templated emails
+- **knowledge-base** - API for application-based data (addresses, profile, employment, leases, etc.)
 
 # Quickstart
 
@@ -23,9 +24,9 @@ Build the images locally.
 
 `./go start app`
 
-#### Start Web API on `localhost:4000`:
+#### Start Application API on `localhost:4000`:
 
-`./go start web-api`
+`./go start app-api`
 
 #### Start Static Web Content on `localhost:8080`:
 
@@ -34,3 +35,7 @@ Build the images locally.
 #### Start Emailer Task Consumer:
 
 `./go start emailer`
+
+#### Start Knowledge Base API on `localhost:5000`:
+
+`./go start knowledge_base`
