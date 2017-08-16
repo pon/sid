@@ -150,3 +150,30 @@ sqs:
 
 s3:
   image: lphoward/fake-s3
+
+web:
+  build: ./web
+  ports:
+    - "8080:80"
+  environment:
+    - WORDPRESS_DB_PASSOWRD=example
+    - WORDPRESS_DB_HOST=mariadb
+    - WORDPRESS_DB_USER=wordpress
+    - WORDPRESS_DB_PASSWORD=wordpress
+  links:
+    - mariadb
+
+mariadb:
+  image: mariadb
+  volumes_from:
+    - mariadb_data
+  environment:
+    - MYSQL_DATABASE=wordpress
+    - MYSQL_USER=wordpress
+    - MYSQL_PASSWORD=wordpress
+    - MYSQL_ROOT_PASSWORD=example
+
+mariadb_data:
+  image: busybox
+  volumes:
+    - "/var/lib/mysql"
