@@ -36,6 +36,7 @@ module.exports = {
   LANDLORD_VERIFIED: require('./landlord-verified'),
   LEASE_CREATED: require('./lease-created'),
   LEASE_DELETED: require('./lease-deleted'),
+  LEASE_LANDLORD_ATTACHED: require('./lease-landlord-attached'),
   LEASE_RESTORED: require('./lease-updated'),
   LEASE_UPDATED: require('./lease-updated'),
   LOAN_OFFER_CONSENT_TO_ESIGN: require('./loan-offer-consent-to-esign'),

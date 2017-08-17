@@ -17,6 +17,9 @@ modelsExport.Address.belongsTo(modelsExport.State, {foreignKey: 'state_id'})
   modelsExport.Lease.belongsTo(modelsExport.Address, {foreignKey: 'address_id'})
   modelsExport.Address.hasMany(modelsExport.Lease, {foreignKey: 'address_id'})
 
+  modelsExport.Lease.belongsTo(modelsExport.Landlord, {foreignKey: 'landlord_id'})
+  modelsExport.Landlord.hasMany(modelsExport.Lease, {foreignKey: 'landlord_id'})
+
   modelsExport.Application.belongsTo(modelsExport.CreditReport, {foreignKey: 'credit_report_id'})
   modelsExport.CreditReport.hasMany(modelsExport.Application, {foreignKey: 'credit_report_id'})
 

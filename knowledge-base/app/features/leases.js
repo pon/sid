@@ -7,6 +7,7 @@ exports.register = (server, options, next) => {
 
   const Address   = server.plugins.db.models.Address
   const Event     = server.plugins.db.models.Event
+  const Landlord  = server.plugins.db.models.Landlord
   const Lease     = server.plugins.db.models.Lease
 
   server.route([{
@@ -46,6 +47,8 @@ exports.register = (server, options, next) => {
           lease = lease.toJSON()
           lease.address = `/addresses/${lease.address_id}`
           lease.address = lease.address + (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
+          lease.landlord = `/landlords/${lease.landlord_id}`
+          lease.landlord = lease.landlord + (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
           return lease
         })
         .asCallback(reply)
@@ -173,6 +176,45 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/leases/{leaseId}/attach_landlord',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        let lease
+        return Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
+        .then(_lease => {
+          lease = _lease
+          if (!lease) throw server.plugins.errors.leaseNotFound
+
+          return Landlord.findOne({
+            where: {id: request.payload.landlord_id, deleted_at: null}
+          })
+        })
+        .then(landlord=> {
+          if (!landlord) throw server.plugins.errors.landlordNotFound
+
+          const LeaseAttachLandlordEvent = new Events.LEASE_LANDLORD_ATTACHED(
+            request.params.leaseId,
+            request.payload.landlord_id
+          )
+
+          return lease.process(
+            LeaseAttachLandlordEvent.type,
+            LeaseAttachLandlordEvent.toJSON()
+          )
+          .then(() => {
+            server.emit('KB', LeaseAttachLandlordEvent)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        params: {leaseId: server.plugins.schemas.uuid},
+        payload: server.plugins.schemas.leaseAttachLandlord
       }
     }
   }])

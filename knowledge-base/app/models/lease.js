@@ -14,6 +14,10 @@ module.exports = db => {
       allowNull: false,
       references: {model: 'addresses', key: 'id'}
     },
+    landlord_id: {
+      type: Sequelize.UUID,
+      references: {model: 'landlords', key: 'id'}
+    },
     security_deposit: {type: Sequelize.INTEGER, allowNull: false},
     monthly_rent: {type: Sequelize.INTEGER, allowNull: false},
     start_date: {type: Sequelize.DATE, allowNull: false},
@@ -49,6 +53,10 @@ module.exports = db => {
                 this[key] = event[key]
               }
             })
+            if (!inMemory) return this.save()
+            break
+          case 'LEASE_LANDLORD_ATTACHED':
+            this.landlord_id = event.landlord_id
             if (!inMemory) return this.save()
             break
           case 'LEASE_DELETED':
