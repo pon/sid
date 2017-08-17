@@ -177,3 +177,8 @@ mariadb_data:
   image: busybox
   volumes:
     - "/var/lib/mysql"
+
+r_studio:
+  image: rocker/rstudio
+  ports:
+    - "8787:8787"

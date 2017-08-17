@@ -12,6 +12,7 @@ The following components are included:
 - **web** - Static [Nginx](https://www.nginx.com/) server for landing pages and marketing stuff
 - **emailer** - SQS task consumer for sending templated emails
 - **knowledge-base** - API for application-based data (addresses, profile, employment, leases, etc.)
+- **RStudio** - IDE for local R development
 
 # Quickstart
 
@@ -39,3 +40,7 @@ Build the images locally.
 #### Start Knowledge Base API on `localhost:5000`:
 
 `./go start knowledge_base`
+
+#### Start RStudio in Browser at `localhost:8787`:
+
+`./go start r_studio`

@@ -21,6 +21,7 @@ function bootstrap {
   ${DC} build app
   ${DC} build emailer
   ${DC} build knowledge_base
+  ${DC} build r_studio
 
   ${DC} run app_api npm run migrate
   ${DC} run knowledge_base npm run migrate
