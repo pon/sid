@@ -7,9 +7,9 @@ module.exports = {
         defaultValue: Sequelize.UUIDV1,
         allowNull: false
       },
-      name: {Sequelize.STRING(255), allowNull: false},
-      phone_number: {Sequelize.STRING(255), allowNull: false},
-      email: {Sequelize.STRING(255)},
+      name: {type: Sequelize.STRING(255), allowNull: false},
+      phone_number: {type: Sequelize.STRING(255), allowNull: false},
+      email: {type: Sequelize.STRING(255)},
       address_id: {
         type: Sequelize.UUID,
         allowNull: false,

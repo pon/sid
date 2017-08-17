@@ -60,6 +60,17 @@ exports.register = (server, options, next) => {
     incomeVerify: Joi.object().keys({
       verified_income: Joi.number().integer().required()
     }),
+    landlordCreate: Joi.object().keys({
+      name: Joi.string().max(255).required(),
+      phone_number: Joi.string().max(255).required(),
+      email: Joi.string().email().optional(),
+      address_id: Joi.string().guid().required()
+    }),
+    landlordUpdate: Joi.object().keys({
+      name: Joi.string().max(255).optional(),
+      phone_number: Joi.string().max(255).optional(),
+      email: Joi.string().email().optional()
+    }),
     leaseCreate: Joi.object().keys({
       user_id: Joi.string().max(255).required(),
       address_id: Joi.string().max(255).required(),
@@ -111,7 +122,8 @@ exports.register = (server, options, next) => {
       user_id: Joi.string().max(255).required(),
       category: Joi.string().max(255).required(),
       file: Joi.object().required()
-    })
+    }),
+    uuid: Joi.string().guid()
   }
 
   server.expose(schemas)

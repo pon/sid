@@ -39,10 +39,10 @@ exports.register = (server, options, next) => {
               landlord.process(event.type, event.payload, true)
             })
 
-            return lease
+            return landlord
           })
         })
-        .then(lease => {
+        .then(landlord => {
           landlord = landlord.toJSON()
           landlord.address = `/addresses/${landlord.address_id}`
           landlord.address = landlord.address + (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
@@ -50,7 +50,10 @@ exports.register = (server, options, next) => {
         })
         .asCallback(reply)
       },
-      validate: {query: server.plugins.schemas.asOfQuery}
+      validate: {
+        params: {landlordId: server.plugins.schemas.uuid},
+        query: server.plugins.schemas.asOfQuery
+      }
     }
   }, {
     method: 'GET',
@@ -74,6 +77,9 @@ exports.register = (server, options, next) => {
           }
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {landlordId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -92,89 +98,155 @@ exports.register = (server, options, next) => {
 
           const LandlordCreatedEvent = new Events.LANDLORD_CREATED(request.payload)
 
-          return lease.process(LeaseCreatedEvent.type, LeaseCreatedEvent.toJSON())
+          return landlord.process(LandlordCreatedEvent.type, LandlordCreatedEvent.toJSON())
           .then(() => {
-            server.emit('KB', LeaseCreatedEvent)
-            return lease
+            server.emit('KB', LandlordCreatedEvent)
+            return landlord
           })
         })
         .asCallback(reply)
       },
       validate: {
-        payload: server.plugins.schemas.leaseCreate,
+        payload: server.plugins.schemas.landlordCreate,
         options: {stripUnknown: true}
       }
     }
-  // }, {
-  //   method: 'PATCH',
-  //   path: '/leases/{leaseId}',
-  //   config: {
-  //     tags: ['api'],
-  //     handler: (request, reply) => {
-  //       return Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
-  //       .then(lease => {
-  //         if (!lease) throw server.plugins.errors.leaseNotFound
-  //
-  //         const LeaseUpdatedEvent = new Events.LEASE_UPDATED(
-  //           lease.id,
-  //           request.payload
-  //         )
-  //
-  //         return lease.process(LeaseUpdatedEvent.type, LeaseUpdatedEvent.toJSON())
-  //         .then(() => {
-  //           server.emit('KB', LeaseUpdatedEvent)
-  //         })
-  //       })
-  //       .asCallback(reply)
-  //     },
-  //     validate: {
-  //       payload: server.plugins.schemas.leaseUpdate
-  //     }
-  //   }
-  // }, {
-  //   method: 'DELETE',
-  //   path: '/leases/{leaseId}',
-  //   config: {
-  //     tags: ['api'],
-  //     handler: (request, reply) => {
-  //       return Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
-  //       .then(lease => {
-  //         if (!lease) throw server.plugins.errors.leaseNotFound
-  //
-  //         const LeaseDeletedEvent = new Events.LEASE_DELETED(request.params.leaseId)
-  //         return lease.process(LeaseDeletedEvent.type, LeaseDeletedEvent.toJSON())
-  //         .then(() => {
-  //           server.emit('KB', LeaseDeletedEvent)
-  //         })
-  //       })
-  //       .asCallback(reply)
-  //     }
-  //   }
-  // }, {
-  //   method: 'POST',
-  //   path: '/leases/{leaseId}/restore',
-  //   config: {
-  //     tags: ['api'],
-  //     handler: (request, reply) => {
-  //       return Lease.findOne({
-  //         where: {
-  //           id: request.params.leaseId,
-  //           deleted_at: {$ne: null}
-  //         }
-  //       })
-  //       .then(lease => {
-  //         if (!lease) throw server.plugins.errors.leaseNotFound
-  //
-  //         const LeaseRestoredEvent = new Events.LEASE_RESTORED(request.params.leaseId)
-  //
-  //         return lease.process(LeaseRestoredEvent.type, LeaseRestoredEvent.toJSON())
-  //         .then(() => {
-  //           server.emit('KB', LeaseRestoredEvent)
-  //         })
-  //       })
-  //       .asCallback(reply)
-  //     }
-  //   }
+  }, {
+    method: 'PATCH',
+    path: '/landlords/{landlordId}',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
+        .then(landlord => {
+          if (!landlord) throw server.plugins.errors.landlordNotFound
+
+          const LandlordUpdatedEvent= new Events.LANDLORD_UPDATED(
+            landlord.id,
+            request.payload
+          )
+
+          return landlord.process(LandlordUpdatedEvent.type, LandlordUpdatedEvent.toJSON())
+          .then(() => {
+            server.emit('KB', LandlordUpdatedEvent)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        params: {landlordId: server.plugins.schemas.uuid},
+        payload: server.plugins.schemas.landlordUpdate
+      }
+    }
+  }, {
+    method: 'DELETE',
+    path: '/landlords/{landlordId}',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
+        .then(landlord => {
+          if (!landlord) throw server.plugins.errors.landlordNotFound
+
+          const LandlordDeletedEvent = new Events.LANDLORD_DELETED(request.params.landlordId)
+          return landlord.process(LandlordDeletedEvent.type, LandlordDeletedEvent.toJSON())
+          .then(() => {
+            server.emit('KB', LandlordDeletedEvent)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        params: {landlordId: server.plugins.schemas.uuid}
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/landlords/{landlordId}/restore',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Landlord.findOne({
+          where: {
+            id: request.params.landlordId,
+            deleted_at: {$ne: null}
+          }
+        })
+        .then(landlord => {
+          if (!landlord) throw server.plugins.errors.landlordNotFound
+
+          const LandlordRestoredEvent = new Events.LANDLORD_RESTORED(request.params.landlordId)
+
+          return landlord.process(LandlordRestoredEvent.type, LandlordRestoredEvent.toJSON())
+          .then(() => {
+            server.emit('KB', LandlordRestoredEvent)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        params: {landlordId: server.plugins.schemas.uuid}
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/landlords/{landlordId}/verify',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
+        .then(landlord => {
+          if (!landlord) {
+            throw server.plugins.errors.landlordNotFound
+          } else if (landlord.verified) {
+            throw server.plugins.errors.landlordAlreadyVerified
+          }
+
+          const LandlordVerifiedEvent = new Events.LANDLORD_VERIFIED(landlord.id)
+
+          return landlord.process(LandlordVerifiedEvent.type, LandlordVerifiedEvent.toJSON())
+          .then(() => {
+            server.emit('KB', LandlordVerifiedEvent)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        params: {landlordId: server.plugins.schemas.uuid}
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/landlords/{landlordId}/unverify',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        return Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
+        .then(landlord => {
+          if (!landlord) {
+            throw server.plugins.errors.landlordNotFound
+          } else if (!landlord.verified) {
+            throw server.plugins.errors.landlordNotVerified
+          }
+
+          const LandlordUnverifiedEvent = new Events.LANDLORD_UNVERIFIED(
+            request.params.landlordId
+          )
+
+          return landlord.process(
+            LandlordUnverifiedEvent.type,
+            LandlordUnverifiedEvent.toJSON()
+          )
+          .then(() => {
+            server.emit('KB', LandlordUnverifiedEvent)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        params: {landlordId: server.plugins.schemas.uuid}
+      }
+    }
   }])
 
   next()
