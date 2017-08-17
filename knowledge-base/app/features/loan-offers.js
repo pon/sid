@@ -15,7 +15,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return P.resolve()
+        P.resolve()
         .then(() => {
           if (!request.query.as_of) {
             return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
@@ -52,7 +52,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {application_id: request.params.applicationId, deleted_at: null}})
+        LoanOffer.findOne({where: {application_id: request.params.applicationId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
           return loanOffer
@@ -66,7 +66,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Event.findAll({
+        Event.findAll({
           where: {aggregate_id: request.params.loanOfferId},
           order: [['id', 'ASC']]
         })
@@ -90,7 +90,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findOne({where: {id: request.payload.application_id, deleted_at: null}})
+        Application.findOne({where: {id: request.payload.application_id, deleted_at: null}})
         .then(application => {
           if (!application) throw server.plugins.errors.applicationNotFound
 
@@ -127,7 +127,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
 
@@ -153,7 +153,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
 
@@ -172,7 +172,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
 
@@ -195,7 +195,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
 
@@ -220,7 +220,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
 
@@ -239,7 +239,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
 
@@ -260,7 +260,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
 
@@ -279,7 +279,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
 
@@ -300,7 +300,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
 
@@ -319,7 +319,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
 
@@ -340,7 +340,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
 
@@ -359,7 +359,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
         .then(loanOffer => {
           if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
 
@@ -378,7 +378,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return LoanOffer.findOne({
+        LoanOffer.findOne({
           where: {
             id: request.params.loanOfferId,
             deleted_at: {$ne: null}

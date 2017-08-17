@@ -16,7 +16,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return P.resolve()
+        P.resolve()
         .then(() => {
           if (!request.query.as_of) {
             return Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
@@ -61,7 +61,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Event.findAll({
+        Event.findAll({
           where: {aggregate_id: request.params.leaseId},
           order: [['id', 'ASC']]
         })
@@ -85,7 +85,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Address.findOne({where: {id: request.payload.address_id, deleted_at: null}})
+        Address.findOne({where: {id: request.payload.address_id, deleted_at: null}})
         .then(address => {
           if (!address) throw server.plugins.errors.addressNotFound
 
@@ -114,7 +114,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
+        Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
         .then(lease => {
           if (!lease) throw server.plugins.errors.leaseNotFound
 
@@ -140,7 +140,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
+        Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
         .then(lease => {
           if (!lease) throw server.plugins.errors.leaseNotFound
 
@@ -159,7 +159,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Lease.findOne({
+        Lease.findOne({
           where: {
             id: request.params.leaseId,
             deleted_at: {$ne: null}
@@ -185,7 +185,7 @@ exports.register = (server, options, next) => {
       tags: ['api'],
       handler: (request, reply) => {
         let lease
-        return Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
+        Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
         .then(_lease => {
           lease = _lease
           if (!lease) throw server.plugins.errors.leaseNotFound

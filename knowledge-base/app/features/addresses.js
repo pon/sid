@@ -15,7 +15,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return P.resolve()
+        P.resolve()
         .then(() => {
           if (!request.query.as_of) {
             return Address.findOne({where: {id: request.params.addressId, deleted_at: null}})
@@ -52,7 +52,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Event.findAll({
+        Event.findAll({
           where: {aggregate_id: request.params.addressId},
           order: [['id', 'ASC']]
         })
@@ -76,7 +76,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return State.findById(request.payload.state.toUpperCase())
+        State.findById(request.payload.state.toUpperCase())
         .then(state => {
           if (!state) throw server.plugins.errors.invalidState
 
@@ -112,7 +112,7 @@ exports.register = (server, options, next) => {
       tags: ['api'],
       handler: (request, reply) => {
         let state
-        return P.resolve()
+        P.resolve()
         .then(() => {
           if (request.payload.state) {
             return State.findById(request.payload.state.toUpperCase())
@@ -163,7 +163,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Address.findOne({where: {id: request.params.addressId, deleted_at: null}})
+        Address.findOne({where: {id: request.params.addressId, deleted_at: null}})
         .then(address => {
           if (!address) throw server.plugins.errors.addressNotFound
 
@@ -182,7 +182,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Address.findOne({
+        Address.findOne({
           where: {
             id: request.params.addressId,
             deleted_at: {$ne: null}

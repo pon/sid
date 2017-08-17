@@ -15,7 +15,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return P.resolve()
+        P.resolve()
         .then(() => {
           if (!request.query.as_of) {
             return Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
@@ -61,7 +61,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Event.findAll({
+        Event.findAll({
           where: {aggregate_id: request.params.landlordId},
           order: [['id', 'ASC']]
         })
@@ -88,7 +88,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Address.findOne({where: {id: request.payload.address_id, deleted_at: null}})
+        Address.findOne({where: {id: request.payload.address_id, deleted_at: null}})
         .then(address => {
           if (!address) throw server.plugins.errors.addressNotFound
 
@@ -117,7 +117,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
+        Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
         .then(landlord => {
           if (!landlord) throw server.plugins.errors.landlordNotFound
 
@@ -144,7 +144,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
+        Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
         .then(landlord => {
           if (!landlord) throw server.plugins.errors.landlordNotFound
 
@@ -166,7 +166,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Landlord.findOne({
+        Landlord.findOne({
           where: {
             id: request.params.landlordId,
             deleted_at: {$ne: null}
@@ -194,7 +194,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
+        Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
         .then(landlord => {
           if (!landlord) {
             throw server.plugins.errors.landlordNotFound
@@ -221,7 +221,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
+        Landlord.findOne({where: {id: request.params.landlordId, deleted_at: null}})
         .then(landlord => {
           if (!landlord) {
             throw server.plugins.errors.landlordNotFound

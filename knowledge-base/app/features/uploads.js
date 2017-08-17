@@ -16,7 +16,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Event.findAll({
+        Event.findAll({
           where: {aggregate_id: request.params.uploadId},
           order: [['id', 'ASC']]
         })
@@ -44,7 +44,7 @@ exports.register = (server, options, next) => {
         allow: 'multipart/form-data'
       },
       handler: (request, reply) => {
-        return P.resolve()
+        P.resolve()
         .then(() => {
           const upload = Upload.build()
 
@@ -90,7 +90,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return P.resolve()
+        P.resolve()
         .then(() => {
           if (!request.query.as_of) {
             return Upload.findOne({where: {id: request.params.uploadId, deleted_at: null}})
@@ -138,7 +138,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Upload.findAll({where: {application_id: request.params.applicationId, deleted_at: null}})
+        Upload.findAll({where: {application_id: request.params.applicationId, deleted_at: null}})
         .map(upload => {
           return {
             id: upload.id,
@@ -157,7 +157,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Upload.findOne({where: {id: request.params.uploadId, deleted_at: null}})
+        Upload.findOne({where: {id: request.params.uploadId, deleted_at: null}})
         .then(upload => {
           if (!upload) throw server.plugins.errors.uploadNotFound
 
@@ -176,7 +176,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Upload.findOne({
+        Upload.findOne({
           where: {
             id: request.params.uploadId,
             deleted_at: {$ne: null}

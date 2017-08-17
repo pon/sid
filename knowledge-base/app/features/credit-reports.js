@@ -14,7 +14,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Event.findAll({
+        Event.findAll({
           where: {aggregate_id: request.params.creditReportId},
           order: [['id', 'ASC']]
         })
@@ -38,7 +38,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return P.resolve()
+        P.resolve()
         .then(() => {
           const creditReport = CreditReport.build()
           request.payload.id = creditReport.id
@@ -63,7 +63,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return P.resolve()
+        P.resolve()
         .then(() => {
           if (!request.query.as_of) {
             return CreditReport.findOne({where: {id: request.params.creditReportId, deleted_at: null}})
@@ -107,7 +107,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return CreditReport.findOne({where: {id: request.params.creditReportId, deleted_at: null}})
+        CreditReport.findOne({where: {id: request.params.creditReportId, deleted_at: null}})
         .then(creditReport => {
           if (!creditReport) throw server.plugins.errors.creditReportNotFound
 
@@ -126,7 +126,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return CreditReport.findOne({
+        CreditReport.findOne({
           where: {
             id: request.params.creditReportId,
             deleted_at: {$ne: null}

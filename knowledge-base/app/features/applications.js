@@ -19,7 +19,7 @@ exports.register = (server, options, next) => {
       tags: ['api'],
       handler: (request, reply) => {
         let application
-        return P.resolve()
+        P.resolve()
         .then(() => {
           if (!request.query.as_of) {
             return Application.findOne({
@@ -103,7 +103,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Event.findAll({
+        Event.findAll({
           where: {aggregate_id: request.params.applicationId},
           order: [['id', 'ASC']]
         })
@@ -127,7 +127,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findAll({
+        Application.findAll({
           where: {user_id: request.params.userId, deleted_at: null},
           order: [['created_at', 'DESC']]
         })
@@ -148,7 +148,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findAll({where: {user_id: request.payload.user_id, deleted_at: null}})
+        Application.findAll({where: {user_id: request.payload.user_id, deleted_at: null}})
         .filter(application => {
           return ['APPROVED', 'DECLINED'].indexOf(application.status) === -1
         })
@@ -183,7 +183,7 @@ exports.register = (server, options, next) => {
       tags: ['api'],
       handler: (request, reply) => {
         let application
-        return Application.findOne({where: {id: request.params.applicationId, deleted_at: null}})
+        Application.findOne({where: {id: request.params.applicationId, deleted_at: null}})
         .then(_application => {
           application = _application
           if (!application) throw server.plugins.errors.applicationNotFound
@@ -227,7 +227,7 @@ exports.register = (server, options, next) => {
       handler: (request, reply) => {
         let application
         let incomeIds
-        return Application.findOne({where: {id: request.params.applicationId, deleted_at: null}})
+        Application.findOne({where: {id: request.params.applicationId, deleted_at: null}})
         .then(_application => {
           application = _application
           if (!application) throw server.plugins.errors.applicationNotFound
@@ -276,7 +276,7 @@ exports.register = (server, options, next) => {
       handler: (request, reply) => {
         let application
         let uploadIds
-        return Application.findOne({where: {id: request.params.applicationId, deleted_at: null}})
+        Application.findOne({where: {id: request.params.applicationId, deleted_at: null}})
         .then(_application => {
           application = _application
           if (!application) throw server.plugins.errors.applicationNotFound
@@ -324,7 +324,7 @@ exports.register = (server, options, next) => {
       tags: ['api'],
       handler: (request, reply) => {
         let application
-        return Application.findOne({where: {id: request.params.applicationId, deleted_at: null}})
+        Application.findOne({where: {id: request.params.applicationId, deleted_at: null}})
         .then(_application => {
           application = _application
           if (!application) throw server.plugins.errors.applicationNotFound
@@ -366,7 +366,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findOne({
+        Application.findOne({
           where: {id: request.params.applicationId, deleted_at: null}
         })
         .then(application => {
@@ -392,7 +392,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findOne({
+        Application.findOne({
           where: {id: request.params.applicationId, deleted_at: null}
         })
         .then(application => {
@@ -422,7 +422,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findOne({
+        Application.findOne({
           where: {id: request.params.applicationId, deleted_at: null}
         })
         .then(application => {
@@ -448,7 +448,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findOne({
+        Application.findOne({
           where: {id: request.params.applicationId, deleted_at: null}
         })
         .then(application => {
@@ -474,7 +474,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findOne({
+        Application.findOne({
           where: {id: request.params.applicationId, deleted_at: null}
         })
         .then(application => {
@@ -500,7 +500,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findOne({
+        Application.findOne({
           where: {id: request.params.applicationId, deleted_at: null}
         })
         .then(application => {
@@ -526,7 +526,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findOne({
+        Application.findOne({
           where: {id: request.params.applicationId, deleted_at: null}
         })
         .then(application => {
@@ -552,7 +552,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findOne({
+        Application.findOne({
           where: {id: request.params.applicationId, deleted_at: null}
         })
         .then(application => {
@@ -578,7 +578,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Application.findOne({
+        Application.findOne({
           where: {id: request.params.applicationId, deleted_at: null}
         })
         .then(application => {

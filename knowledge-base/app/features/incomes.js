@@ -14,7 +14,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return P.resolve()
+        P.resolve()
         .then(() => {
           if (!request.query.as_of) {
             return Income.findOne({where: {id: request.params.incomeId, deleted_at: null}})
@@ -51,7 +51,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Event.findAll({
+        Event.findAll({
           where: {aggregate_id: request.params.incomeId},
           order: [['id', 'ASC']]
         })
@@ -81,7 +81,7 @@ exports.register = (server, options, next) => {
 
         const IncomeCreatedEvent = new Events.INCOME_CREATED(request.payload)
 
-        return income.process(IncomeCreatedEvent.type, IncomeCreatedEvent)
+        income.process(IncomeCreatedEvent.type, IncomeCreatedEvent)
         .then(() => {
           server.emit('KB', IncomeCreatedEvent)
           return income
@@ -99,7 +99,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Income.findOne({where: {id: request.params.incomeId, deleted_at: null}})
+        Income.findOne({where: {id: request.params.incomeId, deleted_at: null}})
         .then(income => {
           if (!income) throw server.plugins.errors.incomeNotFound
 
@@ -125,7 +125,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Income.findOne({where: {id: request.params.incomeId, deleted_at: null}})
+        Income.findOne({where: {id: request.params.incomeId, deleted_at: null}})
         .then(income => {
           if (!income) throw server.plugins.errors.incomeNotFound
 
@@ -144,7 +144,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Income.findOne({
+        Income.findOne({
           where: {
             id: request.params.incomeId,
             deleted_at: {$ne: null}
@@ -174,7 +174,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Income.findOne({where: {id: request.params.incomeId, deleted_at: null}})
+        Income.findOne({where: {id: request.params.incomeId, deleted_at: null}})
         .then(income => {
           if (!income) {
             throw server.plugins.errors.incomeNotFound
@@ -208,7 +208,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Income.findOne({where: {id: request.params.incomeId, deleted_at: null}})
+        Income.findOne({where: {id: request.params.incomeId, deleted_at: null}})
         .then(income => {
           if (!income) {
             throw server.plugins.errors.incomeNotFound

@@ -14,7 +14,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return P.resolve()
+        P.resolve()
         .then(() => {
           return Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
           .then(profile => {
@@ -49,7 +49,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
+        Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
         .then(profile => {
           if (!profile) throw server.plugins.errors.profileNotFound
 
@@ -78,7 +78,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Profile.findOne({where: {user_id: request.payload.user_id, deleted_at: null}})
+        Profile.findOne({where: {user_id: request.payload.user_id, deleted_at: null}})
         .then(existingProfile => {
           if (existingProfile) throw server.plugins.errors.profileAlreadyExists
 
@@ -106,7 +106,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
+        Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
         .then(profile => {
           if (!profile) throw server.plugins.errors.profileNotFound
 
@@ -134,7 +134,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
+        Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
         .then(profile => {
           if (!profile) throw server.plugins.errors.profileNotFound
           else if (profile.identity_verified) throw server.plugins.errors.profileAlreadyVerified
@@ -158,7 +158,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
+        Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
         .then(profile => {
           if (!profile) throw server.plugins.errors.profileNotFound
           else if (!profile.identity_verified) throw server.plugins.errors.profileNotVerified
@@ -182,7 +182,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
+        Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
         .then(profile => {
           if (!profile) throw server.plugins.errors.profileNotFound
           else if (profile.citizenship_verified) throw server.plugins.errors.profileAlreadyVerified
@@ -206,7 +206,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
+        Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
         .then(profile => {
           if (!profile) throw server.plugins.errors.profileNotFound
           else if (!profile.citizenship_verified) throw server.plugins.errors.profileNotVerified
