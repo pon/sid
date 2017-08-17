@@ -22,6 +22,7 @@ exports.register = (server, options, next) => {
     incomeAlreadyVerified: Boom.badRequest('income already verified'),
     incomeNotFound: Boom.notFound('income does not exist'),
     incomeNotVerified: Boom.badRequest('income not verified'),
+    landlordNotFound: Boom.notFound('landlord does not exist'),
     leaseAlreadyVerified: Boom.badRequest('lease already verified'),
     leaseNotFound: Boom.notFound('lease does not exist'),
     leaseNotVerified: Boom.badRequest('lease not verified'),

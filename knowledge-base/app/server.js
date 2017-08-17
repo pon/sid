@@ -66,6 +66,10 @@ server.register([
       options: {events: require('./events')}
     },
     {
+      register: require('./features/leases'),
+      options: {events: require('./events')}
+    },
+    {
       register: require('./features/uploads'),
       options: {
         events: require('./events'),
