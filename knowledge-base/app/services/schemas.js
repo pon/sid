@@ -18,16 +18,16 @@ exports.register = (server, options, next) => {
       zip_code: Joi.string().regex(/[0-9]/).max(9)
     }),
     applicationAttachCreditReport: Joi.object().keys({
-      credit_report_id: Joi.string().max(255).required()
+      credit_report_id: Joi.string().guid().required()
     }),
     applicationAttachIncomes: Joi.object().keys({
-      income_ids: [Joi.array().items(Joi.string().max(255).required()), Joi.string().max(255).required()]
+      income_ids: [Joi.array().items(Joi.string().guid().required()), Joi.string().guid().required()]
     }),
     applicationAttachUploads: Joi.object().keys({
-      upload_ids: [Joi.array().items(Joi.string().max(255).required()), Joi.string().max(255).required()]
+      upload_ids: [Joi.array().items(Joi.string().guid().required()), Joi.string().guid().required()]
     }),
     applicationAttachLease: Joi.object().keys({
-      lease_id: Joi.string().max(255).required()
+      lease_id: Joi.string().guid().required()
     }),
     applicationCreate: Joi.object().keys({
       user_id: Joi.string().max(255).required()
@@ -76,7 +76,7 @@ exports.register = (server, options, next) => {
     }),
     leaseCreate: Joi.object().keys({
       user_id: Joi.string().max(255).required(),
-      address_id: Joi.string().max(255).required(),
+      address_id: Joi.string().guid().required(),
       security_deposit: Joi.number().integer().min(0).required(),
       monthly_rent: Joi.number().integer().min(0).required(),
       start_date: Joi.date().required(),
@@ -91,7 +91,7 @@ exports.register = (server, options, next) => {
       term_months: Joi.number().integer().min(1)
     }),
     loanOfferCreate: Joi.object().keys({
-      application_id: Joi.string().max(255).required(),
+      application_id: Joi.string().guid().required(),
       interest_rate: Joi.number().integer().min(0).required(),
       term_in_months: Joi.number().integer().min(1).required(),
       principal_amount: Joi.number().integer().min(0).required()
