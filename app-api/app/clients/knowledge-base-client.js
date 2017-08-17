@@ -174,6 +174,13 @@ class KnowledgeBaseClient {
     return this._patch(`/leases/${leaseId}`, {body: updates, json: true})
   }
 
+  leaseAttachLandlord(leaseId, landlordId) {
+    return this._post(`/leases/${leaseId}/attach_landlord`, {
+      body: {landlord_id: landlordId},
+      json: true
+    })
+  }
+
   getLease(leaseId, asOf) {
     return this._get(
       `/leases/${leaseId}`,
@@ -185,6 +192,14 @@ class KnowledgeBaseClient {
       return this.getAddress(lease.address_id)
       .then(address => {
         lease.address = address
+        return lease
+      })
+    })
+    .then(lease => {
+      if (!lease.landlord_id) return lease
+      return this.getLandlord(lease.landlord_id)
+      .then(landlord => {
+        lease.landlord = landlord
         return lease
       })
     })
@@ -384,6 +399,44 @@ class KnowledgeBaseClient {
   getApplicationLoanOffer(applicationId) {
     return this._get(`/applications/${applicationId}/loan-offer`, {json: true})
     .then(res => res.body)
+  }
+
+  getLandlord(landlordId, asOf) {
+    return this._get(
+      `/landlords/${landlordId}`,
+      asOf ? {json: true, as_of: asOf} : {json: true}
+    )
+    .then(res => res.body)
+  }
+
+  getLandlordEvents(landlordId) {
+    return this._get(`/landlords/${landlordId}/events`, {json: true})
+    .then(res => res.body)
+  }
+
+  createLandlord(landlord) {
+    return this._post('/landlords', {body: landlord, json: true})
+    .then(res => res.body)
+  }
+
+  updateLandlord(landlordId, updates) {
+    return this._patch(`/landlords/${landlordId}`, {body: updates, json: true})
+  }
+
+  deleteLandlord(landlordId) {
+    return this._delete(`/landlords/${landlordId}`)
+  }
+
+  restoreLandlord(landlordId) {
+    return this._post(`/landlords/${landlordId}/restore`)
+  }
+
+  verifyLandlord(landlordId) {
+    return this._post(`/landlords/${landlordId}/verify`)
+  }
+
+  unverifyLandlord(landlordId) {
+    return this._post(`/landlords/${landlordId}/unverify`)
   }
 }
 
