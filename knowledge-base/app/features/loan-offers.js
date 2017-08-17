@@ -44,7 +44,10 @@ exports.register = (server, options, next) => {
         })
         .asCallback(reply)
       },
-      validate: {query: server.plugins.schemas.asOfQuery}
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid},
+        query: server.plugins.schemas.asOfQuery
+      }
     }
   }, {
     method: 'GET',
@@ -58,6 +61,9 @@ exports.register = (server, options, next) => {
           return loanOffer
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -82,6 +88,9 @@ exports.register = (server, options, next) => {
           }
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -144,6 +153,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid},
         payload: server.plugins.schemas.loanOfferUpdate
       }
     }
@@ -164,6 +174,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -187,6 +200,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -210,6 +226,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid},
         payload: server.plugins.schemas.loanOfferSign,
         options: {stripUnknown: true}
       }
@@ -231,6 +248,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -252,6 +272,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -271,6 +294,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -292,6 +318,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -311,6 +340,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -332,6 +364,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -351,6 +386,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -370,6 +408,9 @@ exports.register = (server, options, next) => {
           })
           .asCallback(reply)
         })
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -394,6 +435,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
   }])

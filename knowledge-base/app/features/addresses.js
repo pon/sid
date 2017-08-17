@@ -44,7 +44,10 @@ exports.register = (server, options, next) => {
         })
         .asCallback(reply)
       },
-      validate: {query: server.plugins.schemas.asOfQuery}
+      validate: {
+        params: {addressId: server.plugins.schemas.uuid},
+        query: server.plugins.schemas.asOfQuery
+      }
     }
   }, {
     method: 'GET',
@@ -68,6 +71,9 @@ exports.register = (server, options, next) => {
           }
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {addressId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -153,6 +159,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
+        params: {addressId: server.plugins.schemas.uuid},
         payload: server.plugins.schemas.addressUpdate,
         options: {stripUnknown: true}
       }
@@ -174,6 +181,9 @@ exports.register = (server, options, next) => {
           })
           .asCallback(reply)
         })
+      },
+      validate: {
+        params: {addressId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -198,6 +208,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {addressId: server.plugins.schemas.uuid}
       }
     }
   }])

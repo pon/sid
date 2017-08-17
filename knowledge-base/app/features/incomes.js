@@ -43,7 +43,10 @@ exports.register = (server, options, next) => {
         })
         .asCallback(reply)
       },
-      validate: {query: server.plugins.schemas.asOfQuery}
+      validate: {
+        params: {incomeId: server.plugins.schemas.uuid},
+        query: server.plugins.schemas.asOfQuery
+      }
     }
   }, {
     method: 'GET',
@@ -67,6 +70,9 @@ exports.register = (server, options, next) => {
           }
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {incomeId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -116,6 +122,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
+        params: {incomeId: server.plugins.schemas.uuid},
         payload: server.plugins.schemas.incomeUpdate
       }
     }
@@ -136,6 +143,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {incomeId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -166,6 +176,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {incomeId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -198,6 +211,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
+        params: {incomeId: server.plugins.schemas.uuid},
         payload: server.plugins.schemas.incomeVerify,
         options: {stripUnknown: true}
       }
@@ -229,6 +243,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {incomeId: server.plugins.schemas.uuid}
       }
     }
   }])

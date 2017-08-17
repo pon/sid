@@ -30,6 +30,9 @@ exports.register = (server, options, next) => {
           }
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {creditReportId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -99,7 +102,10 @@ exports.register = (server, options, next) => {
         })
         .asCallback(reply)
       },
-      validate: {query: server.plugins.schemas.asOfQuery}
+      validate: {
+        params: {creditReportId: server.plugins.schemas.uuid},
+        query: server.plugins.schemas.asOfQuery
+      }
     }
   }, {
     method: 'DELETE',
@@ -118,6 +124,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {creditReportId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -143,6 +152,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {creditReportId: server.plugins.schemas.uuid}
       }
     }
   }])

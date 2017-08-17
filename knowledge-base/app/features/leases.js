@@ -53,7 +53,10 @@ exports.register = (server, options, next) => {
         })
         .asCallback(reply)
       },
-      validate: {query: server.plugins.schemas.asOfQuery}
+      validate: {
+        params: {leaseId: server.plugins.schemas.uuid},
+        query: server.plugins.schemas.asOfQuery
+      }
     }
   }, {
     method: 'GET',
@@ -77,6 +80,9 @@ exports.register = (server, options, next) => {
           }
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {leaseId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -131,6 +137,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
+        params: {leaseId: server.plugins.schemas.uuid},
         payload: server.plugins.schemas.leaseUpdate
       }
     }
@@ -151,6 +158,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {leaseId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -176,6 +186,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {leaseId: server.plugins.schemas.uuid}
       }
     }
   }, {

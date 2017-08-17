@@ -93,6 +93,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
+        params: {applicationId: server.plugins.schemas.uuid},
         query: server.plugins.schemas.asOfQuery,
         options: {stripUnknown: true}
       }
@@ -119,6 +120,9 @@ exports.register = (server, options, next) => {
           }
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -140,6 +144,9 @@ exports.register = (server, options, next) => {
           }
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {userId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -215,6 +222,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
+        params: {applicationId: server.plugins.schemas.uuid},
         payload: server.plugins.schemas.applicationAttachCreditReport,
         options: {stripUnknown: true}
       }
@@ -264,6 +272,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
+        params: {applicationId: server.plugins.schemas.uuid},
         payload: server.plugins.schemas.applicationAttachIncomes,
         options: {stripUnknown: true}
       }
@@ -313,6 +322,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
+        params: {applicationId: server.plugins.schemas.uuid},
         payload: server.plugins.schemas.applicationAttachUploads,
         options: {stripUnknown: true}
       }
@@ -356,6 +366,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
+        params: {applicationId: server.plugins.schemas.uuid},
         payload: server.plugins.schemas.applicationAttachLease,
         options: {stripUnknown: true}
       }
@@ -384,6 +395,9 @@ exports.register = (server, options, next) => {
           })
         })
       .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -414,6 +428,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -440,6 +457,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -466,6 +486,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -492,6 +515,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -518,6 +544,9 @@ exports.register = (server, options, next) => {
           })
         })
       .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -544,6 +573,9 @@ exports.register = (server, options, next) => {
           })
         })
       .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -570,6 +602,9 @@ exports.register = (server, options, next) => {
           })
         })
       .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -596,6 +631,9 @@ exports.register = (server, options, next) => {
           })
         })
       .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.uuid}
       }
     }
   }])
