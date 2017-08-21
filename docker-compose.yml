@@ -182,3 +182,5 @@ r_studio:
   image: rocker/rstudio
   ports:
     - "8787:8787"
+  volumes:
+    - ./r:/home/rstudio
