@@ -14,7 +14,7 @@ const server = new Hapi.Server({
   }
 })
 
-server.connection({port: 4000, routes: {cors: true}})
+server.connection({port: process.env.PORT || 4000, routes: {cors: true}})
 
 const KBClient = require('./clients/knowledge-base-client')
 
