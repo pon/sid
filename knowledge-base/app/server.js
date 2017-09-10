@@ -13,7 +13,7 @@ const server = new Hapi.Server({
   }
 })
 
-server.connection({port: 5000, routes: {cors: true}})
+server.connection({port: process.env.PORT || 5000, routes: {cors: true}})
 
 server.register([
   {
@@ -33,6 +33,7 @@ server.register([
         database: process.env.DATABASE_DATABASE,
         username: process.env.DATABASE_USERNAME,
         password: process.env.DATABASE_PASSWORD,
+        port: process.env.DATABASE_PORT || 5432,
         host: process.env.DATABASE_HOST,
         dialect: 'postgres'
       },
@@ -51,6 +52,7 @@ server.register([
     }
   }
 ], err => {
+  if (err) throw err
   server.register([
     require('./event-handlers'),
     {

@@ -5,7 +5,10 @@ WORKDIR /usr/src/app
 
 ADD docker_entrypoint /usr/bin/docker_entrypoint
 
-ENTRYPOINT ["/usr/bin/docker_entrypoint"]
-CMD ["npm", "start"]
+ADD package.json  /usr/src/app/package.json
 
-EXPOSE 8080
+RUN npm install
+
+ADD . /usr/src/app
+
+CMD ["npm", "start"]

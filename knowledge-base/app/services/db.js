@@ -3,6 +3,7 @@ exports.register = function (server, options, next) {
   const sequelize = new Sequelize(
     options.config.database, options.config.username, options.config.password, {
       host: options.config.host,
+      port: options.config.port,
       dialect: options.config.dialect,
       define: {
         paranoid: true,

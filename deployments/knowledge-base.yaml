@@ -1,0 +1,64 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: knowledge-base
+  labels:
+    app: knowledge-base
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: knowledge-base
+  template:
+    metadata:
+      labels:
+        app: knowledge-base
+    spec:
+      containers:
+        - image: us.gcr.io/poplar-178404/knowledge_base:latest
+          imagePullPolicy: Always
+          name: knowledge-base
+          env:
+            - name: DATABASE_DATABASE
+              value: "knowledge_base"
+            - name: DATABASE_USERNAME
+              value: "knowledge_base"
+            - name: DATABASE_PASSWORD
+              value: "knowledge_base"
+            - name: DATABASE_HOST
+              value: "127.0.0.1"
+            - name: PORT
+              value: "80"
+            - name: AWS_ACCESS_KEY_ID
+              value: "key"
+            - name: AWS_SECRET_ACCESS_KEY
+              value: "key"
+            - name: AWS_REGION
+              value: "us-east-1"
+            - name: UPLOADS_BUCKET
+              value: "kb"
+          ports:
+            - containerPort: 80
+              protocol: TCP
+        - image: gcr.io/cloudsql-docker/gce-proxy:1.09
+          name: cloudsql-proxy
+          command: ["/cloud_sql_proxy", "--dir=/cloudsql",
+                    "-instances=poplar-178404:us-east4:poplar=tcp:5432",
+                    "-credential_file=/secrets/cloudsql/poplar-f56cca7c55cc.json"]
+          volumeMounts:
+            - name: cloudsql-instance-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+            - name: ssl-certs
+              mountPath: /etc/ssl/certs
+            - name: cloudsql
+              mountPath: /cloudsql
+      volumes:
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: cloudsql-instance-credentials
+        - name: ssl-certs
+          hostPath:
+            path: /etc/ssl/certs
+        - name: cloudsql
+          emptyDir:
