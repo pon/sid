@@ -64,7 +64,7 @@ web:
     - "8080:80"
 
 app:
-  build: ./app
+  build: ./app/Dockerfile.dev
   ports:
     - "3000:3000"
   volumes:

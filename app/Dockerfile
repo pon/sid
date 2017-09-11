@@ -1,11 +1,11 @@
-FROM node:boron
+FROM nginx
+COPY build /usr/share/nginx/html
 
-RUN mkdir -p /usr/src/app
+FROM node:boron
+COPY build /usr/src/app
+
 WORKDIR /usr/src/app
 
-ADD docker_entrypoint /usr/bin/docker_entrypoint
+RUN npm i -g serve
 
-ENTRYPOINT ["/usr/bin/docker_entrypoint"]
-CMD ["npm", "start"]
-
-EXPOSE 3000
+CMD serve -p 80 -s
