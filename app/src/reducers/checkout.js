@@ -1,8 +1,9 @@
 import Immutable from 'immutable';
 import {Effects, loop} from 'redux-loop';
-import {push} from 'react-router-redux';
 
 import {handleError} from '../utils/fetcher-utils';
+
+import {API_ROOT} from '../config';
 
 // ACTIONS
 const GET_CHECKOUT = 'GET_CHECKOUT';
@@ -22,7 +23,7 @@ export const initialState = Immutable.fromJS({
 
 // FETCHERS
 const fetchGetCheckout = () => {
-  return fetch(`http://localhost:4000/checkout`, {
+  return fetch(`${API_ROOT}/checkout`, {
     method: 'GET',
     headers: {
       Authorization: sessionStorage.getItem('jwtToken')

@@ -4,6 +4,8 @@ import {push} from 'react-router-redux';
 
 import {handleError} from '../utils/fetcher-utils';
 
+import {API_ROOT} from '../config';
+
 // ACTIONS
 const SUBMIT_ADDITIONAL_UPLOAD = 'SUBMIT_ADDITIONAL_UPLOAD';
 const SUBMIT_ADDITIONAL_UPLOAD_SUCCESS = 'SUBMIT_ADDITIONAL_UPLOAD_SUCCESS';
@@ -30,7 +32,7 @@ const fetchAdditionalUpload = payload => {
     formData.append('categories', file.category);
   })
   formData.append('application_id', payload.application_id);
-  return fetch('http://localhost:4000/additional-uploads', {
+  return fetch(`${API_ROOT}/additional-uploads`, {
     method: 'POST',
     headers: {
       Authorization: sessionStorage.getItem('jwtToken')

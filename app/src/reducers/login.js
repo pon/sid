@@ -4,6 +4,8 @@ import {push} from 'react-router-redux';
 
 import {handleError} from '../utils/fetcher-utils';
 
+import {API_ROOT} from '../config';
+
 // ACTIONS
 const SUBMIT_LOGIN = 'SUBMIT_LOGIN';
 const SUBMIT_LOGIN_SUCCESS = 'SUBMIT_LOGIN_SUCCESS';
@@ -34,7 +36,7 @@ export const initialState = Immutable.fromJS({
 
 // FETCHERS
 const submitLoginFetcher = payload => {
-  return fetch('http://localhost:4000/login', {
+  return fetch(`${API_ROOT}/login`, {
     method: 'POST',
     body: JSON.stringify({
       email: payload.email,

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import FileUpload from '../common/FileUpload';
 
 const PayoffDetailsForm = props => {
-  const {handleSubmit, submitting, valid} = props;
+  const {submitting, valid} = props;
 
   const PayoffDetailsWrapper = styled.div`
     width: 50%;

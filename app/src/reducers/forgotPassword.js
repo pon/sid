@@ -3,6 +3,8 @@ import {Effects, loop} from 'redux-loop';
 
 import {handleError} from '../utils/fetcher-utils';
 
+import {API_ROOT} from '../config';
+
 // ACTIONS
 const SUBMIT_FORGOT_PASSWORD = 'SUBMIT_FORGOT_PASSWORD';
 const SUBMIT_FORGOT_PASSWORD_SUCCESS = 'SUBMIT_FORGOT_PASSWORD_SUCCESS';
@@ -23,7 +25,7 @@ export const initialState = Immutable.fromJS({
 
 // FETCHERS
 const submitForgotPasswordFetcher = payload => {
-  return fetch('http://localhost:4000/password-reset', {
+  return fetch(`${API_ROOT}/password-reset`, {
     method: 'POST',
     body: JSON.stringify({
       email: payload.email

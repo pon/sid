@@ -3,6 +3,8 @@ import {Effects, loop} from 'redux-loop';
 
 import {handleError} from '../utils/fetcher-utils';
 
+import {API_ROOT} from '../config';
+
 // ACTIONS
 const FETCH_PROFILE = 'FETCH_PROFILE';
 const FETCH_PROFILE_SUCCESS = 'FETCH_PROFILE_SUCCESS';
@@ -23,7 +25,7 @@ export const initialState = Immutable.fromJS({
 
 // FETCHERS
 const fetchProfileFetcher = () => {
-  return fetch('http://localhost:4000/users/me', {
+  return fetch(`${API_ROOT}/users/me`, {
     method: 'GET',
     headers: {
       Authorization: sessionStorage.getItem('jwtToken')

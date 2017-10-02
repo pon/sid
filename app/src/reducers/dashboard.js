@@ -1,8 +1,9 @@
 import Immutable from 'immutable';
 import {Effects, loop} from 'redux-loop';
-import {push} from 'react-router-redux';
 
 import {handleError} from '../utils/fetcher-utils';
+
+import {API_ROOT} from '../config';
 
 // ACTIONS
 const GET_DASHBOARD = 'GET_DASHBOARD';
@@ -22,7 +23,7 @@ export const initialState = Immutable.fromJS({
 
 // FETCHERS
 const fetchGetDashboard = () => {
-  return fetch(`http://localhost:4000/dashboard`, {
+  return fetch(`${API_ROOT}/dashboard`, {
     method: 'GET',
     headers: {
       Authorization: sessionStorage.getItem('jwtToken')

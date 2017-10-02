@@ -3,6 +3,8 @@ import {Effects, loop} from 'redux-loop';
 
 import {handleError} from '../utils/fetcher-utils';
 
+import {API_ROOT} from '../config';
+
 // ACTIONS
 const SUBMIT_REGISTER = 'SUBMIT_REGISTER';
 const SUBMIT_REGISTER_SUCCESS = 'SUBMIT_REGISTER_SUCCESS';
@@ -22,7 +24,7 @@ export const initialState = Immutable.fromJS({
 
 // FETCHERS
 const fetchRegister = payload => {
-  return fetch('http://localhost:4000/register', {
+  return fetch(`${API_ROOT}/register`, {
     method: 'POST',
     body: JSON.stringify({
       email: payload.email,

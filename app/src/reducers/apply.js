@@ -4,6 +4,8 @@ import {push} from 'react-router-redux';
 
 import {handleError} from '../utils/fetcher-utils';
 
+import {API_ROOT} from '../config';
+
 // ACTIONS
 const GET_APPLY = 'GET_APPLY';
 const GET_APPLY_SUCCESS = 'GET_APPLY_SUCCESS';
@@ -55,7 +57,7 @@ export const initialState = Immutable.fromJS({
 
 // FETCHERS
 const fetchGetApply = () => {
-  return fetch(`http://localhost:4000/apply`, {
+  return fetch(`${API_ROOT}/apply`, {
     method: 'GET',
     headers: {
       Authorization: sessionStorage.getItem('jwtToken')
@@ -75,7 +77,7 @@ const fetchGetApply = () => {
 };
 
 const fetchApplyStepOne = payload => {
-  return fetch('http://localhost:4000/apply/step-one', {
+  return fetch(`${API_ROOT}/apply/step-one`, {
     method: 'POST',
     body: JSON.stringify(payload)
   })
@@ -109,7 +111,7 @@ const fetchApplyStepTwo = payload => {
     }
   });
 
-  return fetch('http://localhost:4000/apply/step-two', {
+  return fetch(`${API_ROOT}/apply/step-two`, {
     method: 'POST',
     headers: {
       Authorization: sessionStorage.getItem('jwtToken')
@@ -141,7 +143,7 @@ const fetchApplyStepThree = payload => {
     formData.append('categories', file.category);
   })
   formData.append('application_id', payload.application_id);
-  return fetch('http://localhost:4000/apply/step-three', {
+  return fetch(`${API_ROOT}/apply/step-three`, {
     method: 'POST',
     headers: {
       Authorization: sessionStorage.getItem('jwtToken')
@@ -166,7 +168,7 @@ const fetchApplyStepThree = payload => {
 };
 
 const fetchApplyStepFour = payload => {
-  return fetch('http://localhost:4000/apply/step-four', {
+  return fetch(`${API_ROOT}/apply/step-four`, {
     method: 'POST',
     body: JSON.stringify(payload),
     headers: {
@@ -200,9 +202,9 @@ export default (state = initialState, {type, payload}) => {
         Effects.promise(fetchGetApply)
       )
     case GET_APPLY_SUCCESS:
-      if (payload.application.status !== 'APPLYING') {
+      if (payload.application && payload.application.status !== 'APPLYING') {
         return loop(
-          state.set('isSubmitting', false), 
+          state.set('isSubmitting', false),
           Effects.constant(push('/dashboard'))
         );
       } else {
