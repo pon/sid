@@ -1,7 +1,6 @@
 const Hapi = require('hapi')
 const Pkg = require('../package.json')
 
-
 const Bunyan = require('bunyan')
 const logger = Bunyan.createLogger({name: Pkg.name, level: 'debug'})
 process.on('uncaughtException', err => {
@@ -51,17 +50,7 @@ server.register([
       })
     }
   },
-  require('./services/documentation'),
-  {
-    register: require('./services/aws'),
-    options: {
-      accessKey: process.env.AWS_ACCESS_KEY_ID,
-      secretKey: process.env.AWS_SECRET_ACCESS_KEY,
-      region: process.env.AWS_REGION,
-      sqsUrl: process.env.AWS_SQS_URL,
-      sqsPort: process.env.AWS_SQS_PORT
-    }
-  }
+  require('./services/documentation')
 ], err => {
   if (err) throw err
 

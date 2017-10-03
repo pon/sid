@@ -41,6 +41,8 @@ spec:
               value: ""
             - name: KNOWLEDGE_BASE_URL
               value: "http://knowledge-base"
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
           ports:
             - containerPort: 80
               protocol: TCP
@@ -57,10 +59,15 @@ spec:
               mountPath: /etc/ssl/certs
             - name: cloudsql
               mountPath: /cloudsql
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
       volumes:
         - name: cloudsql-instance-credentials
           secret:
             secretName: cloudsql-instance-credentials
+        - name: google-cloud-key
+          secret:
+            secretName: poplar-app-credentials
         - name: ssl-certs
           hostPath:
             path: /etc/ssl/certs
