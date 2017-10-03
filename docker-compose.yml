@@ -88,12 +88,13 @@ emailer:
     - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     - AWS_REGION=us-east-1
-    - AWS_SQS_QUEUE_NAME=emailer
-    - AWS_SQS_URL=sqs
-    - AWS_SQS_PORT=4568
+    - TOPIC=emailer
+    - SUBSCRIPTION=emailer-subscription
     - FROM_EMAIL=pnagel5@gmail.com
+    - PUBSUB_EMULATOR_HOST=pubsub_emulator:8085
   links:
     - sqs
+    - pubsub_emulator
 
 emailer_node_modules:
   image: busybox
