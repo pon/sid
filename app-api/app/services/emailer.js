@@ -47,7 +47,12 @@ exports.register = (server, options, next) => {
   })
 
   topic.exists((err, exists) => {
-    if (err) next(err)
+    if (err) {
+      server.log(['error', 'emailer'], err)
+      return next(err)
+    }
+
+    server.log(['info', 'emailer'], 'topic exists and ready')
 
     if (!exists) {
       return topic.create(next)
