@@ -42,7 +42,6 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
-        params: {userId: server.plugins.schemas.uuid},
         query: server.plugins.schemas.asOfQuery
       }
     }
@@ -73,9 +72,6 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
-      },
-      validate: {
-        params: {userId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -131,7 +127,6 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
-        params: {userId: server.plugins.schemas.uuid},
         payload: server.plugins.schemas.profileUpdate
       }
     }
@@ -157,9 +152,6 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
-      },
-      validate: {
-        params: {userId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -184,9 +176,6 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
-      },
-      validate: {
-        params: {userId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -211,9 +200,6 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
-      },
-      validate: {
-        params: {userId: server.plugins.schemas.uuid}
       }
     }
   }, {
@@ -238,9 +224,6 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
-      },
-      validate: {
-        params: {userId: server.plugins.schemas.uuid}
       }
     }
   }])
