@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: emailer
+  labels:
+    app: emailer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: emailer
+  template:
+    metadata:
+      labels:
+        app: emailer
+    spec:
+      containers:
+        - image: us.gcr.io/poplar-178404/emailer:20171005204912_emailer
+          imagePullPolicy: Always
+          name: emailer
+          env:
+            - name: TOPIC
+              value: emailer
+            - name: SUBSCRIPTION
+              value: emailer-subscription
+            - name: FROM_EMAIL
+              value: pnagel5@gmail.com
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /secrets/google/key.json
+            - name: AWS_REGION
+              value: us-east-1
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws
+                  key: access-key
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws
+                  key: secret-key
+          volumeMounts:
+            - name: google-cloud-key
+              mountPath: /secrets/google
+      volumes:
+        - name: google-cloud-key
+          secret:
+            secretName: poplar-emailer-credentials

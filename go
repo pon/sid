@@ -50,6 +50,7 @@ function build {
   case "$@" in
     app) BUILD_PATH="app"                       ;;
     app_api) BUILD_PATH="app-api"               ;;
+    emailer) BUILD_PATH="emailer"               ;;
     knowledge_base) BUILD_PATH="knowledge-base" ;;
     web) BUILD_PATH="web"                       ;;
   esac
