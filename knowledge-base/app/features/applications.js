@@ -144,9 +144,6 @@ exports.register = (server, options, next) => {
           }
         })
         .asCallback(reply)
-      },
-      validate: {
-        params: {userId: server.plugins.schemas.uuid}
       }
     }
   }, {
