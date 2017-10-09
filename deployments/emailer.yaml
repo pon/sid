@@ -15,7 +15,7 @@ spec:
         app: emailer
     spec:
       containers:
-        - image: us.gcr.io/poplar-178404/emailer:20171005204912_emailer
+        - image: us.gcr.io/poplar-178404/emailer:20171009105826_emailer
           imagePullPolicy: Always
           name: emailer
           env:
@@ -24,7 +24,7 @@ spec:
             - name: SUBSCRIPTION
               value: emailer-subscription
             - name: FROM_EMAIL
-              value: pnagel5@gmail.com
+              value: hello@poplar.co
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /secrets/google/key.json
             - name: AWS_REGION

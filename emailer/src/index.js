@@ -50,6 +50,7 @@ return topic.exists()
   subscription.on('message', msg => handleMessage(msg, err => {
     if (err) {
       Logger.error('error', err)
+      msg.ack()
     } else {
       Logger.info('message-sent', {ackId: msg.ackId})
       msg.ack()
