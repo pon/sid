@@ -1,63 +1,44 @@
+const Consumer = require('sqs-consumer')
 const Emailer = require('./emailer')
-const Logger  = require('./logger')
-const P       = require('bluebird')
-const PubSub  = require('@google-cloud/pubsub')({promise: P})
+const Logger = require('./logger')
+const AWS = require('aws-sdk')
 
-const handleMessage = (message, next) => {
-  const body = JSON.parse(message.data.toString())
-  Logger.info('message-received', {ackId: message.ackId, data: body})
-  Emailer.sendMail(
-    body.to,
-    process.env.FROM_EMAIL,
-    body.template,
-    JSON.stringify(body.data),
-    next
+const sqsOptions = {}
+if (process.env.AWS_SQS_URL) {
+  sqsOptions.endpoint = new AWS.Endpoint(
+    `http://${process.env.AWS_SQS_URL}:${process.env.AWS_SQS_PORT}`
   )
 }
 
-const topic = PubSub.topic(process.env.TOPIC)
-let subscription
+const SQS = new AWS.SQS(sqsOptions)
 
-return topic.exists()
-.then(exists => exists[0])
-.then(exists => {
-  if (!exists) {
-    return topic.create()
-    .then(() => {
-      return topic
-    })
+SQS.createQueue({QueueName: process.env.AWS_SQS_QUEUE_NAME}, (err, config) => {
+  if (err) throw err
+
+  if (process.env.AWS_SQS_URL) {
+    config.QueueUrl = config.QueueUrl.replace('0.0.0.0', process.env.AWS_SQS_URL)
   }
 
-  return topic
-})
-.then(topic => {
-  subscription = topic.subscription(process.env.SUBSCRIPTION)
-  return subscription.exists()
-})
-.then(exists => exists[0])
-.then(exists => {
-  if (!exists) {
-    return subscription.create()
-    .then(() => {
-      return subscription
-    })
-  }
-
-  return subscription
-})
-.then(subscription => {
-  subscription.on('error', err => Logger.error('error', err))
-  subscription.on('message', msg => handleMessage(msg, err => {
-    if (err) {
-      Logger.error('error', err)
-      msg.ack()
-    } else {
-      Logger.info('message-sent', {ackId: msg.ackId})
-      msg.ack()
+  const app = Consumer.create({
+    queueUrl: config.QueueUrl,
+    handleMessage: (message, done) => {
+      const body = JSON.parse(message.Body)
+      Emailer.sendMail(
+        body.to,
+        process.env.FROM_EMAIL,
+        body.template,
+        JSON.stringify(body.data),
+        done
+      )
     }
-  }))
-})
-.catch(err => {
-  Logger.error('error', err)
-  process.exit(1)
+  })
+
+  app.on('error', err => Logger.error('error', err))
+  app.on('message_received', msg => Logger.info('message-received', msg))
+  app.on('message_processed', msg => Logger.info('message-processed', msg))
+  app.on('processing_error', (err, msg) => Logger.error('error', {message: msg, error: err}))
+  app.on('stopped', () => Logger.info('stopped'))
+
+  app.start()
+  Logger.info('started')
 })
