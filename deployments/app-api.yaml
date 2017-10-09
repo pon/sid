@@ -31,10 +31,6 @@ spec:
               value: "80"
             - name: KNOWLEDGE_BASE_URL
               value: http://knowledge-base
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /secrets/google/key.json
-            - name: EMAILER_QUEUE
-              value: emailer
           ports:
             - containerPort: 80
               protocol: TCP
@@ -58,9 +54,6 @@ spec:
         - name: cloudsql-instance-credentials
           secret:
             secretName: cloudsql-instance-credentials
-        - name: google-cloud-key
-          secret:
-            secretName: poplar-app-credentials
         - name: ssl-certs
           hostPath:
             path: /etc/ssl/certs

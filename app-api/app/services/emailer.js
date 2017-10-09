@@ -1,18 +1,13 @@
-const Joi     = require('joi')
-const P       = require('bluebird')
-const PubSub  = require('@google-cloud/pubsub')({promise: P})
+const Joi = require('joi')
+const P = require('bluebird')
 
 exports.register = (server, options, next) => {
-
-  const topic = PubSub.topic(options.queueName)
-  const publisher = topic.publisher()
-
   const sendEmail = (to, template, data) => {
-    return publisher.publish(Buffer.from(JSON.stringify({
+    return server.plugins.aws.enqueueMessage(options.queueName, {
       to: to,
       template: template,
       data: data
-    })))
+    })
   }
 
   const sendPasswordReset = (to, data) => {
@@ -46,20 +41,7 @@ exports.register = (server, options, next) => {
     sendEmailVerification: sendEmailVerification
   })
 
-  topic.exists((err, exists) => {
-    if (err) {
-      server.log(['error', 'emailer'], err)
-      return next(err)
-    }
-
-    server.log(['info', 'emailer'], 'topic exists and ready')
-
-    if (!exists) {
-      return topic.create(next)
-    }
-
-    next()
-  })
+  next()
 }
 
 exports.register.attributes = {
