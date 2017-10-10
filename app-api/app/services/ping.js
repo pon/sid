@@ -1,5 +1,5 @@
 exports.register = (server, options, next) => {
-  server.route({
+  server.route([{
     method: 'GET',
     path: '/ping',
     config: {
@@ -14,7 +14,17 @@ exports.register = (server, options, next) => {
         })
       }
     }
-  })
+  }, {
+    method: 'GET',
+    path: '/',
+    config: {
+      auth: false,
+      tags: ['api'],
+      handler: (request, reply) => {
+        return reply()
+      }
+    }
+  }])
 
   next()
 }

@@ -5,8 +5,7 @@ metadata:
     app: app-api
   name: app-api
 spec:
-  type: LoadBalancer
-  loadBalancerIP: "35.196.85.113"
+  type: NodePort
   ports:
     - port: 80
       targetPort: 80

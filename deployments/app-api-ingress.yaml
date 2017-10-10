@@ -1,0 +1,10 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: app-api-ingress
+spec:
+  tls:
+    - secretName: api.poplar.co
+  backend:
+    serviceName: app-api
+    servicePort: 80

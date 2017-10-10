@@ -1,6 +1,6 @@
+const fs = require('fs')
 const Hapi = require('hapi')
 const Pkg = require('../package.json')
-
 
 const Bunyan = require('bunyan')
 const logger = Bunyan.createLogger({name: Pkg.name, level: 'debug'})
@@ -14,7 +14,19 @@ const server = new Hapi.Server({
   }
 })
 
-server.connection({port: process.env.PORT || 4000, routes: {cors: true}})
+const serverOptions = {
+  port: process.env.PORT || 4000,
+  routes: {cors: true}
+}
+
+if (process.env.TLS_CERT_PATH && process.env.TLS_KEY_PATH) {
+  serverOptions.tls = {
+    key: fs.readFileSync(process.env.TLS_KEY_PATH),
+    cert: fs.readFileSync(process.env.TLS_CERT_PATH)
+  }
+}
+
+server.connection(serverOptions)
 
 const KBClient = require('./clients/knowledge-base-client')
 

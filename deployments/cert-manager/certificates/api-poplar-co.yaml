@@ -1,0 +1,10 @@
+apiVersion: "stable.hightower.com/v1"
+kind: "Certificate"
+metadata:
+  name: "api-poplar-dot-co"
+spec:
+  domain: "api.poplar.co"
+  email: "peter@poplar.co"
+  provider: "googledns"
+  secret: "kube-cert-manager"
+  secretKey: "key.json"
