@@ -3,7 +3,7 @@ const hostname = window && window.location && window.location.hostname;
 let apiUrl;
 
 if (hostname === 'app.poplar.co') {
-  apiUrl = 'http://api.poplar.co';
+  apiUrl = 'https://api.poplar.co';
 } else {
   apiUrl = 'http://localhost:4000';
 }
