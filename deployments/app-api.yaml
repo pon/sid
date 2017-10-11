@@ -15,7 +15,7 @@ spec:
         app: app-api
     spec:
       containers:
-        - image: us.gcr.io/poplar-178404/app_api:20171009161011_app_api
+        - image: us.gcr.io/poplar-178404/app_api:20171011132315_app_api
           imagePullPolicy: Always
           name: app-api
           env:
@@ -45,6 +45,8 @@ spec:
                 secretKeyRef:
                   name: aws
                   key: secret-key
+            - name: APP_BASE_URL
+              value: https://app.poplar.co
           ports:
             - containerPort: 80
               protocol: TCP
