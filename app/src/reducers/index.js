@@ -7,6 +7,7 @@ import loginReducer from './login';
 import profileReducer from './profile';
 import registerReducer from './register';
 import resetPasswordReducer from './resetPassword';
+import verifyEmailReducer from './verifyEmail';
 
 export const reducers = {
   additionalUpload: additionalUploadReducer,
@@ -17,5 +18,6 @@ export const reducers = {
   login: loginReducer,
   profile: profileReducer,
   register: registerReducer,
-  resetPassword: resetPasswordReducer
+  resetPassword: resetPasswordReducer,
+  verifyEmail: verifyEmailReducer
 }

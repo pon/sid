@@ -9,6 +9,7 @@ import Login from './Login';
 import Profile from './Profile';
 import Register from './Register';
 import ResetPassword from './ResetPassword';
+import VerifyEmail from './VerifyEmail';
 
 export {
   AdditionalUpload,
@@ -21,5 +22,6 @@ export {
   Login,
   Profile,
   Register,
-  ResetPassword
+  ResetPassword,
+  VerifyEmail
 }

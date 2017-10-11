@@ -1,7 +1,11 @@
 import React from 'react';
 import {Field, reduxForm} from 'redux-form';
+import styled from 'styled-components';
+import {TextField} from 'redux-form-material-ui';
 
 import RenderField from '../common/RenderField';
+
+import {constants} from '../../utils/style-utils';
 
 const validate = values => {
   const errors = {};
@@ -19,44 +23,32 @@ const validate = values => {
   return errors;
 };
 
+const FormError = styled.div`
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: ${constants.red}
+`;
+
+const LoginWrapper = styled.div`
+  width: 25%;
+  margin: 0 auto;
+  text-align: center;
+`;
+
 const LoginForm = props => {
   const {handleSubmit, pristine, submitting, submitLogin, valid} = props;
   const error = props.login.get('error');
   return (
-    <div>
-      <h1>Login</h1>
-      <span>{error}</span>
+    <LoginWrapper>
+      <h2>Login</h2>
       <form onSubmit={handleSubmit(submitLogin)}>
-        <div>
-          <label>Email</label>
-          <div>
-            <Field
-              name="email"
-              component={RenderField}
-              type="email"
-              placeholder="Email"
-            />
-          </div>
-        </div>
-        <div>
-          <label>Password</label>
-          <div>
-            <Field
-              name="password"
-              component={RenderField}
-              type="password"
-              placeholder="Password"
-            />
-          </div>
-        </div>
-        <div>
-          <Field name="nextPath" component="input" type="hidden" />
-        </div>
-        <div>
-          <button type="submit" disabled={!valid || pristine || submitting}>Login</button>
-        </div>
+        <FormError>{error}</FormError>
+        <Field name="email" fullWidth={true} component={TextField} floatingLabelText="Email" />
+        <Field name="password" fullWidth={true} component={TextField} hintText="Password" floatingLabelText="Password" type="password" />
+        <Field name="nextPath" component="input" type="hidden" />
+        <button type="submit" disabled={!valid || pristine || submitting}>Login</button>
       </form>
-    </div>
+    </LoginWrapper>
   );
 }
 

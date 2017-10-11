@@ -25,7 +25,7 @@ exports.register = (server, options, next) => {
 
   const sendEmailVerification = (to, data) => {
     const dataTemplate = Joi.object().keys({
-      verificationToken: Joi.string().required()
+      verificationUrl: Joi.string().required()
     })
 
     const dataResult = Joi.validate(data, dataTemplate)

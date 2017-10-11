@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import styled from 'styled-components';
 
 import LoginForm from './LoginForm';
 import {submitLogin, submitLoginSuccess} from '../../reducers/login';
 
 export class Login extends Component {
+
   render () {
     return (
       <LoginForm {...this.props} />
@@ -16,7 +18,7 @@ const mapStateToProps = ({login}, ownProps) => {
   return {
     login,
     initialValues: {
-      nextPath: ownProps.location.state.nextPathname
+      nextPath: ownProps.location && ownProps.location.state && ownProps.location.state.nextPathname
     }
   }
 };

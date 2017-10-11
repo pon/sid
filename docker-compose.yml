@@ -14,6 +14,7 @@ app_api:
     - AWS_SQS_PORT=4568
     - EMAILER_QUEUE=emailer
     - KNOWLEDGE_BASE_URL=http://knowledge_base:5000
+    - APP_BASE_URL=http://localhost:3000
   volumes:
     - ./app-api:/usr/src/app
   volumes_from:
@@ -90,7 +91,7 @@ emailer:
     - AWS_SQS_QUEUE_NAME=emailer
     - AWS_SQS_URL=sqs
     - AWS_SQS_PORT=4568
-    - FROM_EMAIL=pnagel5@gmail.com
+    - FROM_EMAIL=hello@poplar.co
   links:
     - sqs
 

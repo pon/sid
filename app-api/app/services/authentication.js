@@ -17,7 +17,8 @@ exports.register = (server, options, next) => {
       sessionLength: Joi.string().required(),
       hashSaltRounds: Joi.number().integer().required().min(1),
       passwordResetExpiryHours: Joi.number().integer().required().min(1),
-      emailVerificationExpiryHours: Joi.number().integer().required().min(1)
+      emailVerificationExpiryHours: Joi.number().integer().required().min(1),
+      appBaseUrl: Joi.string().required()
     })
 
     const optionsResult = Joi.validate(options, optionsSchema)
@@ -116,7 +117,7 @@ exports.register = (server, options, next) => {
           })
           .then(verification => {
             return server.plugins.emailer.sendEmailVerification(user.email, {
-              verificationToken: verification.token
+              verificationUrl: `${options.appBaseUrl}/verify-email/${verification.token}`
             })
           })
           .then(() => {
@@ -157,7 +158,7 @@ exports.register = (server, options, next) => {
           })
           .then(verification => {
             return server.plugins.emailer.sendEmailVerification(user.email, {
-              verificationToken: verification.token
+              verificationUrl: `${options.appBaseUrl}/verify-email/${verification.token}`
             })
           })
           .then(() => {
@@ -170,7 +171,6 @@ exports.register = (server, options, next) => {
       method: 'POST',
       path: '/verify-email',
       config: {
-        auth: false,
         tags: ['api'],
         handler: (request, reply) => {
           return EmailVerification.findOne({
@@ -181,8 +181,11 @@ exports.register = (server, options, next) => {
             include: [User]
           })
           .then(verification => {
-            if (!verification) {
+            const user = request.auth.credentials
+            if (!user.verified && !verification) {
               throw server.plugins.errors.invalidVerificationToken
+            } else if (user.verified) {
+              return
             }
 
             return verification.user.update({

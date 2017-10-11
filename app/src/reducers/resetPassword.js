@@ -25,7 +25,6 @@ export const initialState = Immutable.fromJS({
 
 // FETCHERS
 const submitResetPasswordFetcher = payload => {
-  debugger;
   return fetch(`${API_ROOT}/change-password`, {
     method: 'POST',
     body: JSON.stringify({

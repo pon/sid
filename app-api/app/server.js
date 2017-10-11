@@ -95,7 +95,8 @@ server.register([
           sessionLength: '10h',
           hashSaltRounds: 10,
           passwordResetExpiryHours: 24,
-          emailVerificationExpiryHours: 48
+          emailVerificationExpiryHours: 48,
+          appBaseUrl: process.env.APP_BASE_URL
         }
       },
       require('./features/apply'),

@@ -79,7 +79,7 @@ export default (state = initialState, {type, payload}) => {
         state
           .set('isAuthenticated', true)
           .set('isSubmitting', false),
-        Effects.constant(push(payload.nextPath))
+        Effects.constant(push(payload.nextPath || '/dashboard'))
       )
     case SUBMIT_LOGIN_FAILURE:
       state.set('isSubmitting', false);
