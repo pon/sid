@@ -5,11 +5,11 @@ let transporter = nodemailer.createTransport({
   SES: new AWS.SES()
 })
 
-module.exports.sendMail = (to, from, subject, text, next) => {
+module.exports.sendMail = (to, from, subject, html, next) => {
   transporter.sendMail({
     from: from,
     to: to,
     subject: subject,
-    text: text
+    html: html
   }, next)
 }

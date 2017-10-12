@@ -15,14 +15,14 @@ spec:
         app: emailer
     spec:
       containers:
-        - image: us.gcr.io/poplar-178404/emailer:20171009115549_emailer
+        - image: us.gcr.io/poplar-178404/emailer:20171011174956_emailer
           imagePullPolicy: Always
           name: emailer
           env:
             - name: AWS_SQS_QUEUE_NAME
               value: emailer
             - name: FROM_EMAIL
-              value: hello@poplar.co
+              value: '"Poplar" <hello@poplar.co>"'
             - name: AWS_REGION
               value: us-east-1
             - name: AWS_ACCESS_KEY_ID

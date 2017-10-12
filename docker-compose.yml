@@ -91,7 +91,7 @@ emailer:
     - AWS_SQS_QUEUE_NAME=emailer
     - AWS_SQS_URL=sqs
     - AWS_SQS_PORT=4568
-    - FROM_EMAIL=hello@poplar.co
+    - FROM_EMAIL='"Poplar" <hello@poplar.co>"'
   links:
     - sqs
 

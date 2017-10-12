@@ -2,6 +2,9 @@ const Consumer = require('sqs-consumer')
 const Emailer = require('./emailer')
 const Logger = require('./logger')
 const AWS = require('aws-sdk')
+const Handlebars = require('handlebars')
+const fs = require('fs')
+const path = require('path')
 
 const sqsOptions = {}
 if (process.env.AWS_SQS_URL) {
@@ -11,6 +14,10 @@ if (process.env.AWS_SQS_URL) {
 }
 
 const SQS = new AWS.SQS(sqsOptions)
+
+const subjectMap = {
+  'email-verification': 'Please Verify Your Email Address'
+}
 
 SQS.createQueue({QueueName: process.env.AWS_SQS_QUEUE_NAME}, (err, config) => {
   if (err) throw err
@@ -23,11 +30,14 @@ SQS.createQueue({QueueName: process.env.AWS_SQS_QUEUE_NAME}, (err, config) => {
     queueUrl: config.QueueUrl,
     handleMessage: (message, done) => {
       const body = JSON.parse(message.Body)
+      const template = Handlebars.compile(fs.readFileSync(path.join(__dirname, `../templates/${body.template}.hbs`)).toString())
+      const htmlBody = template(body.data)
+
       Emailer.sendMail(
         body.to,
         process.env.FROM_EMAIL,
-        body.template,
-        JSON.stringify(body.data),
+        subjectMap[body.template],
+        htmlBody,
         done
       )
     }
