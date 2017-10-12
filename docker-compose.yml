@@ -65,7 +65,8 @@ web:
     - "8080:80"
 
 app:
-  build: ./app/Dockerfile.dev
+  build: ./app
+  dockerfile: Dockerfile.dev
   ports:
     - "3000:3000"
   volumes:
@@ -185,3 +186,58 @@ r_studio:
     - "8787:8787"
   volumes:
     - ./r:/home/rstudio
+
+inside_api:
+  build: ./inside-api
+  ports:
+    - "2000:2000"
+  environment:
+    - DATABASE_DATABASE=inside
+    - DATABASE_USERNAME=inside
+    - DATABASE_PASSWORD=inside
+    - DATABASE_HOST=insidepg
+    - AWS_ACCESS_KEY_ID=key
+    - AWS_SECRET_ACCESS_KEY=key
+    - AWS_REGION=us-east-1
+    - AWS_SQS_URL=sqs
+    - AWS_SQS_PORT=4568
+    - KNOWLEDGE_BASE_URL=http://knowledge_base:5000
+    - APP_API_URL=http://app_api:4000
+  volumes:
+    - ./inside-api:/usr/src/app
+  volumes_from:
+    - inside_api_node_modules
+  links:
+    - app_api
+    - knowledge_base
+    - insidepg
+    - inside_testpg
+    - sqs
+
+inside_api_node_modules:
+  image: busybox
+  volumes:
+    - /usr/src/app/node_modules
+
+insidepg:
+  image: postgres:9.4.5
+  ports:
+    - "5435:5432"
+  volumes_from:
+    - inside_pg_data
+  environment:
+    - POSTGRES_USER=inside
+    - POSTGRES_PASSWORD=inside
+    - POSTGRES_DB=inside
+
+inside_testpg:
+  image: postgres:9.4.5
+  environment:
+    - POSTGRES_USER=inside
+    - POSTGRES_PASSWORD=inside
+    - POSTGRES_DB=inside_test
+
+inside_pg_data:
+  image: busybox
+  volumes:
+    - "/var/lib/postgresql/data"

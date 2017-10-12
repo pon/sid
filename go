@@ -23,15 +23,17 @@ function helptext {
 function bootstrap {
   ${DC} build app_api
   ${DC} build web
-  ${DC} build app
   ${DC} build emailer
   ${DC} build knowledge_base
   ${DC} build r_studio
+  ${DC} build inside_api
 
   ${DC} run app_api npm run migrate
   ${DC} run knowledge_base npm run migrate
+  ${DC} run inside_api npm run migrate
   ${DC} run -e DATABASE_HOST=testpg -e DATABASE_DATABASE=sid_test app_api npm run migrate
   ${DC} run -e DATABASE_HOST=knowledge_base_testpg -e DATABASE_DATABASE=knowledge_base_test knowledge_base npm run migrate
+  ${DC} run -e DATABASE_HOST=inside_testpg -e DATABASE_DATABASE=inside_test inside_api npm run migrate
 }
 
 function start {
@@ -53,6 +55,7 @@ function build {
     emailer) BUILD_PATH="emailer"               ;;
     knowledge_base) BUILD_PATH="knowledge-base" ;;
     web) BUILD_PATH="web"                       ;;
+    inside_api) BUILD_PATH="inside-api"         ;;
   esac
 
   BUILD_TAG=$(date +'%Y%m%d%H%M%S')_$@

@@ -1,0 +1,35 @@
+exports.register = (server, options, next) => {
+  server.route([{
+    method: 'GET',
+    path: '/ping',
+    config: {
+      auth: false,
+      tags: ['api'],
+      handler: (request, reply) => {
+        return reply({
+          name: options.name,
+          version: options.version,
+          pong: new Date().toISOString(),
+          memMB: (process.memoryUsage().rss / (1024 * 1024)).toFixed(2)
+        })
+      }
+    }
+  }, {
+    method: 'GET',
+    path: '/',
+    config: {
+      auth: false,
+      tags: ['api'],
+      handler: (request, reply) => {
+        return reply()
+      }
+    }
+  }])
+
+  next()
+}
+
+exports.register.attributes = {
+  name: 'status',
+  version: '1.0.0'
+}

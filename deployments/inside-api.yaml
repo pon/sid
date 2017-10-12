@@ -1,0 +1,74 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: inside-api
+  labels:
+    app: inside-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inside-api
+  template:
+    metadata:
+      labels:
+        app: inside-api
+    spec:
+      containers:
+        - image: us.gcr.io/poplar-178404/inside_api:20171012125244_inside_api
+          imagePullPolicy: Always
+          name: inside-api
+          env:
+            - name: DATABASE_DATABASE
+              value: inside
+            - name: DATABASE_USERNAME
+              value: inside
+            - name: DATABASE_PASSWORD
+              value: inside
+            - name: DATABASE_HOST
+              value: 127.0.0.1
+            - name: PORT
+              value: "80"
+            - name: KNOWLEDGE_BASE_URL
+              value: http://knowledge-base
+            - name: AWS_REGION
+              value: us-east-1
+            - name: EMAILER_QUEUE
+              value: emailer
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws
+                  key: access-key
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws
+                  key: secret-key
+            - name: APP_API_URL
+              value: https://app.poplar.co
+          ports:
+            - containerPort: 80
+              protocol: TCP
+        - image: gcr.io/cloudsql-docker/gce-proxy:1.09
+          name: cloudsql-proxy
+          command: ["/cloud_sql_proxy", "--dir=/cloudsql",
+                    "-instances=poplar-178404:us-east4:poplar=tcp:5432",
+                    "-credential_file=/secrets/cloudsql/poplar-f56cca7c55cc.json"]
+          volumeMounts:
+            - name: cloudsql-instance-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+            - name: ssl-certs
+              mountPath: /etc/ssl/certs
+            - name: cloudsql
+              mountPath: /cloudsql
+      volumes:
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: cloudsql-instance-credentials
+        - name: ssl-certs
+          hostPath:
+            path: /etc/ssl/certs
+        - name: cloudsql
+          emptyDir:
