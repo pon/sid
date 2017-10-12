@@ -9,4 +9,3 @@ if (hostname === 'app.poplar.co') {
 }
 
 export const API_ROOT = apiUrl;
-
