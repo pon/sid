@@ -79,6 +79,21 @@ app_node_modules:
   volumes:
     - /usr/src/app/node_modules
 
+inside:
+  build: ./inside
+  dockerfile: Dockerfile.dev
+  ports:
+    - "7000:3000"
+  volumes:
+    - ./inside:/usr/src/app
+  volumes_from:
+    - inside_node_modules
+
+inside_node_modules:
+  image: busybox
+  volumes:
+    - /usr/src/app/node_modules
+
 emailer:
   build: ./emailer
   volumes:

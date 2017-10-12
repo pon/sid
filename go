@@ -56,6 +56,7 @@ function build {
     knowledge_base) BUILD_PATH="knowledge-base" ;;
     web) BUILD_PATH="web"                       ;;
     inside_api) BUILD_PATH="inside-api"         ;;
+    inside) BUILD_PATH="inside"                 ;;
   esac
 
   BUILD_TAG=$(date +'%Y%m%d%H%M%S')_$@

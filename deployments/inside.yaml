@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: inside
+  labels:
+    app: inside
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inside
+  template:
+    metadata:
+      labels:
+        app: inside
+    spec:
+      containers:
+        - image: us.gcr.io/poplar-178404/inside:20171012153435_inside
+          imagePullPolicy: Always
+          name: inside
+          ports:
+            - containerPort: 80
+              protocol: TCP
