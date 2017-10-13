@@ -136,6 +136,56 @@ exports.register = (server, options, next) => {
           }
         }
       }
+    }, {
+      method: 'POST',
+      path: '/accept-invite',
+      config: {
+        auth: false,
+        tags: ['api', 'authentication'],
+        handler: (request, reply) => {
+          Invitation.findOne({
+            where: {
+              token: request.payload.token,
+              expires_at: {$gte: new Date()}
+            },
+            include: [User]
+          })
+          .then(invitation => {
+            if (!invitation) {
+              throw server.plugins.errors.invalidInvitationToken
+            }
+
+            return P.all([
+              Bcrypt.hash(request.payload.password, options.hashSaltRounds),
+              invitation
+            ])
+          })
+          .spread((hash, invitation) => {
+            return invitation.user.update({
+              verified: true,
+              verified_at: new Date(),
+              password: hash
+            })
+          })
+          .then(user => {
+            return {
+              user_id: user.id,
+              token: Jwt.sign({
+                id: user.id
+              }, options.key, {
+                expiresIn: options.sessionLength
+              })
+            }
+          })
+          .asCallback(reply)
+        },
+        validate: {
+          payload: {
+            token: server.plugins.schemas.invitationCode,
+            password: server.plugins.schemas.password
+          }
+        }
+      }
     }])
 
     next()

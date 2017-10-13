@@ -7,7 +7,7 @@ exports.register = (server, options, next) => {
     userNotFound: Boom.notFound('user could not be found'),
     userInvalidPassword: Boom.badRequest('incorrect password'),
     invalidPasswordToken: Boom.badRequest('invalid password reset token'),
-    invalidVerificationToken: Boom.badRequest('invalid email verification token'),
+    invalidInvitationToken: Boom.badRequest('invalid invitation token'),
     userAlreadyVerified: Boom.badRequest('user already verified')
   }
 
