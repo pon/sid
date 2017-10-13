@@ -15,7 +15,7 @@ spec:
         app: emailer
     spec:
       containers:
-        - image: us.gcr.io/poplar-178404/emailer:20171011174956_emailer
+        - image: us.gcr.io/poplar-178404/emailer:20171013144234_emailer
           imagePullPolicy: Always
           name: emailer
           env:

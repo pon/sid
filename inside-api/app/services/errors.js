@@ -1,7 +1,15 @@
 const Boom = require('boom')
 
 exports.register = (server, options, next) => {
-  const errors = {}
+  const errors = {
+    emailAlreadyExists: Boom.badRequest('email already exists'),
+    invalidEmailForInvite: Boom.badRequest('invalid email to invite to inside'),
+    userNotFound: Boom.notFound('user could not be found'),
+    userInvalidPassword: Boom.badRequest('incorrect password'),
+    invalidPasswordToken: Boom.badRequest('invalid password reset token'),
+    invalidVerificationToken: Boom.badRequest('invalid email verification token'),
+    userAlreadyVerified: Boom.badRequest('user already verified')
+  }
 
   server.expose(errors)
 

@@ -15,7 +15,9 @@ exports.register = (server, options, next) => {
     const optionsSchema = Joi.object().keys({
       key: Joi.string().required(),
       sessionLength: Joi.string().required(),
-      hashSaltRounds: Joi.number().integer().required().min(1)
+      hashSaltRounds: Joi.number().integer().required().min(1),
+      invitationExpiryHours: Joi.number().integer().required().min(1),
+      insideUrl: Joi.string().required()
     })
 
     const optionsResult = Joi.validate(options, optionsSchema)
@@ -23,9 +25,15 @@ exports.register = (server, options, next) => {
       return next(optionsResult.error)
     }
 
+    const Invitation = server.plugins.db.models.Invitation
     const User = server.plugins.db.models.User
     const validate = (decoded, request, cb) => {
-      User.findById(decoded.id)
+      User.findOne({
+        where: {
+          id: decoded.id,
+          verified: true
+        }
+      })
       .then(user => {
         if (!user) {
           return cb(null, false)
@@ -53,7 +61,12 @@ exports.register = (server, options, next) => {
         auth: false,
         tags: ['api', 'authentication'],
         handler: (request, reply) => {
-          return User.findOne({where: {email: request.payload.email}})
+          return User.findOne({
+            where: {
+              email: request.payload.email,
+              verified: true
+            }
+          })
           .then(user => {
             if (!user) {
               throw server.plugins.errors.userNotFound
@@ -75,6 +88,51 @@ exports.register = (server, options, next) => {
           payload: {
             email: server.plugins.schemas.email,
             password: server.plugins.schemas.password
+          }
+        }
+      }
+    }, {
+      method: 'POST',
+      path: '/invite',
+      config: {
+        auth: false,
+        tags: ['api', 'authentication'],
+        handler: (request, reply) => {
+          User.findOne({where: {email: request.payload.email}})
+          .then(user => {
+            if (user && user.verified) {
+              throw server.plugins.errors.emailAlreadyExists
+            } else if (request.payload.email.substring(request.payload.email.length - 9) !== 'poplar.co') {
+              throw server.plugins.errors.invalidEmailForInvite
+            } else if (!user) {
+              return User.create({
+                email: request.payload.email
+              })
+            }
+
+            return user
+          })
+          .then(user => {
+            const now = new Date()
+            return Invitation.create({
+              user_id: user.id,
+              token: crypto.randomBytes(24).toString('hex'),
+              expires_at: now.setHours(now.getHours() + options.invitationExpiryHours)
+            })
+          })
+          .then(invitation => {
+            return server.plugins.emailer.sendInvitation(request.payload.email, {
+              invitationUrl: `${options.insideUrl}/accept-invite/${invitation.token}`
+            })
+          })
+          .then(() => {
+            return
+          })
+          .asCallback(reply)
+        },
+        validate: {
+          payload: {
+            email: server.plugins.schemas.email
           }
         }
       }

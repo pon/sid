@@ -78,6 +78,12 @@ server.register([
   if (err) throw err
 
   server.register([
+    {
+      register: require('./services/emailer'),
+      options: {
+        queueName: process.env.EMAILER_QUEUE
+      }
+    }
   ], err => {
     if (err) throw err
 
@@ -87,7 +93,9 @@ server.register([
         options: {
           key: 'MySecret',
           sessionLength: '10h',
-          hashSaltRounds: 10
+          hashSaltRounds: 10,
+          invitationExpiryHours: 24,
+          insideUrl: process.env.INSIDE_URL
         }
       }
     ], err => {

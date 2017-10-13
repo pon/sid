@@ -12,5 +12,8 @@ module.exports = function (db) {
     modelsExport[key] = models[model](db)
   })
 
+  modelsExport.User.hasMany(modelsExport.Invitation, {foreignKey: 'user_id'})
+  modelsExport.Invitation.belongsTo(modelsExport.User, {foreignKey: 'user_id'})
+
   return modelsExport
 }
