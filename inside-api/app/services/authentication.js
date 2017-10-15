@@ -92,6 +92,31 @@ exports.register = (server, options, next) => {
         }
       }
     }, {
+      method: 'GET',
+      path: '/invite-status',
+      config: {
+        auth: false,
+        tags: ['api', 'authentication'],
+        handler: (request, reply) => {
+          Invitation.findOne({
+            where: {token: request.query.token},
+            include: [User]
+          })
+          .then(invite => {
+            if (!invite) {
+              return {status: 'INVALID'}
+            } else if (invite.expires_at < new Date()) {
+              return {status: 'EXPIRED'}
+            } else if (invite.user.verified) {
+              return {status: 'ACCEPTED'}
+            } else {
+              return {status: 'VALID'}
+            }
+          })
+          .asCallback(reply)
+        }
+      }
+    }, {
       method: 'POST',
       path: '/invite',
       config: {

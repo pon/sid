@@ -6,7 +6,7 @@ import {media} from '../utils/style-utils';
 export class Header extends Component {
   render () {
     const StyledHeader = styled.header`
-      background-color: #333
+      background-color: #4688F1
       overflow: hidden;
       ${media.phone`
         a:not(:first-child):not(:last-child) {display:none;}

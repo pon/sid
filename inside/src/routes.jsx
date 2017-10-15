@@ -5,15 +5,27 @@ import {syncHistoryWithStore} from 'react-router-redux';
 import initStore from './store';
 
 import {App} from './containers';
+import {AcceptInvite, Dashboard} from './components';
 
 const store = initStore(browserHistory);
 const history = syncHistoryWithStore(browserHistory, store);
+
+const RequireAuth = (nextState, replace) => {
+  if (!sessionStorage.getItem('jwtToken')) {
+    replace({
+      pathname: '/login',
+      state: {nextPathname: nextState.location.pathname}
+    })
+  }
+}
 
 export default function routes () {
   return (
     <Provider store={store}>
       <Router history={history}>
         <Route path="/" component={App}>
+          <Router path="accept-invite/:token" component={AcceptInvite} />
+          <Router path="dashboard" component={Dashboard} onEnter={RequireAuth}/>
         </Route>
       </Router>
     </Provider>
