@@ -5,7 +5,7 @@ import {syncHistoryWithStore} from 'react-router-redux';
 import initStore from './store';
 
 import {App} from './containers';
-import {AcceptInvite, Dashboard} from './components';
+import {AcceptInvite, Dashboard, Login} from './components';
 
 const store = initStore(browserHistory);
 const history = syncHistoryWithStore(browserHistory, store);
@@ -26,6 +26,7 @@ export default function routes () {
         <Route path="/" component={App}>
           <Router path="accept-invite/:token" component={AcceptInvite} />
           <Router path="dashboard" component={Dashboard} onEnter={RequireAuth}/>
+          <Router path="login" component={Login} />
         </Route>
       </Router>
     </Provider>

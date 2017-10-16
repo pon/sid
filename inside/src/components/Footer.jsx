@@ -11,6 +11,6 @@ export default () => {
   `;
 
   return (
-    <StyledFooter>&copy; PON 2017</StyledFooter>
+    <StyledFooter>&copy; Poplar 2017</StyledFooter>
   );
 }

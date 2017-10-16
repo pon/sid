@@ -3,10 +3,12 @@ import {connect} from 'react-redux';
 import styled from 'styled-components';
 import {media} from '../utils/style-utils';
 
+import {submitLogout} from '../reducers/login';
+
 export class Header extends Component {
   render () {
     const StyledHeader = styled.header`
-      background-color: #4688F1
+      background-color: #4688F1;
       overflow: hidden;
       ${media.phone`
         a:not(:first-child):not(:last-child) {display:none;}
@@ -37,13 +39,28 @@ export class Header extends Component {
       `}
     `;
 
+    const LogInOut = styled(Item)`
+      float: right;
+    `;
+
     return (
       <StyledHeader>
-        <ItemLink href="#">Inside</ItemLink>
+        <ItemLink href="#">Poplar Inside</ItemLink>
         <ItemIcon href="#" icon>&#9776;</ItemIcon>
+        <LogInOut onClick={this.props.submitLogout}>
+          {this.props.isAuthenticated ? 'Log Out': 'Log In'}
+        </LogInOut>
       </StyledHeader>
     );
   }
 }
 
-export default Header;
+export default connect(({login}) => {
+  return {
+    isAuthenticated: login.get('isAuthenticated')
+  }
+}, dispatch => ({
+  submitLogout: () => {
+    return dispatch(submitLogout())
+  }
+}))(Header);
