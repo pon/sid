@@ -9,6 +9,8 @@ ADD package.json /usr/src/app/package.json
 
 RUN npm install
 
+RUN npm i -g serve
+
 ADD . /usr/src/app
 
 RUN npm run build
@@ -17,7 +19,4 @@ RUN cp -r /usr/src/app/build /usr/src
 
 WORKDIR /usr/src/build
 
-RUN npm i -g serve
-
 CMD serve -p 80 -s
-

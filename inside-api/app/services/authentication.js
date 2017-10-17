@@ -211,6 +211,17 @@ exports.register = (server, options, next) => {
           }
         }
       }
+    }, {
+      method: 'GET',
+      path: '/invited-users',
+      config: {
+        tags: ['api', 'authentication'],
+        handler: (request, reply) => {
+          User.findAll({include: [{model: Invitation, order: [['created_at', 'DESC']]}]})
+          .map(user => user.serialize())
+          .asCallback(reply)
+        }
+      }
     }])
 
     next()
