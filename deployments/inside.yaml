@@ -15,7 +15,7 @@ spec:
         app: inside
     spec:
       containers:
-        - image: us.gcr.io/poplar-178404/inside:20171016171627_inside
+        - image: us.gcr.io/poplar-178404/inside:20171017160947_inside
           imagePullPolicy: Always
           name: inside
           ports:
