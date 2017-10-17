@@ -10,6 +10,14 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api', 'statistics'],
       handler: (request, reply) => {
+        const possibleStatuses = [
+          {key: 'APPLYING', display: 'Applying'},
+          {key: 'VERIFYING', display: 'Verifying'},
+          {key: 'TIMED_OUT', display: 'Timed Out'},
+          {key: 'UNDERWRITING', display: 'Underwriting'},
+          {key: 'APPROVED', display: 'Approved'},
+          {key: 'DECLINED', display: 'Declined'}
+        ]
         sequelize.query(
           `
           SELECT
@@ -27,10 +35,17 @@ exports.register = (server, options, next) => {
           `
         )
         .spread(rows => {
-          return rows.reduce((agg, val) => {
-            agg[val.status] = val.num_apps
+          const emptyStatusCount = possibleStatuses.reduce((agg, status) => {
+            agg[status.key] = {display: status.display, count: 0}
             return agg
           }, {})
+
+          const fullStatusCount = rows.reduce((agg, val) => {
+            agg[val.status].count = val.num_apps
+            return agg
+          }, emptyStatusCount)
+
+          return fullStatusCount
         })
         .asCallback(reply)
       }
