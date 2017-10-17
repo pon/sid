@@ -98,7 +98,8 @@ server.register([
           insideUrl: process.env.INSIDE_URL
         }
       },
-      require('./features/verification')
+      require('./features/verification'),
+      require('./features/dashboard')
     ], err => {
       if (err) throw err
       server.start(err => {

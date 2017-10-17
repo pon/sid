@@ -319,6 +319,11 @@ class KnowledgeBaseClient {
     .then(res => res.body)
   }
 
+  getApplicationsCountByStatus() {
+    return this._get(`/statistics/applications-by-status`, {json: true})
+    .then(res => res.body)
+  }
+
   getApplicationEvents(applicationId) {
     return this._get(`/applications/${applicationId}/events`, {json: true})
     .then(res => res.body)
