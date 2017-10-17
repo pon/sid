@@ -32,6 +32,12 @@ exports.register = (server, options, next) => {
     applicationCreate: Joi.object().keys({
       user_id: Joi.string().max(255).required()
     }),
+    applicationsPaginatedQuery: Joi.object().keys({
+      starting_after: Joi.string().guid().optional(),
+      ending_before: Joi.string().guid().optional(),
+      limit: Joi.number().integer().min(1).max(100).default(10),
+      status: Joi.string().optional()
+    }),
     asOfQuery: Joi.object().keys({
       as_of: Joi.number().integer().optional()
     }),

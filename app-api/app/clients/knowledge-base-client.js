@@ -123,7 +123,7 @@ class KnowledgeBaseClient {
   getAddress(addressId, asOf) {
     return this._get(
       `/addresses/${addressId}`,
-      asOf ? {json: true, as_of: asOf} : {json: true}
+      asOf ? {json: true, qs: {as_of: asOf}} : {json: true}
     )
     .then(res => res.body)
   }
@@ -160,7 +160,7 @@ class KnowledgeBaseClient {
   getIncome(incomeId, asOf) {
     return this._get(
       `/incomes/${incomeId}`,
-      asOf ? {json: true, as_of: asOf} : {json: true}
+      asOf ? {json: true, qs: {as_of: asOf}} : {json: true}
     )
     .then(res => res.body)
   }
@@ -184,7 +184,7 @@ class KnowledgeBaseClient {
   getLease(leaseId, asOf) {
     return this._get(
       `/leases/${leaseId}`,
-      asOf ? {json: true, as_of: asOf} : {json: true}
+      asOf ? {json: true, qs: {as_of: asOf}} : {json: true}
     )
     .then(res => res.body)
     .then(lease => {
@@ -229,7 +229,7 @@ class KnowledgeBaseClient {
   getCreditReport(creditReportId, asOf) {
     return this._get(
       `/credit-reports/${creditReportId}`,
-      asOf ? {json: true, as_of: asOf} : {json: true}
+      asOf ? {json: true, qs: {as_of: asOf}} : {json: true}
     )
     .then(res => res.body)
   }
@@ -278,7 +278,7 @@ class KnowledgeBaseClient {
   getUpload(uploadId, asOf) {
     return this._get(
       `/uploads/${uploadId}`,
-      asOf ? {json: true, as_of: asOf} : {json: true}
+      asOf ? {json: true, qs: {as_of: asOf}} : {json: true}
     )
     .then(res => res.body)
   }
@@ -291,7 +291,7 @@ class KnowledgeBaseClient {
     let application
     return this._get(
       `/applications/${applicationId}`,
-      asOf ? {json: true, as_of: asOf} : {json: true}
+      asOf ? {json: true, qs: {as_of: asOf}} : {json: true}
     )
     .then(res => res.body)
     .then(_application => {
@@ -366,7 +366,7 @@ class KnowledgeBaseClient {
   getProfile(userId, asOf) {
     return this._get(
       `/users/${userId}/profile`,
-      asOf ? {json: true, as_of: asOf} : {json: true}
+      asOf ? {json: true, qs: {as_of: asOf}} : {json: true}
     )
     .then(res => res.body)
   }
@@ -404,7 +404,7 @@ class KnowledgeBaseClient {
   getLandlord(landlordId, asOf) {
     return this._get(
       `/landlords/${landlordId}`,
-      asOf ? {json: true, as_of: asOf} : {json: true}
+      asOf ? {json: true, qs: {as_of: asOf}} : {json: true}
     )
     .then(res => res.body)
   }

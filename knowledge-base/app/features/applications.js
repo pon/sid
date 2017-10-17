@@ -14,6 +14,44 @@ exports.register = (server, options, next) => {
 
   server.route([{
     method: 'GET',
+    path: '/applications',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        const whereClause = {deleted_at: null}
+        if (request.query.status) {
+          whereClause.status = request.query.status
+        }
+
+        P.resolve()
+        .then(() => {
+          if (request.query.ending_before) {
+            return Application.findById(request.query.ending_before)
+          }  else if (request.query.starting_after) {
+            return Application.findById(request.query.starting_after)
+          }
+        })
+        .then(application => {
+          if (request.query.ending_before) {
+            whereClause.created_at = {$lt: application.created_at}
+          } else if (request.query.starting_after) {
+            whereClause.created_at = {$gt: application.created_at}
+          }
+
+          return Application.findAll({
+            where: whereClause,
+            limit: request.query.limit,
+            order: [['created_at', 'DESC']]
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        query: server.plugins.schemas.applicationsPaginatedQuery
+      }
+    }
+  }, {
+    method: 'GET',
     path: '/applications/{applicationId}',
     config:{
       tags: ['api'],

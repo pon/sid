@@ -97,7 +97,8 @@ server.register([
           invitationExpiryHours: 24,
           insideUrl: process.env.INSIDE_URL
         }
-      }
+      },
+      require('./features/verification')
     ], err => {
       if (err) throw err
       server.start(err => {
