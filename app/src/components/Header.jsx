@@ -45,7 +45,7 @@ export class Header extends Component {
 
     return (
       <StyledHeader>
-        <ItemLink href="#">Sid</ItemLink>
+        <ItemLink href="#">Poplar</ItemLink>
         <ItemIcon href="#" icon>&#9776;</ItemIcon>
         <LogInOut onClick={this.props.submitLogout}>
           {this.props.isAuthenticated ? 'Log Out': 'Log In'}
