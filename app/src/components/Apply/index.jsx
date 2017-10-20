@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 import styled from 'styled-components';
 
+import FlatButton from 'material-ui/FlatButton';
 import {
   Step,
   Stepper,
@@ -20,6 +22,11 @@ import ApplyStepThreeForm from './ApplyStepThree';
 import ApplyStepFourForm from './ApplyStepFour';
 import {getApply, submitApplyStepOne, submitApplyStepTwo, submitApplyStepThree, submitApplyStepFour} from '../../reducers/apply';
 
+const StepFourWrapper = styled.div`
+  margin: 0 auto;
+  width: 50%;
+`;
+
 export class Apply extends Component {
 
   componentWillMount() {
@@ -33,7 +40,11 @@ export class Apply extends Component {
     const application = this.props.apply.get('application');
 
     if (application && application.status !== 'APPLYING') {
-      applyStep = <h1>Done</h1>;
+      applyStep =
+        <StepFourWrapper>
+          <h3>Thank you for applying!</h3>
+          <Link to='/dashboard'><FlatButton label="Return to Dashboard" primary={true} /></Link>
+        </StepFourWrapper>
     } else if (!this.props.apply.get('profile')) {
       applyStepIndex = 0;
       applyStep = <ApplyStepOneForm apply={this.props.apply} submitApplyStepOne={this.props.submitApplyStepOne}/>;
