@@ -8,7 +8,10 @@ exports.register = (server, options, next) => {
     userInvalidPassword: Boom.badRequest('incorrect password'),
     invalidPasswordToken: Boom.badRequest('invalid password reset token'),
     invalidInvitationToken: Boom.badRequest('invalid invitation token'),
-    userAlreadyVerified: Boom.badRequest('user already verified')
+    userAlreadyVerified: Boom.badRequest('user already verified'),
+    incomeNotFound: Boom.notFound('income does not exist'),
+    unableToVerifyIncome: Boom.badRequest('unable to verify income'),
+    unableToUnverifyIncome: Boom.badRequest('unable to unverify income')
   }
 
   server.expose(errors)

@@ -10,28 +10,28 @@ function InternalServer(message) {
   this.message = message || '';
   this.stack = (new Error()).stack;
 }
-InternalServer.prototype = Error.prototype;
+InternalServer.prototype = Object.create(Error.prototype);
 
 function NotFound(message) {
   this.name = 'NotFound';
   this.message = message || '';
   this.stack = (new Error()).stack;
 }
-NotFound.prototype = Error.prototype;
+NotFound.prototype = Object.create(Error.prototype);
 
 function InvalidParameters(message) {
   this.name = 'InvalidParameters';
   this.message = message || '';
   this.stack = (new Error()).stack;
 }
-InvalidParameters.prototype = Error.prototype;
+InvalidParameters.prototype = Object.create(Error.prototype);
 
 function BadRequest(message) {
   this.name = 'BadRequest';
   this.message = message || '';
   this.stack = (new Error()).stack;
 }
-BadRequest.prototype = Error.prototype;
+BadRequest.prototype = Object.create(Error.prototype);
 
 class KnowledgeBaseClient {
   constructor(options) {

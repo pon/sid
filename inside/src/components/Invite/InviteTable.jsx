@@ -35,7 +35,7 @@ const getVerificationStatus = user => {
     return 'N/a';
   } else if (new Date(user.invitations[0].expires_at) > (new Date(now.getTime() + now.getTimezoneOffset() * 60000))) {
     return 'Valid';
-  } 
+  }
 
   return 'Expired';
 }
@@ -78,7 +78,7 @@ const InviteTable = ({users, sendInvite, successMessage}) => {
                 <TableRowColumn>{user.verified ? 'Yes' : 'No'}</TableRowColumn>
                 <TableRowColumn>{user.invitations.length}</TableRowColumn>
                 <TableRowColumn>{getVerificationStatus(user)}</TableRowColumn>
-                <TableRowColumn>{!user.verified && 
+                <TableRowColumn>{!user.verified &&
                   <div onClick={() => {sendInvite(user.email)}}>
                     <FlatButton label="Resend Invite" primary={true} />
                   </div>}</TableRowColumn>

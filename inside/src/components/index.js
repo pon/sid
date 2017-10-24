@@ -4,6 +4,8 @@ import Footer from './Footer.jsx';
 import Header from './Header.jsx';
 import Invite from './Invite';
 import Login from './Login';
+import VerificationApplication from './Verification/Application';
+import VerificationDashboard from './Verification/Dashboard';
 
 export {
   AcceptInvite,
@@ -11,5 +13,7 @@ export {
   Footer,
   Header,
   Invite,
-  Login
+  Login,
+  VerificationApplication,
+  VerificationDashboard
 }

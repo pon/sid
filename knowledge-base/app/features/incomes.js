@@ -204,7 +204,7 @@ exports.register = (server, options, next) => {
             IncomeVerifiedEvent.type,
             IncomeVerifiedEvent.toJSON()
           )
-          .then(() => {
+          .tap(() => {
             server.emit('KB', IncomeVerifiedEvent)
           })
         })
@@ -238,7 +238,7 @@ exports.register = (server, options, next) => {
             IncomeUnverifiedEvent.type,
             IncomeUnverifiedEvent.toJSON()
           )
-          .then(() => {
+          .tap(() => {
             server.emit('KB', IncomeUnverifiedEvent)
           })
         })
