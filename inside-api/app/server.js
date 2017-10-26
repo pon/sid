@@ -101,7 +101,12 @@ server.register([
       },
       require('./features/verification'),
       require('./features/dashboard'),
-      require('./features/uploads')
+      {
+        register: require('./features/uploads'),
+        options: {
+          url: process.env.KNOWLEDGE_BASE_URL
+        }
+      }
     ], err => {
       if (err) throw err
       server.start(err => {

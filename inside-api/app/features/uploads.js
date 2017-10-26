@@ -9,7 +9,13 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api', 'verification'],
       handler: (request, reply) => {
-        return reply.proxy(({host: 'knowledge_base', port: '5000', protocol: 'http'}))
+        const urlSplit = options.url.split(':')
+
+        return reply.proxy(({
+          host: urlSplit[0]', 
+          port: urlSplit.length !== 1 ? urlSplit[1] : '80', 
+          protocol: 'http'
+        }))
       },
       validate: {params: {uploadId: server.plugins.schemas.guid}}
     }
