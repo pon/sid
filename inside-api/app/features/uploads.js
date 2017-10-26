@@ -12,7 +12,7 @@ exports.register = (server, options, next) => {
         const urlSplit = options.url.split(':')
 
         return reply.proxy(({
-          host: urlSplit[0]', 
+          host: urlSplit[0], 
           port: urlSplit.length !== 1 ? urlSplit[1] : '80', 
           protocol: 'http'
         }))
