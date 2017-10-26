@@ -89,7 +89,7 @@ exports.register = (server, options, next) => {
     }
   }, {
     method: 'GET',
-    path: '/uploads/{uploadId}',
+    path: '/uploads/{uploadId}/view',
     config: {
       tags: ['api'],
       handler: (request, reply) => {
@@ -140,11 +140,51 @@ exports.register = (server, options, next) => {
     }
   }, {
     method: 'GET',
-    path: '/applications/{applicationId}/uploads',
+    path: '/uploads/{uploadId}',
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        Upload.findAll({where: {application_id: request.params.applicationId, deleted_at: null}})
+        P.resolve()
+        .then(() => {
+          if (!request.query.as_of) {
+            return Upload.findOne({where: {id: request.params.uploadId, deleted_at: null}})
+            .then(upload => {
+              if (!upload) throw server.plugins.errors.uploadNotFound
+              return upload
+            })
+          }
+
+          return Event.findAll({
+            where: {aggregate_id: request.params.uploadId},
+            order: [['id', 'ASC']]
+          })
+          .filter(event => {
+            return event.created_at.getTime() <= request.query.as_of
+          })
+          .then(events => {
+            if (!events.length) throw server.plugins.errors.uploadNotFound
+            const upload = Upload.build()
+            events.forEach(event => {
+              upload.process(event.type, event.payload, true)
+            })
+
+            return upload
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        params: {uploadId: server.plugins.schemas.uuid},
+        query: server.plugins.schemas.asOfQuery
+      }
+    }
+  }, {
+    method: 'GET',
+    path: '/users/{userId}/uploads',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        Upload.findAll({where: {user_id: request.params.userId, deleted_at: null}})
         .map(upload => {
           return {
             id: upload.id,
@@ -157,7 +197,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
-        params: {applicationId: server.plugins.schemas.uuid}
+        params: {userId: server.plugins.schemas.uuid}
       }
     }
   }, {
