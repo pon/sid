@@ -1,8 +1,6 @@
 const P = require('bluebird')
 
 exports.register = (server, options, next) => {
-  const Events = options.events
-
   const KBClient = server.plugins.clients.KnowledgeBaseClient
 
   server.route([{

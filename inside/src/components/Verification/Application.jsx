@@ -5,10 +5,11 @@ import Snackbar from 'material-ui/Snackbar';
 
 import {getApplicationForVerification, unverifyIncome, verifyIncome} from '../../reducers/verification';
 
+import UploadBar from '../Uploads/UploadBar';
 import IncomeSection from './IncomeSection';
 
 const VerificationApplicationWrapper = styled.div`
-  width: 75%;
+  width: 95%;
   margin: 0 auto;
 `;
 
@@ -23,8 +24,17 @@ export class VerificationApplication extends Component {
     return (
       <VerificationApplicationWrapper>
         {application && application.incomes && application.incomes.length &&
-          <IncomeSection incomes={application.incomes} verifyIncome={this.props.verifyIncome} unverifyIncome={this.props.unverifyIncome}/>
+          <IncomeSection 
+            style={{float: 'left', width: '70%'}}
+            incomes={application.incomes} 
+            verifyIncome={this.props.verifyIncome} 
+            unverifyIncome={this.props.unverifyIncome}
+          />
         }
+        <UploadBar 
+          style={{float: 'right', width: '25%'}} 
+          uploads={(application && application.uploads) || []} 
+        />
         <Snackbar
           open={!!this.props.verification.get('successMessage')}
           message={this.props.verification.get('successMessage') || ''}

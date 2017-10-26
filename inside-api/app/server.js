@@ -41,6 +41,7 @@ server.register([
   },
   require('./services/errors'),
   require('./services/schemas'),
+  require('h2o2'),
   {
     register: require('./services/db'),
     options: {
@@ -99,7 +100,8 @@ server.register([
         }
       },
       require('./features/verification'),
-      require('./features/dashboard')
+      require('./features/dashboard'),
+      require('./features/uploads')
     ], err => {
       if (err) throw err
       server.start(err => {

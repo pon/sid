@@ -6,6 +6,7 @@ import Invite from './Invite';
 import Login from './Login';
 import VerificationApplication from './Verification/Application';
 import VerificationDashboard from './Verification/Dashboard';
+import ViewUpload from './Uploads/ViewUpload';
 
 export {
   AcceptInvite,
@@ -15,5 +16,6 @@ export {
   Invite,
   Login,
   VerificationApplication,
-  VerificationDashboard
+  VerificationDashboard,
+  ViewUpload
 }

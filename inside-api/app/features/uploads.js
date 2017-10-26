@@ -5,12 +5,13 @@ exports.register = (server, options, next) => {
 
   server.route([{
     method: 'GET',
-    path: '/dashboard/application-statistics',
+    path: '/uploads/{uploadId}/view',
     config: {
-      tags: ['api', 'dashboard'],
+      tags: ['api', 'verification'],
       handler: (request, reply) => {
-        KBClient.getApplicationsCountByStatus().asCallback(reply)
-      }
+        return reply.proxy(({host: 'knowledge_base', port: '5000', protocol: 'http'}))
+      },
+      validate: {params: {uploadId: server.plugins.schemas.guid}}
     }
   }])
 
@@ -18,6 +19,6 @@ exports.register = (server, options, next) => {
 }
 
 exports.register.attributes = {
-  name: 'dashboard',
+  name: 'uploads',
   version: '1.0.0'
 }

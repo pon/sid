@@ -313,11 +313,15 @@ class KnowledgeBaseClient {
         _application.income_ids && P.map(_application.income_ids, incomeId => {
           return this.getIncome(incomeId)
         }),
-        _application.lease_id && this.getLease(_application.lease_id)
+        _application.lease_id && this.getLease(_application.lease_id),
+        _application.upload_ids && P.map(_application.upload_ids, uploadId => {
+          return this.getUpload(uploadId)
+        })
       ])
-      .spread((incomes, lease) => {
+      .spread((incomes, lease, uploads) => {
         if (incomes) application.incomes = incomes
         if (lease) application.lease = lease
+        if (uploads) application.uploads = uploads
 
         return application
       })

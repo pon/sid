@@ -4,9 +4,9 @@ import styled from 'styled-components';
 
 import IncomeCard from './IncomeCard';
 
-const IncomeSection = ({incomes, successMessage, unverifyIncome, verifyIncome}) => {
+const IncomeSection = ({incomes, successMessage, unverifyIncome, verifyIncome, style}) => {
   return (
-    <div>
+    <div style={style}>
       <h3>Incomes</h3>
       <div>
         {incomes.map(income => {
