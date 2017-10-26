@@ -15,7 +15,7 @@ spec:
         app: inside-api
     spec:
       containers:
-        - image: us.gcr.io/poplar-178404/inside_api:20171026145225_inside_api
+        - image: us.gcr.io/poplar-178404/inside_api:20171026164159_inside_api
           imagePullPolicy: Always
           name: inside-api
           env:
@@ -30,7 +30,7 @@ spec:
             - name: PORT
               value: "80"
             - name: KNOWLEDGE_BASE_URL
-              value: http://knowledge-base
+              value: knowledge-base
             - name: AWS_REGION
               value: us-east-1
             - name: EMAILER_QUEUE

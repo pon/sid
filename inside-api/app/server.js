@@ -59,7 +59,7 @@ server.register([
     register: require('./services/clients'),
     options: {
       knowledgeBaseClient: new KBClient({
-        url: process.env.KNOWLEDGE_BASE_URL,
+        url: `http://${process.env.KNOWLEDGE_BASE_URL}`,
         logger: message => {server.log(['clients', 'kb'], message)}
       })
     }
