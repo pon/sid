@@ -61,7 +61,7 @@ export class VerificationApplication extends Component {
             <IncomeSection 
               style={{float: 'left', width: '70%'}}
               incomes={application.incomes} 
-              editable={!application.verified}
+              editable={!verified}
               verifyIncome={this.props.verifyIncome} 
               unverifyIncome={this.props.unverifyIncome}
             />
