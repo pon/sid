@@ -1,16 +1,12 @@
 import React from 'react';
 import {Field, reduxForm} from 'redux-form';
-import styled from 'styled-components';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import {TextField} from 'redux-form-material-ui';
 import {blue100, blue500, green100, green500} from 'material-ui/styles/colors';
-import Snackbar from 'material-ui/Snackbar';
 import CheckBox from 'material-ui/svg-icons/toggle/check-box';
 import CheckBoxOutline from 'material-ui/svg-icons/toggle/check-box-outline-blank';
-
-import {constants, currencyFormat} from '../../utils/style-utils';
 
 const validate = values => {
   const errors = {};
@@ -48,7 +44,7 @@ const headerColor = income => {
   }
 }
 
-const IncomeFormComponent = ({handleSubmit, initialValues, pristine, submitting, valid, unverifyIncome, verifyIncome}) => {
+const IncomeFormComponent = ({editable, handleSubmit, initialValues, pristine, submitting, valid, unverifyIncome, verifyIncome}) => {
   const onSubmit = () => {
     if (!initialValues.verified) {
       return verifyIncome;
@@ -61,11 +57,11 @@ const IncomeFormComponent = ({handleSubmit, initialValues, pristine, submitting,
     <form onSubmit={handleSubmit(onSubmit())}>
       <CardText>
         <Field name="stated_income" component={TextField} floatingLabelText="Stated Income" hintText="Stated Income" disabled={true} /><br />
-        <Field name="verified_income" component={TextField} floatingLabelText="Verified Income" hintText="Verified Income" />
+        <Field name="verified_income" component={TextField} floatingLabelText="Verified Income" hintText="Verified Income" disabled={!editable} />
       </CardText>
       <CardActions style={{width: '100%', textAlign: 'right'}}>
-        {!initialValues.verified && <RaisedButton type="submit" disabled={!valid || pristine || submitting} label="Verify" primary={true} />}
-        {initialValues.verified && <RaisedButton type="submit" disabled={submitting} label="Unverify" secondary={true} />}
+        {!initialValues.verified && <RaisedButton type="submit" disabled={!editable || !valid || pristine || submitting} label="Verify" primary={true} />}
+        {initialValues.verified && <RaisedButton type="submit" disabled={!editable || submitting} label="Unverify" secondary={true} />}
       </CardActions>
     </form>
   );

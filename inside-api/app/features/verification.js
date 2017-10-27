@@ -71,6 +71,102 @@ exports.register = (server, options, next) => {
         params: {incomeId: server.plugins.schemas.guid}
       }
     }
+  }, {
+    method: 'POST',
+    path: '/verification/applications/{applicationId}/complete-verification',
+    config: {
+      tags: ['api', 'verification'],
+      handler: (request, reply) => {
+        KBClient.applicationCompleteVerification(request.params.applicationId)
+        .catch(KBClient.NotFound, () => {
+          throw server.plugins.errors.applicationNotFound
+        })
+        .catch(KBClient.BadRequest, () => {
+          throw server.plugins.errors.unableToVerifyApplication
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/verification/applications/{applicationId}/re-verify',
+    config: {
+      tags: ['api', 'verification'],
+      handler: (request, reply) => {
+        KBClient.applicationReverify(request.params.applicationId)
+        .catch(KBClient.NotFound, () => {
+          throw server.plugins.errors.applicationNotFound
+        })
+        .catch(KBClient.BadRequest, () => {
+          throw server.plugins.errors.unableToReverifyApplication
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/verification/users/{userId}/verify-identity',
+    config: {
+      tags: ['api', 'verification'],
+      handler: (request, reply) => {
+        KBClient.profileVerifyIdentity(request.params.userId)
+        .catch(KBClient.NotFound, () => {
+          throw server.plugins.errors.userNotFound
+        })
+        .catch(KBClient.BadRequest, () => {
+          throw server.plugins.errors.unableToVerifyIdentity
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/verification/users/{userId}/unverify-identity',
+    config: {
+      tags: ['api', 'verification'],
+      handler: (request, reply) => {
+        KBClient.profileUnverifyIdentity(request.params.userId)
+        .catch(KBClient.NotFound, () => {
+          throw server.plugins.errors.userNotFound
+        })
+        .catch(KBClient.BadRequest, () => {
+          throw server.plugins.errors.unableToUnverifyIdentity
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/verification/users/{userId}/verify-citizenship',
+    config: {
+      tags: ['api', 'verification'],
+      handler: (request, reply) => {
+        KBClient.profileVerifyCitizenship(request.params.userId)
+        .catch(KBClient.NotFound, () => {
+          throw server.plugins.errors.userNotFound
+        })
+        .catch(KBClient.BadRequest, () => {
+          throw server.plugins.errors.unableToVerifyCitizenship
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/verification/users/{userId}/unverify-citizenship',
+    config: {
+      tags: ['api', 'verification'],
+      handler: (request, reply) => {
+        KBClient.profileUnverifyCitizenship(request.params.userId)
+        .catch(KBClient.NotFound, () => {
+          throw server.plugins.errors.userNotFound
+        })
+        .catch(KBClient.BadRequest, () => {
+          throw server.plugins.errors.unableToUnverifyCitizenship
+        })
+        .asCallback(reply)
+      }
+    }
   }])
 
   next()

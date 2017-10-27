@@ -18,7 +18,7 @@ export class ViewUpload extends Component {
   render () {
     return (
       <UploadsWrapper>
-        <img src={this.props.uploads.get('upload')} />
+        <img src={this.props.uploads.get('upload')} alt="Client Upload"/>
       </UploadsWrapper>
     );
   }

@@ -1,6 +1,5 @@
 import React from 'react';
 import {Field, reduxForm} from 'redux-form';
-import styled from 'styled-components';
 import {TextField} from 'redux-form-material-ui';
 
 import FlatButton from 'material-ui/FlatButton';
@@ -13,8 +12,6 @@ import {
   TableRowColumn,
 } from 'material-ui/Table';
 import Snackbar from 'material-ui/Snackbar';
-
-import {constants} from '../../utils/style-utils';
 
 const validate = values => {
   const errors = {};

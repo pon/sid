@@ -149,6 +149,7 @@ exports.register = (server, options, next) => {
           )
           .then(() => {
             server.emit('KB', ProfileIdentityVerifiedEvent)
+            return profile
           })
         })
         .asCallback(reply)
@@ -173,6 +174,7 @@ exports.register = (server, options, next) => {
           )
           .then(() => {
             server.emit('KB', ProfileIdentityUnverifiedEvent)
+            return profile
           })
         })
         .asCallback(reply)
@@ -197,6 +199,7 @@ exports.register = (server, options, next) => {
           )
           .then(() => {
             server.emit('KB', ProfileCitizenshipVerifiedEvent)
+            return profile
           })
         })
         .asCallback(reply)
@@ -221,6 +224,7 @@ exports.register = (server, options, next) => {
           )
           .then(() => {
             server.emit('KB', ProfileCitizenshipUnverifiedEvent)
+            return profile
           })
         })
         .asCallback(reply)

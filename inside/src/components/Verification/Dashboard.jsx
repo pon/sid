@@ -30,7 +30,7 @@ export class VerificationDashboard extends Component {
     const applications = this.props.verification.get('applications');
     return (
       <VerificationDashboardWrapper>
-        {applications && applications.length && <Table selectable={false}>
+        {applications && <Table selectable={false}>
           <TableHeader>
             <TableRow>
               <TableHeaderColumn>ID</TableHeaderColumn>

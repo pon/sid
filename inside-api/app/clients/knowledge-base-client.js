@@ -311,17 +311,19 @@ class KnowledgeBaseClient {
       application = _application
       return P.all([
         _application.income_ids && P.map(_application.income_ids, incomeId => {
-          return this.getIncome(incomeId)
+          return this.getIncome(incomeId, asOf)
         }),
-        _application.lease_id && this.getLease(_application.lease_id),
+        _application.lease_id && this.getLease(_application.lease_id, asOf),
         _application.upload_ids && P.map(_application.upload_ids, uploadId => {
           return this.getUpload(uploadId)
-        })
+        }),
+        this.getProfile(application.user_id, asOf)
       ])
-      .spread((incomes, lease, uploads) => {
+      .spread((incomes, lease, uploads, profile) => {
         if (incomes) application.incomes = incomes
         if (lease) application.lease = lease
         if (uploads) application.uploads = uploads
+        application.profile = profile
 
         return application
       })
@@ -389,6 +391,20 @@ class KnowledgeBaseClient {
     })
   }
 
+  applicationCompleteVerification(applicationId) {
+    return this._post(`/applications/${applicationId}/complete-verification`, {
+      json: true
+    })
+    .then(res => res.body)
+  }
+
+  applicationReverify(applicationId) {
+    return this._post(`/applications/${applicationId}/re-verify`, {
+      json: true
+    })
+    .then(res => res.body)
+  }
+
   createProfile(profile) {
     return this._post('/profiles', {body: profile, json: true}).then(res => res.body)
   }
@@ -412,18 +428,22 @@ class KnowledgeBaseClient {
 
   profileVerifyIdentity(userId) {
     return this._post(`/users/${userId}/profile/verify-identity`)
+    .then(res => res.body)
   }
 
   profileUnverifyIdentity(userId) {
     return this._post(`/users/${userId}/profile/unverify-identity`)
+    .then(res => res.body)
   }
 
   profileVerifyCitizenship(userId) {
     return this._post(`/users/${userId}/profile/verify-citizenship`)
+    .then(res => res.body)
   }
 
   profileUnverifyCitizenship(userId) {
     return this._post(`/users/${userId}/profile/unverify-citizenship`)
+    .then(res => res.body)
   }
 
   getApplicationLoanOffer(applicationId) {

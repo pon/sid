@@ -1,6 +1,5 @@
 import Immutable from 'immutable';
 import {Effects, loop} from 'redux-loop';
-import {push} from 'react-router-redux';
 
 import {handleError} from '../utils/fetcher-utils';
 

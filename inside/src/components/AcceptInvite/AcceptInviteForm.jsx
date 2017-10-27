@@ -4,8 +4,6 @@ import {TextField} from 'redux-form-material-ui';
 import FlatButton from 'material-ui/FlatButton';
 import styled from 'styled-components';
 
-import RenderField from '../common/RenderField';
-
 import {constants} from '../../utils/style-utils';
 
 const validate = values => {

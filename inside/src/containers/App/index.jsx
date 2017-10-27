@@ -3,8 +3,6 @@ import {Footer, Header} from '../../components';
 import styled from 'styled-components';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 
 export class App extends Component {
 

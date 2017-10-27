@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import styled from 'styled-components';
 import {Link} from 'react-router';
 
 import {GridList, GridTile} from 'material-ui/GridList';
 import LaunchIcon from 'material-ui/svg-icons/action/launch';
-
-import {getUpload} from '../../reducers/uploads';
 
 const UploadsWrapper = styled.div`
   display: 'flex';
