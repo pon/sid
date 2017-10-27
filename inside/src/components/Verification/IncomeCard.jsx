@@ -72,11 +72,11 @@ const IncomeForm = reduxForm({
   validate
 })(IncomeFormComponent);
 
-const IncomeCard = ({income, verifyIncome, unverifyIncome}) => {
+const IncomeCard = ({editable, income, verifyIncome, unverifyIncome}) => {
   return (
   <Card style={{width: '30%'}}>
     <CardHeader title={formatTypeDisplay(income)} style={{backgroundColor: headerColor(income)}} />
-    <IncomeForm initialValues={income} verifyIncome={verifyIncome} unverifyIncome={unverifyIncome}/>
+    <IncomeForm initialValues={income} editable={editable} verifyIncome={verifyIncome} unverifyIncome={unverifyIncome}/>
   </Card>
   );
 }
