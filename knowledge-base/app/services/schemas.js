@@ -127,6 +127,9 @@ exports.register = (server, options, next) => {
       years_of_employment: Joi.number().integer().min(0),
       social_security_number: Joi.string().length(9)
     }),
+    profileAttachCurrentAddress: Joi.object().keys({
+      address_id: Joi.string().guid().required()
+    }),
     uploadCreate: Joi.object().keys({
       user_id: Joi.string().max(255).required(),
       category: Joi.string().max(255).required(),

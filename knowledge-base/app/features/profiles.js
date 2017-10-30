@@ -269,6 +269,9 @@ exports.register = (server, options, next) => {
           })
         })
         .asCallback(reply)
+      },
+      validate: {
+        payload: server.plugins.schemas.profileAttachCurrentAddress
       }
     }
   }])
