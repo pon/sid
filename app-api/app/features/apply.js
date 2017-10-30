@@ -163,7 +163,8 @@ exports.register = (server, options, next) => {
                 employer_name: income.employer_name !== '' ? income.employer_name : undefined,
                 stated_income: income.stated_income
               }
-            }))
+            })), 
+            KBClient.attachCurrentAddressToProfile(request.auth.credentials.id, address.id)
           ])
         }).spread((lease, incomes) => {
           return P.all([
