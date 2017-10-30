@@ -14,6 +14,7 @@ module.exports = db => {
     citizenship_verified_at: {type: Sequelize.DATE},
     years_of_employment: {type: Sequelize.INTEGER},
     social_security_number: {type: Sequelize.STRING(9)},
+    current_address_id: {type: Sequelize.UUID, references: {model: 'addresses', key: 'id'}},
     deleted_at: Sequelize.DATE
   }, {
     paranoid: false,
@@ -66,6 +67,10 @@ module.exports = db => {
           case 'PROFILE_IDENTITY_UNVERIFIED':
             this.identity_verified = false
             this.identity_verified_at = null
+            if (!inMemory) return this.save()
+            break
+          case 'PROFILE_CURRENT_ADDRESS_ATTACHED':
+            this.current_address_id = event.address_id
             if (!inMemory) return this.save()
             break
           default:

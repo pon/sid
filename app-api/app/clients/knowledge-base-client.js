@@ -380,20 +380,12 @@ class KnowledgeBaseClient {
     return this._patch(`/users/${userId}/profile`, {body: updates, json: true})
   }
 
-  profileVerifyIdentity(userId) {
-    return this._post(`/users/${userId}/profile/verify-identity`)
-  }
-
-  profileUnverifyIdentity(userId) {
-    return this._post(`/users/${userId}/profile/unverify-identity`)
-  }
-
-  profileVerifyCitizenship(userId) {
-    return this._post(`/users/${userId}/profile/verify-citizenship`)
-  }
-
-  profileUnverifyCitizenship(userId) {
-    return this._post(`/users/${userId}/profile/unverify-citizenship`)
+  attachCurrentAddressToProfile(userId, addressId) {
+    return this._post(`/users/${userId}/profile/attach-current-address`, {
+      body: {address_id: addressId},
+      json: true
+    })
+    .then(res => res.body)
   }
 
   getApplicationLoanOffer(applicationId) {

@@ -56,6 +56,7 @@ module.exports = {
   PROFILE_CITIZENSHIP_UNVERIFIED: require('./profile-citizenship-unverified'),
   PROFILE_CITIZENSHIP_VERIFIED: require('./profile-citizenship-verified'),
   PROFILE_CREATED: require('./profile-created'),
+  PROFILE_CURRENT_ADDRESS_ATTACHED: require('./profile-current-address-attached'),
   PROFILE_IDENTITY_UNVERIFIED: require('./profile-identity-unverified'),
   PROFILE_IDENTITY_VERIFIED: require('./profile-identity-verified'),
   PROFILE_UPDATED: require('./profile-updated'),

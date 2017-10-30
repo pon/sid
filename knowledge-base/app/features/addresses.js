@@ -77,6 +77,21 @@ exports.register = (server, options, next) => {
       }
     }
   }, {
+    method: 'GET',
+    path: '/users/{userId}/addresses',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        Address.findAll({
+          where: {
+            user_id: request.params.userId,
+            deleted_at: null
+          } 
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
     method: 'POST',
     path: '/addresses',
     config: {

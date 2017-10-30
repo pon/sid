@@ -5,6 +5,7 @@ exports.register = (server, options, next) => {
 
   const Events = options.events
 
+  const Address    = server.plugins.db.models.Address
   const Event      = server.plugins.db.models.Event
   const Profile    = server.plugins.db.models.Profile
 
@@ -224,6 +225,46 @@ exports.register = (server, options, next) => {
           )
           .then(() => {
             server.emit('KB', ProfileCitizenshipUnverifiedEvent)
+            return profile
+          })
+        })
+        .asCallback(reply)
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/users/{userId}/profile/attach-current-address',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        let profile
+        Profile.findOne({where: {user_id: request.params.userId, deleted_at: null}})
+        .then(_profile => {
+          profile = _profile
+          if (!profile) throw server.plugins.errors.profileNotFound
+          return Address.findOne({
+            where: {
+              id: request.payload.address_id, 
+              user_id: request.params.userId,
+              deleted_at: null
+            }
+          })
+        })
+        .then(address => {
+          if (!address) throw server.plugins.errors.addressNotFound
+          
+          const ProfileCurrentAddressAttachedEvent = new Events.PROFILE_CURRENT_ADDRESS_ATTACHED(profile.id, address.id)
+
+          return profile.process(
+            ProfileCurrentAddressAttachedEvent.type,
+            ProfileCurrentAddressAttachedEvent.toJSON()
+          )
+          .then(() => {
+            server.emit('KB', ProfileCurrentAddressAttachedEvent)
+            profile = profile.toJSON()
+            if (profile.current_address_id) {
+              profile.curent_address = `/addresses/${profile.current_address_id}}`
+            }
             return profile
           })
         })
