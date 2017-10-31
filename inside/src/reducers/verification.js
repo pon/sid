@@ -504,7 +504,7 @@ export default (state = initialState, {type, payload}) => {
         .set('application', unverifiedCitizenshipApplication)
         .set('isSubmitting', false)
         .delete('error')
-        .set('successMessage', 'Identity Unverified!');
+        .set('successMessage', 'Citizenship Unverified!');
     case SUBMIT_UNVERIFY_CITIZENSHIP_FAILURE:
       return state
         .set('isSubmitting', false)

@@ -40,6 +40,14 @@ exports.register = (server, options, next) => {
             })
           })
         })
+        .then(profile => {
+          profile = profile.toJSON()
+          if (profile.current_address_id) {
+            profile.current_address = `/addresses/${profile.current_address_id}`
+          }
+
+          return profile
+        })
         .asCallback(reply)
       },
       validate: {
@@ -93,7 +101,6 @@ exports.register = (server, options, next) => {
           return profile.process(ProfileCreatedEvent.type, ProfileCreatedEvent)
           .then(() => {
             server.emit('KB', ProfileCreatedEvent)
-            return profile
           })
         })
         .asCallback(reply)
@@ -117,8 +124,6 @@ exports.register = (server, options, next) => {
             profile.id,
             request.payload
           )
-
-          console.log(ProfileUpdatedEvent.toJSON())
 
           return profile.process(ProfileUpdatedEvent.type, ProfileUpdatedEvent.toJSON())
           .then(() => {
@@ -150,7 +155,6 @@ exports.register = (server, options, next) => {
           )
           .then(() => {
             server.emit('KB', ProfileIdentityVerifiedEvent)
-            return profile
           })
         })
         .asCallback(reply)
@@ -175,7 +179,6 @@ exports.register = (server, options, next) => {
           )
           .then(() => {
             server.emit('KB', ProfileIdentityUnverifiedEvent)
-            return profile
           })
         })
         .asCallback(reply)
@@ -200,7 +203,6 @@ exports.register = (server, options, next) => {
           )
           .then(() => {
             server.emit('KB', ProfileCitizenshipVerifiedEvent)
-            return profile
           })
         })
         .asCallback(reply)
@@ -225,7 +227,6 @@ exports.register = (server, options, next) => {
           )
           .then(() => {
             server.emit('KB', ProfileCitizenshipUnverifiedEvent)
-            return profile
           })
         })
         .asCallback(reply)
@@ -261,11 +262,6 @@ exports.register = (server, options, next) => {
           )
           .then(() => {
             server.emit('KB', ProfileCurrentAddressAttachedEvent)
-            profile = profile.toJSON()
-            if (profile.current_address_id) {
-              profile.curent_address = `/addresses/${profile.current_address_id}}`
-            }
-            return profile
           })
         })
         .asCallback(reply)

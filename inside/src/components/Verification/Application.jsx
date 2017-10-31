@@ -9,13 +9,18 @@ import Snackbar from 'material-ui/Snackbar';
 import {
   getApplicationForVerification, 
   reverifyApplication,
+  unverifyCitizenship,
+  unverifyIdentity,
   unverifyIncome, 
   verifyApplication,
+  verifyCitizenship,
+  verifyIdentity,
   verifyIncome
 } from '../../reducers/verification';
 
-import UploadBar from '../Uploads/UploadBar';
 import IncomeSection from './IncomeSection';
+import ProfileSection from './ProfileSection';
+import UploadBar from '../Uploads/UploadBar';
 
 const VerificationApplicationWrapper = styled.div`
   width: 95%;
@@ -57,6 +62,10 @@ export class VerificationApplication extends Component {
         </VerificationActionWrapper>
         <Divider />
         <div>
+          <UploadBar 
+            style={{float: 'right', width: '25%'}} 
+            uploads={(application && application.uploads) || []} 
+          />
           {application && application.incomes && application.incomes.length &&
             <IncomeSection 
               style={{float: 'left', width: '70%'}}
@@ -66,10 +75,16 @@ export class VerificationApplication extends Component {
               unverifyIncome={this.props.unverifyIncome}
             />
           }
-          <UploadBar 
-            style={{float: 'right', width: '25%'}} 
-            uploads={(application && application.uploads) || []} 
-          />
+          {application && application.profile &&
+            <ProfileSection 
+              style={{float: 'left', width: '70%', marginTop: '20px'}}
+              profile={application.profile}
+              unverifyCitizenship={this.props.unverifyCitizenship}
+              unverifyIdentity={this.props.unverifyIdentity}
+              verifyCitizenship={this.props.verifyCitizenship}
+              verifyIdentity={this.props.verifyIdentity}
+            />
+          }
         </div>
         <Snackbar
           open={!!this.props.verification.get('successMessage')}
@@ -95,8 +110,20 @@ const mapDispatchToProps = dispatch => ({
   reverifyApplication: applicationId => {
     return dispatch(reverifyApplication(applicationId));
   },
+  unverifyCitizenship: userId => {
+    return dispatch(unverifyCitizenship(userId));
+  },
+  unverifyIdentity: userId => {
+    return dispatch(unverifyIdentity(userId));
+  },
   unverifyIncome: income => {
     return dispatch(unverifyIncome(income.id));
+  },
+  verifyCitizenship: userId => {
+    return dispatch(verifyCitizenship(userId));
+  },
+  verifyIdentity: userId => {
+    return dispatch(verifyIdentity(userId));
   },
   verifyIncome: income => {
     return dispatch(verifyIncome(income));

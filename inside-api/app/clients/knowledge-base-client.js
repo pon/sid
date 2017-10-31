@@ -410,11 +410,26 @@ class KnowledgeBaseClient {
   }
 
   getProfile(userId, asOf) {
+    let profile
     return this._get(
       `/users/${userId}/profile`,
       asOf ? {json: true, qs: {as_of: asOf}} : {json: true}
     )
     .then(res => res.body)
+    .then(_profile => {
+      profile = _profile
+      if (profile.current_address) {
+        return this._get(profile.current_address, {json: true})
+        .then(res => res.body)
+      }
+    })
+    .then(address => {
+      if (address) {
+        profile.current_address = address
+      }
+
+      return profile
+    })
   }
 
   getProfileEvents(userId) {
@@ -428,26 +443,27 @@ class KnowledgeBaseClient {
 
   profileVerifyIdentity(userId) {
     return this._post(`/users/${userId}/profile/verify-identity`)
-    .then(res => res.body)
+    .then(() => this.getProfile(userId))
   }
 
   profileUnverifyIdentity(userId) {
     return this._post(`/users/${userId}/profile/unverify-identity`)
-    .then(res => res.body)
+    .then(() => this.getProfile(userId))
   }
 
   profileVerifyCitizenship(userId) {
     return this._post(`/users/${userId}/profile/verify-citizenship`)
-    .then(res => res.body)
+    .then(() => this.getProfile(userId))
   }
 
   profileUnverifyCitizenship(userId) {
     return this._post(`/users/${userId}/profile/unverify-citizenship`)
-    .then(res => res.body)
+    .then(() => this.getProfile(userId))
   }
 
   getApplicationLoanOffer(applicationId) {
     return this._get(`/applications/${applicationId}/loan-offer`, {json: true})
+    .then(() => this.getProfile(userId))
     .then(res => res.body)
   }
 

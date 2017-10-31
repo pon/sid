@@ -110,6 +110,7 @@ exports.register = (server, options, next) => {
       tags: ['api', 'verification'],
       handler: (request, reply) => {
         KBClient.profileVerifyIdentity(request.params.userId)
+        .tap(console.log)
         .catch(KBClient.NotFound, () => {
           throw server.plugins.errors.userNotFound
         })
