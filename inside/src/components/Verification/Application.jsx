@@ -19,6 +19,7 @@ import {
 } from '../../reducers/verification';
 
 import IncomeSection from './IncomeSection';
+import LeaseSection from './LeaseSection';
 import ProfileSection from './ProfileSection';
 import UploadBar from '../Uploads/UploadBar';
 
@@ -77,12 +78,18 @@ export class VerificationApplication extends Component {
           }
           {application && application.profile &&
             <ProfileSection 
-              style={{float: 'left', width: '70%', marginTop: '20px'}}
+              style={{float: 'left', width: '33%', marginTop: '20px'}}
               profile={application.profile}
               unverifyCitizenship={this.props.unverifyCitizenship}
               unverifyIdentity={this.props.unverifyIdentity}
               verifyCitizenship={this.props.verifyCitizenship}
               verifyIdentity={this.props.verifyIdentity}
+            />
+          }
+          {application && application.lease &&
+            <LeaseSection
+              style={{float: 'left', width: '33%', marginTop: '20px', marginLeft: '4%'}}
+              lease={application.lease}
             />
           }
         </div>
