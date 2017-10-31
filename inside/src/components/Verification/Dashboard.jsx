@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import styled from 'styled-components';
+import moment from 'moment';
 
 import FlatButton from 'material-ui/FlatButton';
 import {
@@ -34,6 +35,7 @@ export class VerificationDashboard extends Component {
           <TableHeader>
             <TableRow>
               <TableHeaderColumn>ID</TableHeaderColumn>
+              <TableHeaderColumn>Applied At</TableHeaderColumn>
               <TableHeaderColumn></TableHeaderColumn>
             </TableRow>
           </TableHeader>
@@ -42,6 +44,7 @@ export class VerificationDashboard extends Component {
               return (
                 <TableRow key={application.id}>
                   <TableRowColumn>{application.id}</TableRowColumn>
+                  <TableRowColumn>{moment(application.applied_at).format('ddd MMMM Do YYYY, h:mm A')}</TableRowColumn>
                   <TableRowColumn><Link to={`/verification/${application.id}`}><FlatButton label="View Application" primary={true}/></Link></TableRowColumn>
                 </TableRow>
               );

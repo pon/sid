@@ -13,6 +13,29 @@ exports.register = (server, options, next) => {
         query.status = 'VERIFYING'
 
         KBClient.getApplications(query)
+        .map(application => {
+          return KBClient.getApplicationEvents(application.id)
+          .then(applicationEvents => {
+            applicationEvents.map(e => console.log(e.type))
+            const appliedEvent = applicationEvents.reduce((latest, evt) => {
+              if (!latest && evt.type === 'APPLICATION_APPLIED') {
+                latest = evt
+              } else if (latest && evt.type === 'APPLICATION_APPLIED') {
+                const currentLatestDate = new Date(latest.payload.applied_at)
+                const evtDate = new Date(evt.payload.applied_at)
+
+                if (evtDate > currentLatestDate) {
+                  latest = evt
+                }
+              }
+
+              return latest
+            }, null)
+
+            application.applied_at = appliedEvent.payload.applied_at
+            return application
+          })
+        })
         .asCallback(reply)
       },
       validate: {
