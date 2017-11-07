@@ -283,6 +283,19 @@ class KnowledgeBaseClient {
     .then(res => res.body)
   }
 
+  getFinancialCredentials(userId) {
+    return this._get(`/users/${userId}/financial-credentials`, {json: true})
+    .then(res => res.body)
+  }
+
+  createFinancialCredentials(userId, payload) {
+    payload.user_id = userId
+    return this._post(`/financial/credentials`, {
+      body: payload,
+      json: true
+    })
+  }
+
   createApplication(application) {
     return this._post('/applications', {body: application, json: true}).then(res => res.body)
   }
@@ -300,11 +313,13 @@ class KnowledgeBaseClient {
         _application.income_ids && P.map(_application.income_ids, incomeId => {
           return this.getIncome(incomeId)
         }),
-        _application.lease_id && this.getLease(_application.lease_id)
+        _application.lease_id && this.getLease(_application.lease_id),
+        this.getFinancialCredentials(_application.user_id)
       ])
-      .spread((incomes, lease) => {
+      .spread((incomes, lease, financialCredentials) => {
         if (incomes) application.incomes = incomes
         if (lease) application.lease = lease
+        application.financial_credentials = financialCredentials
 
         return application
       })

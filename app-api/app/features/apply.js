@@ -230,7 +230,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
-        return KBClient.updateProfile(request.auth.credentials.id, {
+        KBClient.updateProfile(request.auth.credentials.id, {
           social_security_number: request.payload.social_security_number
         })
         .then(() => {
@@ -246,6 +246,29 @@ exports.register = (server, options, next) => {
       },
       validate: {
         payload: server.plugins.schemas.applyConfirmStep,
+        options: {stripUnknown: true}
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/apply/financial',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        KBClient.createFinancialCredentials(request.auth.credentials.id, {
+          provider: request.payload.provider,
+          credentials: request.payload.credentials
+        })
+        .then(() => {
+          return P.props({
+            application: KBClient.getApplication(request.payload.application_id),
+            profile: KBClient.getProfile(request.auth.credentials.id)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        payload: server.plugins.schemas.applyFinancialStep,
         options: {stripUnknown: true}
       }
     }

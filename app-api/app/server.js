@@ -41,6 +41,7 @@ server.register([
   },
   require('./services/errors'),
   require('./services/schemas'),
+  require('h2o2'),
   {
     register: require('./services/db'),
     options: {

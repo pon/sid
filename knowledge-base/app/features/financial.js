@@ -158,7 +158,8 @@ exports.register = (server, options, next) => {
           where: {
             user_id: request.params.userId,
             deleted_at: null
-          } 
+          },
+          include: [FinancialAccount]
         })
         .asCallback(reply)
       }

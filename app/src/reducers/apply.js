@@ -22,7 +22,9 @@ const SUBMIT_APPLY_UPLOAD_STEP_FAILURE = 'SUBMIT_APPLY_UPLOAD_STEP_FAILURE';
 const SUBMIT_APPLY_CONFIRM_STEP = 'SUBMIT_APPLY_CONFIRM_STEP';
 const SUBMIT_APPLY_CONFIRM_STEP_SUCCESS = 'SUBMIT_APPLY_CONFIRM_STEP_SUCCESS';
 const SUBMIT_APPLY_CONFIRM_STEP_FAILURE = 'SUBMIT_APPLY_CONFIRM_STEP_FAILURE';
-
+const SUBMIT_APPLY_FINANCIAL_STEP = 'SUBMIT_APPLY_FINANCIAL_STEP';
+const SUBMIT_APPLY_FINANCIAL_STEP_SUCCESS = 'SUBMIT_APPLY_FINANCIAL_STEP_SUCCESS';
+const SUBMIT_APPLY_FINANCIAL_STEP_FAILURE = 'SUBMIT_APPLY_FINANCIAL_STEP_FAILURE';
 
 // CREATORS
 export const getApply = () => ({
@@ -44,6 +46,11 @@ export const submitApplyUploadStep = payload => ({
   payload
 });
 
+export const submitApplyFinancialStep = payload => ({
+  type: SUBMIT_APPLY_FINANCIAL_STEP,
+  payload
+});
+  
 export const submitApplyConfirmStep = payload => ({
   type: SUBMIT_APPLY_CONFIRM_STEP,
   payload
@@ -134,6 +141,29 @@ const fetchApplyApplicationStep = payload => {
       }
     };
   })
+};
+
+const fetchApplyFinancialStep = payload => {
+  return fetch(`${API_ROOT}/apply/financial`, {
+    method: 'POST',
+    headers: {
+      Authorization: sessionStorage.getItem('jwtToken')
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(handleError)
+  .then(response => {
+    return {
+      type: SUBMIT_APPLY_FINANCIAL_STEP_SUCCESS,
+      payload: response
+    };
+  })
+  .catch(err => {
+    return {
+      type: SUBMIT_APPLY_FINANCIAL_STEP_FAILURE,
+      error: err.message
+    };
+  });
 };
 
 const fetchApplyUploadStep = payload => {
@@ -259,8 +289,17 @@ export default (state = initialState, {type, payload}) => {
         .set('isSubmitting', false)
         .set('error', payload.error)
         .set('submittedValues', payload.submittedValues);
+    case SUBMIT_APPLY_FINANCIAL_STEP:
+      payload.application_id = state.get('application').id;
+      return loop(
+        state.set('isSubmitting', true),
+        Effects.promise(
+          fetchApplyFinancialStep,
+          payload
+        )
+      )
     case SUBMIT_APPLY_UPLOAD_STEP:
-      payload.application_id = state.get('application').id
+      payload.application_id = state.get('application').id;
       return loop(
         state.set('isSubmitting', true),
         Effects.promise(

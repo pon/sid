@@ -18,12 +18,14 @@ import {blue500} from 'material-ui/styles/colors';
 
 import RegisterStep from './RegisterStep';
 import ApplicationStep from './ApplicationStep';
+import FinancialStep from './FinancialStep';
 import ApplyUploadStep from './UploadStep';
 import ApplyConfirmStepForm from './ConfirmStep';
 import {
   getApply, 
   submitApplyRegisterStep, 
   submitApplyApplicationStep, 
+  submitApplyFinancialStep,
   submitApplyUploadStep, 
   submitApplyConfirmStep
 } from '../../reducers/apply';
@@ -56,7 +58,8 @@ export class Apply extends Component {
       applyStep = <RegisterStep apply={this.props.apply} submitApplyRegisterStep={this.props.submitApplyRegisterStep}/>;
     } else if (application && (application.incomes.length === 0 || !application.lease)) {
       applyStepIndex = 1;
-      applyStep = <ApplicationStep apply={this.props.apply} submitApplyApplicationStep={this.props.submitApplyApplicationStep}/>;
+      // applyStep = <ApplicationStep apply={this.props.apply} submitApplyApplicationStep={this.props.submitApplyApplicationStep}/>;
+      applyStep = <FinancialStep submitApplyFinancialStep={this.props.submitApplyFinancialStep}/>
     } else if (application && application.uploads.length === 0) {
       applyStepIndex = 2;
       applyStep = <ApplyUploadStep apply={this.props.apply} submitApplyUploadStep={this.props.submitApplyUploadStep}/>;
@@ -105,6 +108,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   submitApplyApplicationStep: payload => {
     return dispatch(submitApplyApplicationStep(payload));
+  },
+  submitApplyFinancialStep: payload => {
+    return dispatch(submitApplyFinancialStep(payload));
   },
   submitApplyUploadStep: payload => {
     return dispatch(submitApplyUploadStep(payload));
