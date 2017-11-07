@@ -46,6 +46,11 @@ exports.register = (server, options, next) => {
       raw_credit_report: Joi.object().required(),
       fico_score: Joi.number().integer().required()
     }),
+    financialCredentialCreate: Joi.object().keys({
+      user_id: Joi.string().max(255).required(),
+      credentials: Joi.object().required(),
+      provider: Joi.string().valid('PLAID').required()
+    }),
     incomeCreate: Joi.object().keys({
       user_id: Joi.string().max(255).required(),
       income_type: Joi.valid(

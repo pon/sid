@@ -50,11 +50,23 @@ server.register([
       fakeS3Url: process.env.AWS_FAKE_S3_URL,
       fakeS3Port: process.env.AWS_FAKE_S3_PORT
     }
+  },
+  {
+    register: require('./services/plaid'),
+    options: {
+      plaidClientId: process.env.PLAID_CLIENT_ID,
+      plaidEnvironment: process.env.PLAID_ENVIRONMENT,
+      plaidKey: process.env.PLAID_KEY,
+      plaidSecret: process.env.PLAID_SECRET
+    }
   }
 ], err => {
   if (err) throw err
   server.register([
-    require('./event-handlers'),
+    {
+      register: require('./event-handlers'),
+      options: {events: require('./events')}
+    },
     {
       register: require('./features/addresses'),
       options: {events: require('./events')}
@@ -104,6 +116,12 @@ server.register([
     },
     {
       register: require('./features/statistics'),
+      options: {
+        events: require('./events')
+      }
+    },
+    {
+      register: require('./features/financial'),
       options: {
         events: require('./events')
       }

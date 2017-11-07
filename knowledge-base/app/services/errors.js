@@ -19,6 +19,7 @@ exports.register = (server, options, next) => {
     applicationInvalidStatusToUndecline: Boom.badRequest('application must be declined to un-decline'),
     applicationNotReadyToApply: Boom.badRequest('application not ready to apply'),
     creditReportNotFound: Boom.notFound('credit report does not exist'),
+    financialCredentialNotFound: Boom.notFound('credential does not exist'),
     incomeAlreadyVerified: Boom.badRequest('income already verified'),
     incomeNotFound: Boom.notFound('income does not exist'),
     incomeNotVerified: Boom.badRequest('income not verified'),

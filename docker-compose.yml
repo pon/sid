@@ -44,6 +44,10 @@ knowledge_base:
     - AWS_REGION=us-east-1
     - AWS_FAKE_S3_URL=s3
     - AWS_FAKE_S3_PORT=4569
+    - PLAID_CLIENT_ID=59f7f70b4e95b8782b00bcd3
+    - PLAID_ENVIRONMENT=sandbox
+    - PLAID_KEY=36da3c134f021f74f4be5171a1d6a9
+    - PLAID_SECRET=${PLAID_SECRET}
     - UPLOADS_BUCKET=kb-uploads
   volumes:
     - ./knowledge-base:/usr/src/app
