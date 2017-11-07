@@ -38,7 +38,7 @@ const validate = values => {
   return errors;
 };
 
-const StepOneWrapper = styled.div`
+const RegisterStepWrapper = styled.div`
   width: 50%;
   margin: 0 auto;
   text-align: center;
@@ -50,13 +50,13 @@ const FormError = styled.div`
   color: ${constants.red}
 `;
 
-let ApplyStepOneForm = props => {
-  const {apply, handleSubmit, pristine, submitting, submitApplyStepOne, valid} = props;
+let ApplyRegisterStepForm = props => {
+  const {apply, handleSubmit, pristine, submitting, submitApplyRegisterStep, valid} = props;
   const error = apply.get('error');
   return (
-    <StepOneWrapper>
+    <RegisterStepWrapper>
       <h2>Get Started</h2>
-      <form onSubmit={handleSubmit(submitApplyStepOne)}>
+      <form onSubmit={handleSubmit(submitApplyRegisterStep)}>
         <FormError>{error}</FormError>
         <Field name="first_name" fullWidth={true} component={TextField} hintText="First Name" floatingLabelText="First Name"/>
         <Field name="last_name" fullWidth={true} component={TextField} hintText="Last Name" floatingLabelText="Last Name"/>
@@ -66,21 +66,21 @@ let ApplyStepOneForm = props => {
         <br />
         <RaisedButton label="Submit" primary={true} disabled={!valid || pristine || submitting} type="submit"/>
       </form>
-    </StepOneWrapper>
+    </RegisterStepWrapper>
   );
 }
 
-ApplyStepOneForm = reduxForm({
-  form: 'apply-step-one',
+ApplyRegisterStepForm = reduxForm({
+  form: 'apply-register-step',
   validate
-})(ApplyStepOneForm);
+})(ApplyRegisterStepForm);
 
-ApplyStepOneForm = connect(
+ApplyRegisterStepForm = connect(
   ({apply}) => {
     return {
       initialValues: apply.get('submittedValues')
     };
   }
-)(ApplyStepOneForm);
+)(ApplyRegisterStepForm);
 
-export default ApplyStepOneForm;
+export default ApplyRegisterStepForm;

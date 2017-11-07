@@ -56,13 +56,13 @@ exports.register = (server, options, next) => {
     }
   }, {
     method: 'POST',
-    path: '/apply/step-one',
+    path: '/apply/register',
     config: {
       tags: ['api'],
       auth: {strategy: 'jwt', mode: 'try'},
       handler: (request, reply) => {
         let registerPayload
-        return P.resolve()
+        P.resolve()
         .then(() => {
           if (!request.auth.isAuthenticated) {
             return P.resolve(server.inject({
@@ -112,13 +112,13 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
-        payload: server.plugins.schemas.applyStepOne,
+        payload: server.plugins.schemas.applyRegisterStep,
         options: {stripUnknown: true}
       }
     }
   }, {
     method: 'POST',
-    path: '/apply/step-two',
+    path: '/apply/application',
     config: {
       tags: ['api'],
       payload: {
@@ -181,13 +181,13 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
-        payload: server.plugins.schemas.applyStepTwo,
+        payload: server.plugins.schemas.applyApplicationStep,
         options: {stripUnknown: true}
       }
     }
   }, {
     method: 'POST',
-    path: '/apply/step-three',
+    path: '/apply/upload',
     config: {
       tags: ['api'],
       payload: {
@@ -220,13 +220,13 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
-        payload: server.plugins.schemas.applyStepThree,
+        payload: server.plugins.schemas.applyUploadStep,
         options: {stripUnknown: true}
       }
     }
   }, {
     method: 'POST',
-    path: '/apply/step-four',
+    path: '/apply/confirm',
     config: {
       tags: ['api'],
       handler: (request, reply) => {
@@ -245,7 +245,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
-        payload: server.plugins.schemas.applyStepFour,
+        payload: server.plugins.schemas.applyConfirmStep,
         options: {stripUnknown: true}
       }
     }

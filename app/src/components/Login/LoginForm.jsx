@@ -3,8 +3,6 @@ import {Field, reduxForm} from 'redux-form';
 import styled from 'styled-components';
 import {TextField} from 'redux-form-material-ui';
 
-import RenderField from '../common/RenderField';
-
 import {constants} from '../../utils/style-utils';
 
 const validate = values => {

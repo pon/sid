@@ -48,8 +48,8 @@ const validate = values => {
   return errors;
 };
 
-let ApplyStepTwoForm= props => {
-  const {apply, handleSubmit, pristine, submitting, submitApplyStepTwo, valid} = props;
+let ApplyApplicationStepForm= props => {
+  const {apply, handleSubmit, pristine, submitting, submitApplyApplicationStep, valid} = props;
 
   const error = apply.get('error');
 
@@ -63,7 +63,7 @@ let ApplyStepTwoForm= props => {
 
   return (
     <div style={wrapperStyles}>
-      <form onSubmit={handleSubmit(submitApplyStepTwo)}>
+      <form onSubmit={handleSubmit(submitApplyApplicationStep)}>
         <FormError>{error}</FormError>
         <h3>Current Address</h3>
         <Field name="street_one" fullWidth={true} component={TextField} type="text" hintText="Address Line One" />
@@ -153,17 +153,17 @@ let ApplyStepTwoForm= props => {
   );
 }
 
-ApplyStepTwoForm = reduxForm({
-  form: 'apply-step-two',
+ApplyApplicationStepForm = reduxForm({
+  form: 'apply-application-step',
   validate
-})(ApplyStepTwoForm);
+})(ApplyApplicationStepForm);
 
-ApplyStepTwoForm = connect(
+ApplyApplicationStepForm = connect(
   ({apply}) => {
     return {
       initialValues: apply.get('submittedValues')
     };
   }
-)(ApplyStepTwoForm);
+)(ApplyApplicationStepForm);
 
-export default ApplyStepTwoForm;
+export default ApplyApplicationStepForm;

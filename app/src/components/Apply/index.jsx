@@ -16,11 +16,17 @@ import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle';
 import PersonIcon from 'material-ui/svg-icons/social/person';
 import {blue500} from 'material-ui/styles/colors';
 
-import ApplyStepOneForm from './ApplyStepOne';
-import ApplyStepTwoForm from './ApplyStepTwo';
-import ApplyStepThreeForm from './ApplyStepThree';
-import ApplyStepFourForm from './ApplyStepFour';
-import {getApply, submitApplyStepOne, submitApplyStepTwo, submitApplyStepThree, submitApplyStepFour} from '../../reducers/apply';
+import RegisterStep from './RegisterStep';
+import ApplicationStep from './ApplicationStep';
+import ApplyUploadStep from './UploadStep';
+import ApplyConfirmStepForm from './ConfirmStep';
+import {
+  getApply, 
+  submitApplyRegisterStep, 
+  submitApplyApplicationStep, 
+  submitApplyUploadStep, 
+  submitApplyConfirmStep
+} from '../../reducers/apply';
 
 const StepFourWrapper = styled.div`
   margin: 0 auto;
@@ -47,16 +53,16 @@ export class Apply extends Component {
         </StepFourWrapper>
     } else if (!this.props.apply.get('profile')) {
       applyStepIndex = 0;
-      applyStep = <ApplyStepOneForm apply={this.props.apply} submitApplyStepOne={this.props.submitApplyStepOne}/>;
+      applyStep = <RegisterStep apply={this.props.apply} submitApplyRegisterStep={this.props.submitApplyRegisterStep}/>;
     } else if (application && (application.incomes.length === 0 || !application.lease)) {
       applyStepIndex = 1;
-      applyStep = <ApplyStepTwoForm apply={this.props.apply} submitApplyStepTwo={this.props.submitApplyStepTwo}/>;
+      applyStep = <ApplicationStep apply={this.props.apply} submitApplyApplicationStep={this.props.submitApplyApplicationStep}/>;
     } else if (application && application.uploads.length === 0) {
       applyStepIndex = 2;
-      applyStep = <ApplyStepThreeForm apply={this.props.apply} submitApplyStepThree={this.props.submitApplyStepThree}/>;
+      applyStep = <ApplyUploadStep apply={this.props.apply} submitApplyUploadStep={this.props.submitApplyUploadStep}/>;
     } else {
       applyStepIndex = 3;
-      applyStep = <ApplyStepFourForm apply={this.props.apply} submitApplyStepFour={this.props.submitApplyStepFour}/>;
+      applyStep = <ApplyConfirmStepForm apply={this.props.apply} submitApplyConfirmStep={this.props.submitApplyConfirmStep}/>;
     }
 
     const ApplyWrapper = styled.div`
@@ -94,17 +100,17 @@ const mapDispatchToProps = (dispatch) => ({
   getApply: () => {
     return dispatch(getApply());
   },
-  submitApplyStepOne: payload => {
-    return dispatch(submitApplyStepOne(payload));
+  submitApplyRegisterStep: payload => {
+    return dispatch(submitApplyRegisterStep(payload));
   },
-  submitApplyStepTwo: payload => {
-    return dispatch(submitApplyStepTwo(payload));
+  submitApplyApplicationStep: payload => {
+    return dispatch(submitApplyApplicationStep(payload));
   },
-  submitApplyStepThree: payload => {
-    return dispatch(submitApplyStepThree(payload));
+  submitApplyUploadStep: payload => {
+    return dispatch(submitApplyUploadStep(payload));
   },
-  submitApplyStepFour: payload => {
-    return dispatch(submitApplyStepFour(payload));
+  submitApplyConfirmStep: payload => {
+    return dispatch(submitApplyConfirmStep(payload));
   }
 })
 

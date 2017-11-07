@@ -16,14 +16,14 @@ exports.register = (server, options, next) => {
     password: Joi.string().required().min(8),
     passwordResetToken: Joi.string().required(),
     emailVerificationToken: Joi.string().required(),
-    applyStepOne: Joi.object().keys({
+    applyRegisterStep: Joi.object().keys({
       first_name: Joi.string().max(255).required(),
       last_name: Joi.string().max(255).required(),
       email: Joi.string().email().required(),
       password: Joi.string().min(8).required(),
       confirm_password: Joi.string().min(8).required()
     }),
-    applyStepTwo: Joi.object().keys({
+    applyApplicationStep: Joi.object().keys({
       application_id: Joi.string().max(255).required(),
       street_one: Joi.string().max(255).required(),
       street_two: Joi.string().max(255),
@@ -37,12 +37,12 @@ exports.register = (server, options, next) => {
       incomes: [Joi.array().items(incomeSchema), incomeSchema],
       years_of_employment: Joi.number().integer().min(0).required()
     }),
-    applyStepThree: Joi.object().keys({
+    applyUploadStep: Joi.object().keys({
       application_id: Joi.string().max(255).required(),
       files: Joi.any(),
       categories: [Joi.array().items(Joi.string()), Joi.string()]
     }),
-    applyStepFour: Joi.object().keys({
+    applyConfirmStep: Joi.object().keys({
       application_id: Joi.string().max(255).required(),
       social_security_number: Joi.string().length(9).required()
     }),

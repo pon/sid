@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import styled from 'styled-components';
 
 import LoginForm from './LoginForm';
 import {submitLogin, submitLoginSuccess} from '../../reducers/login';
