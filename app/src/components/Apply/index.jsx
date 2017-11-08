@@ -17,6 +17,7 @@ import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle';
 import PersonIcon from 'material-ui/svg-icons/social/person';
 import {blue500} from 'material-ui/styles/colors';
 
+import DoneStep from './DoneStep';
 import RegisterStep from './RegisterStep';
 import ApplicationStep from './ApplicationStep';
 import FinancialStep from './FinancialStep';
@@ -31,11 +32,6 @@ import {
   submitApplyUploadStep, 
   submitApplyConfirmStep
 } from '../../reducers/apply';
-
-const StepFourWrapper = styled.div`
-  margin: 0 auto;
-  width: 50%;
-`;
 
 export class Apply extends Component {
 
@@ -65,11 +61,7 @@ export class Apply extends Component {
       applyStepIndex = 4;
       applyStep = <ApplyConfirmStepForm apply={this.props.apply} submitApplyConfirmStep={this.props.submitApplyConfirmStep}/>;
     } else if (application && application.status !== 'APPLYING') {
-      applyStep =
-        <StepFourWrapper>
-          <h3>Thank you for applying!</h3>
-          <Link to='/dashboard'><FlatButton label="Return to Dashboard" primary={true} /></Link>
-        </StepFourWrapper>
+      applyStep = <DoneStep />
     }
 
     const ApplyWrapper = styled.div`
