@@ -15,7 +15,7 @@ spec:
         app: knowledge-base
     spec:
       containers:
-        - image: us.gcr.io/poplar-178404/knowledge_base:20171030194715_knowledge_base
+        - image: us.gcr.io/poplar-178404/knowledge_base:20171107224244_knowledge_base
           imagePullPolicy: Always
           name: knowledge-base
           env:
@@ -43,6 +43,17 @@ spec:
               value: "us-east-1"
             - name: UPLOADS_BUCKET
               value: knowledge-base-uploads
+            - name: PLAID_CLIENT_ID
+              value: 59f7f70b4e95b8782b00bcd3
+            - name: PLAID_ENVIRONMENT
+              value: sandbox
+            - name: PLAID_KEY
+              value: 36da3c134f021f74f4be5171a1d6a9
+            - name: PLAID_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: plaid
+                  key: secret-key
           ports:
             - containerPort: 80
               protocol: TCP

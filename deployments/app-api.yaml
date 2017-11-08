@@ -15,7 +15,7 @@ spec:
         app: app-api
     spec:
       containers:
-        - image: us.gcr.io/poplar-178404/app_api:20171030145611_app_api
+        - image: us.gcr.io/poplar-178404/app_api:20171107224609_app_api
           imagePullPolicy: Always
           name: app-api
           env:
