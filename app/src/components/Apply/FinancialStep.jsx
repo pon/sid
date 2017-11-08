@@ -1,12 +1,19 @@
 import React from 'react';
-import {Field, reduxForm} from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
 import {PLAID_CREDENTIALS} from '../../config';
 
+import AddIcon from 'material-ui/svg-icons/content/add';
+import ArrowDownIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+import AttachMoneyIcon from 'material-ui/svg-icons/editor/attach-money';
+import HourglassIcon from 'material-ui/svg-icons/action/hourglass-empty';
+import Divider from 'material-ui/Divider';
+import {List, ListItem} from 'material-ui/List';
+
 const ApplyFinancialStepForm = props => {
-  const {handleSubmit, submitting, submitApplyFinancialStep, valid} = props;
+  const {financialCredentials, submitSaveFinancialCredential, submitApplyFinancialStep} = props;
 
   const wrapperStyles = {width: '60%', margin: '0 auto', marginBottom: '1em'};
+  const centeredContent = {textAlign: 'center'};
 
   const linkHandler = window.Plaid.create({
     env: PLAID_CREDENTIALS.env,
@@ -17,7 +24,7 @@ const ApplyFinancialStepForm = props => {
     // Use webhooks to get transaction and error updates
     // webhook: 'localhost:5000/financial/credentials',
     onSuccess: function(public_token, metadata) {
-      submitApplyFinancialStep({
+      submitSaveFinancialCredential({
         provider: 'PLAID',
         credentials: {
           public_token,
@@ -40,15 +47,37 @@ const ApplyFinancialStepForm = props => {
 
   return (
     <div style={wrapperStyles}>
-      <form>
+      <div style={centeredContent}>
         <h4>Financial Accounts</h4>
-        <RaisedButton onClick={() => linkHandler.open()} label="Connect" />
-        <RaisedButton fullWidth={true} label="Submit" primary={true} disabled={!valid || submitting} type="submit"/>
-      </form>
+      </div>
+      <List>
+        {financialCredentials.map(financialCredential => {
+          return (
+            <ListItem 
+              key={financialCredential.id}
+              primaryText={financialCredential.institution_name} 
+              leftIcon={<AttachMoneyIcon />}
+              rightIcon={financialCredential.financial_accounts.length === 0 ? <HourglassIcon /> : <ArrowDownIcon />}
+              initiallyOpen={false}
+              primaryTogglesNestedList={true}
+              nestedItems={financialCredential.financial_accounts.map(acct => 
+                <ListItem key={acct.id} primaryText={acct.name} />
+              )}
+            />
+          ) 
+        })}        
+      </List>
+      <div style={centeredContent}>
+        <RaisedButton onClick={() => linkHandler.open()} label={<AddIcon />} />
+      </div>
+      <br />
+      <Divider />
+      <br />
+      <div style={centeredContent}>
+        <RaisedButton primary={true} onClick={() => submitApplyFinancialStep()} label="I'm Done Connecting Accounts" />
+      </div>
     </div>
   );
 }
 
-export default reduxForm({
-  form: 'apply-financial-step'
-})(ApplyFinancialStepForm);
+export default ApplyFinancialStepForm;

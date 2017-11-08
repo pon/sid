@@ -172,6 +172,9 @@ exports.register = (server, options, next) => {
             KBClient.applicationAttachLease(request.payload.application_id, lease.id)
           ])
         })
+        .tap(() => {
+          return KBClient.applicationUpdateCurrentStep(request.payload.application_id, 'FINANCIAL') 
+        })
         .then(() => {
           return P.props({
             application: KBClient.getApplication(request.payload.application_id),
@@ -210,7 +213,10 @@ exports.register = (server, options, next) => {
           })
         })
         .then(uploads => {
-          return KBClient.applicationAttachUploads(request.payload.application_id, uploads.map(upload => upload.id))
+          return P.all([
+            KBClient.applicationAttachUploads(request.payload.application_id, uploads.map(upload => upload.id)),
+            KBClient.applicationUpdateCurrentStep(request.payload.application_id, 'CONFIRM')
+          ])
         }).then(() => {
           return P.props({
             application: KBClient.getApplication(request.payload.application_id),
@@ -255,6 +261,26 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
+        KBClient.applicationUpdateCurrentStep(request.payload.application_id, 'DOCUMENT_UPLOAD')
+        .then(() => {
+          return P.props({
+            application: KBClient.getApplication(request.payload.application_id),
+            profile: KBClient.getProfile(request.auth.credentials.id)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        payload: server.plugins.schemas.applyFinancialStep,
+        options: {stripUnknown: true}
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/apply/financial-credentials',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
         KBClient.createFinancialCredentials(request.auth.credentials.id, {
           provider: request.payload.provider,
           credentials: request.payload.credentials
@@ -268,7 +294,7 @@ exports.register = (server, options, next) => {
         .asCallback(reply)
       },
       validate: {
-        payload: server.plugins.schemas.applyFinancialStep,
+        payload: server.plugins.schemas.applyFinancialCredentials,
         options: {stripUnknown: true}
       }
     }

@@ -10,7 +10,7 @@
       user_id: {type: Sequelize.STRING(255), allowNull: false},
       provider: {type: Sequelize.ENUM('PLAID'), allowNull: false},
       remote_id: {type: Sequelize.STRING(255)},
-      insitution_name: {type: Sequelize.STRING(255)},
+      institution_name: {type: Sequelize.STRING(255)},
       credentials: {type: Sequelize.JSON, allowNull: false},
       enabled: {type: Sequelize.BOOLEAN, allowNull: false, defaultValue: true},
       connected: {type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false},

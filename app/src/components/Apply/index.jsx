@@ -10,6 +10,7 @@ import {
   StepLabel
 } from 'material-ui/Stepper';
 
+import AttachMoneyIcon from 'material-ui/svg-icons/editor/attach-money';
 import EmailIcon from 'material-ui/svg-icons/communication/email';
 import FileUploadIcon from 'material-ui/svg-icons/file/file-upload';
 import CheckCircleIcon from 'material-ui/svg-icons/action/check-circle';
@@ -26,6 +27,7 @@ import {
   submitApplyRegisterStep, 
   submitApplyApplicationStep, 
   submitApplyFinancialStep,
+  submitSaveFinancialCredential,
   submitApplyUploadStep, 
   submitApplyConfirmStep
 } from '../../reducers/apply';
@@ -47,25 +49,27 @@ export class Apply extends Component {
 
     const application = this.props.apply.get('application');
 
-    if (application && application.status !== 'APPLYING') {
+    if (this.props.apply.get('newApp')) {
+      applyStepIndex = 0;
+      applyStep = <RegisterStep apply={this.props.apply} submitApplyRegisterStep={this.props.submitApplyRegisterStep}/>;
+    } else if (application && application.current_step === 'APPLICATION_DETAILS') {
+      applyStepIndex = 1;
+      applyStep = <ApplicationStep apply={this.props.apply} submitApplyApplicationStep={this.props.submitApplyApplicationStep}/>;
+    } else if (application && application.current_step === 'FINANCIAL') {
+      applyStepIndex = 2;
+      applyStep = <FinancialStep submitSaveFinancialCredential={this.props.submitSaveFinancialCredential} financialCredentials={application.financial_credentials} submitApplyFinancialStep={this.props.submitApplyFinancialStep} />
+    } else if (application && application.current_step === 'DOCUMENT_UPLOAD') {
+      applyStepIndex = 3;
+      applyStep = <ApplyUploadStep apply={this.props.apply} submitApplyUploadStep={this.props.submitApplyUploadStep}/>;
+    } else if (application && application.current_step === 'CONFIRM') {
+      applyStepIndex = 4;
+      applyStep = <ApplyConfirmStepForm apply={this.props.apply} submitApplyConfirmStep={this.props.submitApplyConfirmStep}/>;
+    } else if (application && application.status !== 'APPLYING') {
       applyStep =
         <StepFourWrapper>
           <h3>Thank you for applying!</h3>
           <Link to='/dashboard'><FlatButton label="Return to Dashboard" primary={true} /></Link>
         </StepFourWrapper>
-    } else if (!this.props.apply.get('profile')) {
-      applyStepIndex = 0;
-      applyStep = <RegisterStep apply={this.props.apply} submitApplyRegisterStep={this.props.submitApplyRegisterStep}/>;
-    } else if (application && (application.incomes.length === 0 || !application.lease)) {
-      applyStepIndex = 1;
-      // applyStep = <ApplicationStep apply={this.props.apply} submitApplyApplicationStep={this.props.submitApplyApplicationStep}/>;
-      applyStep = <FinancialStep submitApplyFinancialStep={this.props.submitApplyFinancialStep}/>
-    } else if (application && application.uploads.length === 0) {
-      applyStepIndex = 2;
-      applyStep = <ApplyUploadStep apply={this.props.apply} submitApplyUploadStep={this.props.submitApplyUploadStep}/>;
-    } else {
-      applyStepIndex = 3;
-      applyStep = <ApplyConfirmStepForm apply={this.props.apply} submitApplyConfirmStep={this.props.submitApplyConfirmStep}/>;
     }
 
     const ApplyWrapper = styled.div`
@@ -83,10 +87,13 @@ export class Apply extends Component {
             <StepLabel icon={<PersonIcon color={applyStepIndex === 1 ? blue500 : ''}/>}>Application</StepLabel>
           </Step>
           <Step>
-            <StepLabel icon={<FileUploadIcon color={applyStepIndex === 2 ? blue500 : ''}/>}>Document Upload</StepLabel>
+            <StepLabel icon={<AttachMoneyIcon color={applyStepIndex === 2 ? blue500 : ''}/>}>Financial</StepLabel>
           </Step>
           <Step>
-            <StepLabel icon={<CheckCircleIcon color={applyStepIndex === 3 ? blue500 : ''}/>}>Confirm</StepLabel>
+            <StepLabel icon={<FileUploadIcon color={applyStepIndex === 3 ? blue500 : ''}/>}>Document Upload</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel icon={<CheckCircleIcon color={applyStepIndex === 4 ? blue500 : ''}/>}>Confirm</StepLabel>
           </Step>
         </Stepper>
         {applyStep}
@@ -109,8 +116,11 @@ const mapDispatchToProps = (dispatch) => ({
   submitApplyApplicationStep: payload => {
     return dispatch(submitApplyApplicationStep(payload));
   },
-  submitApplyFinancialStep: payload => {
-    return dispatch(submitApplyFinancialStep(payload));
+  submitApplyFinancialStep: () => {
+    return dispatch(submitApplyFinancialStep());
+  },
+  submitSaveFinancialCredential: payload => {
+    return dispatch(submitSaveFinancialCredential(payload));
   },
   submitApplyUploadStep: payload => {
     return dispatch(submitApplyUploadStep(payload));

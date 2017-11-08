@@ -17,6 +17,7 @@ exports.register = (server, options, next) => {
     applicationInvalidStatusToUntimeOut: Boom.badRequest('application must be timed out to un-time out'),
     applicationInvalidStatusToUnapprove: Boom.badRequest('application must be approved to un-approve'),
     applicationInvalidStatusToUndecline: Boom.badRequest('application must be declined to un-decline'),
+    applicationInvalidStatusToUpdateStep: Boom.badRequest('application must be applying to update step'),
     applicationNotReadyToApply: Boom.badRequest('application not ready to apply'),
     creditReportNotFound: Boom.notFound('credit report does not exist'),
     financialCredentialNotFound: Boom.notFound('credential does not exist'),

@@ -101,6 +101,7 @@ exports.register = (server, options, next) => {
           return profile.process(ProfileCreatedEvent.type, ProfileCreatedEvent)
           .then(() => {
             server.emit('KB', ProfileCreatedEvent)
+            return profile
           })
         })
         .asCallback(reply)

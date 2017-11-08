@@ -22,6 +22,9 @@ const SUBMIT_APPLY_UPLOAD_STEP_FAILURE = 'SUBMIT_APPLY_UPLOAD_STEP_FAILURE';
 const SUBMIT_APPLY_CONFIRM_STEP = 'SUBMIT_APPLY_CONFIRM_STEP';
 const SUBMIT_APPLY_CONFIRM_STEP_SUCCESS = 'SUBMIT_APPLY_CONFIRM_STEP_SUCCESS';
 const SUBMIT_APPLY_CONFIRM_STEP_FAILURE = 'SUBMIT_APPLY_CONFIRM_STEP_FAILURE';
+const SUBMIT_SAVE_FINANCIAL_CREDENTIAL = 'SUBMIT_SAVE_FINANCIAL_CREDENTIAL';
+const SUBMIT_SAVE_FINANCIAL_CREDENTIAL_SUCCESS = 'SUBMIT_SAVE_FINANCIAL_CREDENTIAL_SUCCESS';
+const SUBMIT_SAVE_FINANCIAL_CREDENTIAL_FAILURE = 'SUBMIT_SAVE_FINANCIAL_CREDENTIAL_FAILURE';
 const SUBMIT_APPLY_FINANCIAL_STEP = 'SUBMIT_APPLY_FINANCIAL_STEP';
 const SUBMIT_APPLY_FINANCIAL_STEP_SUCCESS = 'SUBMIT_APPLY_FINANCIAL_STEP_SUCCESS';
 const SUBMIT_APPLY_FINANCIAL_STEP_FAILURE = 'SUBMIT_APPLY_FINANCIAL_STEP_FAILURE';
@@ -48,6 +51,11 @@ export const submitApplyUploadStep = payload => ({
 
 export const submitApplyFinancialStep = payload => ({
   type: SUBMIT_APPLY_FINANCIAL_STEP,
+  payload
+});
+
+export const submitSaveFinancialCredential = payload => ({
+  type: SUBMIT_SAVE_FINANCIAL_CREDENTIAL,
   payload
 });
   
@@ -143,6 +151,29 @@ const fetchApplyApplicationStep = payload => {
   })
 };
 
+const fetchSaveFinancialCredential = payload => {
+  return fetch(`${API_ROOT}/apply/financial-credentials`, {
+    method: 'POST',
+    headers: {
+      Authorization: sessionStorage.getItem('jwtToken')
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(handleError)
+  .then(response => {
+    return {
+      type: SUBMIT_SAVE_FINANCIAL_CREDENTIAL_SUCCESS,
+      payload: response
+    };
+  })
+  .catch(err => {
+    return {
+      type: SUBMIT_SAVE_FINANCIAL_CREDENTIAL_FAILURE,
+      error: err.message
+    };
+  });
+};
+
 const fetchApplyFinancialStep = payload => {
   return fetch(`${API_ROOT}/apply/financial`, {
     method: 'POST',
@@ -164,7 +195,7 @@ const fetchApplyFinancialStep = payload => {
       error: err.message
     };
   });
-};
+}
 
 const fetchApplyUploadStep = payload => {
   const formData = new FormData();
@@ -238,10 +269,12 @@ export default (state = initialState, {type, payload}) => {
           Effects.constant(push('/dashboard'))
         );
       } else {
+        const newApp = !!!payload.application;
         return state
           .set('isSubmitting', false)
           .set('application', payload.application)
           .set('profile', payload.profile)
+          .set('newApp', newApp)
           .delete('error');
       }
     case GET_APPLY_FAILURE:
@@ -258,11 +291,12 @@ export default (state = initialState, {type, payload}) => {
       );
     case SUBMIT_APPLY_REGISTER_STEP_SUCCESS:
       sessionStorage.setItem('jwtToken', payload.token);
-       return state
+      return state
         .set('isAuthenticated', true)
         .set('isSubmitting', false)
         .set('application', payload.application)
         .set('profile', payload.profile)
+        .set('newApp', false)
         .delete('error');
     case SUBMIT_APPLY_REGISTER_STEP_FAILURE:
       return state
@@ -289,15 +323,42 @@ export default (state = initialState, {type, payload}) => {
         .set('isSubmitting', false)
         .set('error', payload.error)
         .set('submittedValues', payload.submittedValues);
-    case SUBMIT_APPLY_FINANCIAL_STEP:
+    case SUBMIT_SAVE_FINANCIAL_CREDENTIAL:
       payload.application_id = state.get('application').id;
       return loop(
         state.set('isSubmitting', true),
         Effects.promise(
-          fetchApplyFinancialStep,
+          fetchSaveFinancialCredential,
           payload
         )
       )
+    case SUBMIT_SAVE_FINANCIAL_CREDENTIAL_SUCCESS:
+      return state
+        .set('application', payload.application)
+        .set('isSubmitting', false)
+        .delete('error');
+    case SUBMIT_SAVE_FINANCIAL_CREDENTIAL_FAILURE:
+      return state
+        .set('error', payload.error)
+        .set('isSubmitting', false);
+    case SUBMIT_APPLY_FINANCIAL_STEP:
+      return loop(
+        state.set('isSubmitting', true),
+        Effects.promise(
+          fetchApplyFinancialStep,
+          {application_id: state.get('application').id}
+        )
+      )
+    case SUBMIT_APPLY_FINANCIAL_STEP_SUCCESS:
+      return state
+        .set('application', payload.application)
+        .set('profile', payload.profile)
+        .set('isSubmitting', false)
+        .delete('error');
+    case SUBMIT_APPLY_FINANCIAL_STEP_FAILURE:
+      return state
+        .set('isSubmitting', false)
+        .set('error', payload.error);
     case SUBMIT_APPLY_UPLOAD_STEP:
       payload.application_id = state.get('application').id;
       return loop(

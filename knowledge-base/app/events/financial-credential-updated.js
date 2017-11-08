@@ -13,7 +13,7 @@ module.exports = class FinancialCredentialUpdated {
 
   toJSON() {
     return {
-      insitution_name: this._insitution_name,
+      institution_name: this._institution_name,
       remote_id: this._remote_id,
       credentials: this._credentials,
       enabled: this._enabled,

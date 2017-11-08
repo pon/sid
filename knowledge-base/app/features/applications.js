@@ -671,6 +671,41 @@ exports.register = (server, options, next) => {
         params: {applicationId: server.plugins.schemas.uuid}
       }
     }
+  }, {
+    method: 'POST',
+    path: '/applications/{applicationId}/update_application_step',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        Application.findOne({
+          where: {id: request.params.applicationId, deleted_at: null}
+        }) 
+        .then(application => {
+          if (!application) throw server.plugins.errors.applicationNotFound
+          else if (application.status !== 'APPLYING') {
+            throw server.plugins.errors.applicationInvalidStatusToUpdateStep
+          }
+
+          const ApplicationCurrentStepUpdatedEvent = new Events.APPLICATION_CURRENT_STEP_UPDATED(
+            application.id,
+            request.payload.current_step
+          )
+
+          return application.process(
+            ApplicationCurrentStepUpdatedEvent.type, 
+            ApplicationCurrentStepUpdatedEvent.toJSON()
+          )
+          .then(() => {
+            server.emit('KB', ApplicationCurrentStepUpdatedEvent)
+            return application
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        payload: server.plugins.schemas.applicationUpdateCurrentStep
+      }
+    }
   }])
 
   next()

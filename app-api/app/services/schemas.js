@@ -47,6 +47,9 @@ exports.register = (server, options, next) => {
       social_security_number: Joi.string().length(9).required()
     }),
     applyFinancialStep: Joi.object().keys({
+      application_id: Joi.string().max(255).required()
+    }),
+    applyFinancialCredentials: Joi.object().keys({
       application_id: Joi.string().max(255).required(),
       credentials: Joi.object().required(),
       provider: Joi.valid('PLAID').required() 

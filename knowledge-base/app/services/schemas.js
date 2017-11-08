@@ -38,6 +38,9 @@ exports.register = (server, options, next) => {
       limit: Joi.number().integer().min(1).max(100).default(10),
       status: Joi.string().optional()
     }),
+    applicationUpdateCurrentStep: Joi.object().keys({
+      current_step: Joi.valid('APPLICATION_DETAILS', 'FINANCIAL', 'DOCUMENT_UPLOAD', 'CONFIRM') 
+    }),
     asOfQuery: Joi.object().keys({
       as_of: Joi.number().integer().optional()
     }),

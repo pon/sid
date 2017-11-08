@@ -18,6 +18,7 @@ module.exports = {
   APPLICATION_UNAPPROVED: require('./application-unapproved'),
   APPLICATION_UNDECLINED: require('./application-undeclined'),
   APPLICATION_UNTIMED_OUT: require('./application-untimed-out'),
+  APPLICATION_CURRENT_STEP_UPDATED: require('./application-current-step-updated'),
   APPLICATION_UPLOADS_ATTACHED: require('./application-uploads-attached'),
   FINANCIAL_ACCOUNT_CREATED: require('./financial-account-created'),
   FINANCIAL_ACCOUNT_DELETED: require('./financial-account-deleted'),

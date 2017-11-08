@@ -9,6 +9,7 @@ module.exports = class ApplicationCreated {
     this._credit_report_id = args.credit_report_id
     this._employment_id = args.employment_id
     this._lease_id = args.lease_id
+    this._current_step = 'APPLICATION_DETAILS'
   }
 
   toJSON() {
@@ -18,7 +19,8 @@ module.exports = class ApplicationCreated {
       status: this._status,
       credit_report_id: this._credit_report_id,
       employment_id: this._employment_id,
-      lease_id: this._lease_id
+      lease_id: this._lease_id,
+      current_step: this._current_step
     }
   }
 
@@ -33,4 +35,5 @@ module.exports = class ApplicationCreated {
   get credit_report_id() {return this._credit_report_id}
   get employment_id() {return this._employment_id}
   get lease_id() {return this._lease_id}
+  get current_step() {return this._current_step}
 }

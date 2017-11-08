@@ -374,6 +374,14 @@ class KnowledgeBaseClient {
     })
   }
 
+  applicationUpdateCurrentStep(applicationId, currentStep) {
+    return this._post(`/applications/${applicationId}/update_application_step`, {
+      body: {current_step: currentStep},
+      json: true
+    })
+    .then(res => res.body)
+  }
+
   createProfile(profile) {
     return this._post('/profiles', {body: profile, json: true}).then(res => res.body)
   }
