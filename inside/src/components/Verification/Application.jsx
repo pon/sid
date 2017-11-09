@@ -18,6 +18,7 @@ import {
   verifyIncome
 } from '../../reducers/verification';
 
+import FinancialSection from './FinancialSection';
 import IncomeSection from './IncomeSection';
 import LeaseSection from './LeaseSection';
 import ProfileSection from './ProfileSection';
@@ -91,6 +92,12 @@ export class VerificationApplication extends Component {
               style={{float: 'left', width: '33%', marginTop: '20px', marginLeft: '4%'}}
               lease={application.lease}
             />
+          }
+          {application && application.financial_credentials &&
+            <FinancialSection 
+              style={{float: 'left', width: '70%', marginTop: '20px'}}
+              financialCredentials={application.financial_credentials}
+            />  
           }
         </div>
         <Snackbar

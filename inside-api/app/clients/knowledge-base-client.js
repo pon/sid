@@ -300,6 +300,11 @@ class KnowledgeBaseClient {
     return this._post('/applications', {body: application, json: true}).then(res => res.body)
   }
 
+  getFinancialCredentials(userId) {
+    return this._get(`/users/${userId}/financial-credentials`, {json: true})
+    .then(res => res.body)
+  }
+
   getApplication(applicationId, asOf) {
     let application
     return this._get(
@@ -317,13 +322,15 @@ class KnowledgeBaseClient {
         _application.upload_ids && P.map(_application.upload_ids, uploadId => {
           return this.getUpload(uploadId)
         }),
-        this.getProfile(application.user_id, asOf)
+        this.getProfile(application.user_id, asOf),
+        this.getFinancialCredentials(_application.user_id)
       ])
-      .spread((incomes, lease, uploads, profile) => {
+      .spread((incomes, lease, uploads, profile, credentials) => {
         if (incomes) application.incomes = incomes
         if (lease) application.lease = lease
         if (uploads) application.uploads = uploads
         application.profile = profile
+        application.financial_credentials = credentials
 
         return application
       })
