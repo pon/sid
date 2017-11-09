@@ -56,7 +56,7 @@ const ApplyFinancialStepForm = props => {
       />
       <br />
       <Card>
-        <CardHeader title="Connected Financial Accounts" style={{backgroundColor: grey100}}/>
+        <CardHeader title={<h5>Connected Financial Accounts</h5>} style={{backgroundColor: grey100}}/>
         <Divider />
         <CardText>
           <List>
