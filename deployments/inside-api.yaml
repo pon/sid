@@ -15,7 +15,7 @@ spec:
         app: inside-api
     spec:
       containers:
-        - image: us.gcr.io/poplar-178404/inside_api:20171030205743_inside_api
+        - image: us.gcr.io/poplar-178404/inside_api:20171108212038_inside_api
           imagePullPolicy: Always
           name: inside-api
           env:
