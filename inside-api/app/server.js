@@ -99,6 +99,7 @@ server.register([
           insideUrl: process.env.INSIDE_URL
         }
       },
+      require('./features/underwriting'),
       require('./features/verification'),
       require('./features/dashboard'),
       {

@@ -10,6 +10,7 @@ import {
     Dashboard, 
     Invite, 
     Login, 
+    UnderwritingDashboard,
     VerificationApplication, 
     VerificationDashboard,
     ViewUpload
@@ -37,6 +38,7 @@ export default function routes () {
           <Router path="invite" component={Invite} onEnter={RequireAuth} />
           <Router path="login" component={Login} />
           <Router path="uploads/:uploadId" component={ViewUpload} onEnter={RequireAuth} />
+          <Router path="underwriting" component={UnderwritingDashboard} onEnter={RequireAuth}/>
           <Router path="verification" component={VerificationDashboard} onEnter={RequireAuth}/>
           <Router path="verification/:applicationId" component={VerificationApplication} onEnter={RequireAuth} />
         </Route>

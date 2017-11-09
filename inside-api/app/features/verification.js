@@ -16,7 +16,6 @@ exports.register = (server, options, next) => {
         .map(application => {
           return KBClient.getApplicationEvents(application.id)
           .then(applicationEvents => {
-            applicationEvents.map(e => console.log(e.type))
             const appliedEvent = applicationEvents.reduce((latest, evt) => {
               if (!latest && evt.type === 'APPLICATION_APPLIED') {
                 latest = evt
@@ -133,7 +132,6 @@ exports.register = (server, options, next) => {
       tags: ['api', 'verification'],
       handler: (request, reply) => {
         KBClient.profileVerifyIdentity(request.params.userId)
-        .tap(console.log)
         .catch(KBClient.NotFound, () => {
           throw server.plugins.errors.userNotFound
         })

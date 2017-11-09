@@ -28,6 +28,7 @@ export class Dashboard extends Component {
 
   render () {
     const statusRouteMapper = {
+      UNDERWRITING: '/underwriting',
       VERIFYING: '/verification'
     };
     const applicationStats = this.props.dashboard.get('applicationStats');

@@ -4,6 +4,7 @@ import Footer from './Footer.jsx';
 import Header from './Header.jsx';
 import Invite from './Invite';
 import Login from './Login';
+import UnderwritingDashboard from './Underwriting/Dashboard';
 import VerificationApplication from './Verification/Application';
 import VerificationDashboard from './Verification/Dashboard';
 import ViewUpload from './Uploads/ViewUpload';
@@ -15,6 +16,7 @@ export {
   Header,
   Invite,
   Login,
+  UnderwritingDashboard,
   VerificationApplication,
   VerificationDashboard,
   ViewUpload
