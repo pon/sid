@@ -13,6 +13,11 @@ exports.register = (server, options, next) => {
     guid: Joi.string().guid().required(),
     incomeVerify: Joi.object().keys({
       verified_income: Joi.number().integer().min(0).required()
+    }),
+    approveApplication: Joi.object().keys({
+      term_months: Joi.number().integer().min(0).required(),
+      amount: Joi.number().integer().min(0).required(),
+      interest_rate: Joi.valid(1200)
     })
   }
   server.expose(schemas)

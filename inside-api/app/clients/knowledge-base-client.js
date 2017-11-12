@@ -412,6 +412,11 @@ class KnowledgeBaseClient {
     .then(res => res.body)
   }
 
+  applicationApprove(applicationId) {
+    return this._post(`/applications/${applicationId}/approve`, {json: true})
+    .then(res => res.body)
+  }
+
   createProfile(profile) {
     return this._post('/profiles', {body: profile, json: true}).then(res => res.body)
   }
@@ -472,6 +477,13 @@ class KnowledgeBaseClient {
     return this._get(`/applications/${applicationId}/loan-offer`, {json: true})
     .then(() => this.getProfile(userId))
     .then(res => res.body)
+  }
+
+  createApplicationLoanOffer(body) {
+    return this._post(`/loan-offers`, {
+      json: true,
+      body: body
+    })
   }
 
   getLandlord(landlordId, asOf) {

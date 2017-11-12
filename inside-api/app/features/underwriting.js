@@ -41,6 +41,57 @@ exports.register = (server, options, next) => {
         query: server.plugins.schemas.paginatedQuery
       }
     }
+  }, {
+    method: 'GET',
+    path: '/underwriting/applications/{applicationId}',
+    config: {
+      tags: ['api', 'underwriting'],
+      handler: (request, reply) => {
+        KBClient.getApplication(request.params.applicationId)
+        .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.guid}
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/underwriting/applications/{applicationId}/approve',
+    config: {
+      tags: ['api', 'underwriting'],
+      handler: (request, reply) => {
+        KBClient.getApplication(request.params.applicationId)
+        .catch(KBClient.NotFound, err => {
+          throw server.plugins.errors.applicationNotFound 
+        })
+        .catch(KBClient.BadRequest, err => {
+          throw server.plugins.errors.unableToApproveApplication
+        })
+        .then(application => {
+          if (application.status !== 'UNDERWRITING') {
+            throw server.plugins.errors.unableToApproveApplication
+          }
+
+          return P.all([
+            KBClient.createApplicationLoanOffer({
+              application_id: request.params.applicationId,
+              interest_rate: request.payload.interest_rate,
+              term_in_months: request.payload.term_months,
+              principal_amount: request.payload.amount
+            }),
+            KBClient.applicationApprove(request.params.applicationId)
+          ])
+        })
+        .then(() => {
+          return KBClient.getApplication(request.params.applicationId)
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        params: {applicationId: server.plugins.schemas.guid},
+        payload: server.plugins.schemas.approveApplication
+      }
+    }
   }])
 
   next()

@@ -11,6 +11,7 @@ exports.register = (server, options, next) => {
     userAlreadyVerified: Boom.badRequest('user already verified'),
     incomeNotFound: Boom.notFound('income does not exist'),
     applicationNotFound: Boom.notFound('application does not exist'),
+    unableToApproveApplication: Boom.badRequest('unable to approve application'),
     unableToVerifyApplication: Boom.badRequest('unable to complete verification'),
     unableToVerifyIdentity: Boom.badRequest('unable to verify identity'),
     unableToVerifyCitizenship: Boom.badRequest('unable to verify citizenship'),
