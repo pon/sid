@@ -181,6 +181,13 @@ class KnowledgeBaseClient {
     })
   }
 
+  leaseAttachUploads(leaseId, uploadIds) {
+    return this._post(`/leases/${leaseId}/attach_uploads`, {
+      body: {upload_ids: uploadIds},
+      json: true
+    })
+  }
+
   getLease(leaseId, asOf) {
     return this._get(
       `/leases/${leaseId}`,

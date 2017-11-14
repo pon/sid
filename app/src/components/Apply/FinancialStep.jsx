@@ -11,7 +11,7 @@ import Divider from 'material-ui/Divider';
 import {List, ListItem} from 'material-ui/List';
 import {grey100} from 'material-ui/styles/colors';
 
-import Faq from './Faq';
+import Faq from '../common/Faq';
 
 const ApplyFinancialStepForm = props => {
   const {financialCredentials, submitSaveFinancialCredential, submitApplyFinancialStep} = props;

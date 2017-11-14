@@ -28,6 +28,23 @@ module.exports = db => {
     paranoid: false,
     deletedAt: false,
     instanceMethods: {
+      toJSON: function () {
+        return {
+          id: this.id,
+          user_id: this.user_id,
+          address_id: this.address_id,
+          landlord_id: this.landlord_id,
+          security_deposit: this.security_deposit,
+          monthly_rent: this.monthly_rent,
+          start_date: this.start_date,
+          end_date: this.end_date,
+          term_months: this.term_months,
+          upload_ids: this.uploads ? this.uploads.map(upload => upload.id) : this.upload_ids,
+          created_at: this.created_at,
+          updated_at: this.updated_at,
+          deleted_at: this.deleted_at
+        } 
+      },
       process: function (eventType, event, inMemory = false) {
         switch (eventType) {
           case 'LEASE_CREATED':
@@ -57,6 +74,14 @@ module.exports = db => {
             break
           case 'LEASE_LANDLORD_ATTACHED':
             this.landlord_id = event.landlord_id
+            if (!inMemory) return this.save()
+            break
+          case 'LEASE_UPLOADS_ATTACHED':
+            this.upload_ids = this.upload_ids || []
+            event.upload_ids.map(uploadId => {
+              this.upload_ids.push(uploadId)
+              this.addUpload(uploadId)
+            })
             if (!inMemory) return this.save()
             break
           case 'LEASE_DELETED':

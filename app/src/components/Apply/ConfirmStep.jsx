@@ -6,7 +6,7 @@ import {Card, CardHeader, CardText} from 'material-ui/Card';
 
 import {TextField} from 'redux-form-material-ui';
 
-import Faq from './Faq';
+import Faq from '../common/Faq';
 
 const validate = values => {
   const errors = {};

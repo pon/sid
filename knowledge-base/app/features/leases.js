@@ -9,6 +9,7 @@ exports.register = (server, options, next) => {
   const Event     = server.plugins.db.models.Event
   const Landlord  = server.plugins.db.models.Landlord
   const Lease     = server.plugins.db.models.Lease
+  const Upload    = server.plugins.db.models.Upload
 
   server.route([{
     method: 'GET',
@@ -16,13 +17,20 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api'],
       handler: (request, reply) => {
+        let lease
         P.resolve()
         .then(() => {
           if (!request.query.as_of) {
             return Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
-            .then(lease => {
-              if (!lease) throw server.plugins.errors.leaseNotFound
+            .then(_lease => {
+              lease = _lease
+              if (!_lease) throw server.plugins.errors.leaseNotFound
+
+              return lease.getUploads()
+              .then(uploads => {
+                lease.uploads = uploads
                 return lease
+              })
             })
           }
 
@@ -49,6 +57,15 @@ exports.register = (server, options, next) => {
           lease.address = lease.address + (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
           lease.landlord = `/landlords/${lease.landlord_id}`
           lease.landlord = lease.landlord + (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
+
+          if (lease.upload_ids) {
+            lease.uploads = lease.upload_ids.map(uploadId => {
+              let upload =  `/uploads/${uploadId}`
+              upload = upload + (request.query.as_of ? `?as_of=${request.query.as_of}` : '')
+              return upload
+            })
+          }
+
           return lease
         })
         .asCallback(reply)
@@ -228,6 +245,55 @@ exports.register = (server, options, next) => {
       validate: {
         params: {leaseId: server.plugins.schemas.uuid},
         payload: server.plugins.schemas.leaseAttachLandlord
+      }
+    }
+  }, {
+    method: 'POST',
+    path: '/leases/{leaseId}/attach_uploads',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        let lease
+        let uploadIds
+        Lease.findOne({where: {id: request.params.leaseId, deleted_at: null}})
+        .then(_lease => {
+          lease = _lease
+          if (!lease) throw server.plugins.errors.leaseNotFound
+
+          uploadIds = Array.isArray(request.payload.upload_ids) ? request.payload.upload_ids : [request.payload.upload_ids]
+          return P.map(uploadIds, uploadId => {
+            return Upload.findOne({
+              where: {
+                id: uploadId,
+                user_id: lease.user_id,
+                deleted_at: null
+              }
+            })
+            .then(upload => {
+              if (!upload) throw server.plugins.errors.uploadNotFound
+              return upload
+            })
+          })
+        })
+        .then(uploads => {
+          const LeaseAttachUploadsEvent = new Events.LEASE_UPLOADS_ATTACHED(
+            request.params.leaseId,
+            uploadIds
+          )
+
+          return lease.process(
+            LeaseAttachUploadsEvent.type,
+            LeaseAttachUploadsEvent.toJSON()
+          )
+          .then(() => {
+            server.emit('KB', LeaseAttachUploadsEvent)
+          })
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        params: {leaseId: server.plugins.schemas.uuid},
+        payload: server.plugins.schemas.leaseAttachUploads
       }
     }
   }])

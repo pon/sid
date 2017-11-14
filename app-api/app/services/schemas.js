@@ -61,6 +61,19 @@ exports.register = (server, options, next) => {
     }),
     loanOfferCompleteReviewOffer: Joi.object().keys({
       loan_offer_id: Joi.string().guid().required()
+    }),
+    loanOfferPayoffDetails: Joi.object().keys({
+      loan_offer_id: Joi.string().max(255).required(),
+      files: Joi.any(),
+      categories: [Joi.array().items(Joi.string()), Joi.string()],
+      name: Joi.string().max(255).required(),
+      phone_number: Joi.string().max(255).required(),
+      email: Joi.string().max(255).required(),
+      street_one: Joi.string().max(255).required(),
+      street_two: Joi.string().max(255),
+      city: Joi.string().max(255).required(),
+      state: Joi.string().max(2).required(),
+      zip_code: Joi.string().regex(/[0-9]/).max(9).required(),
     })
   }
 

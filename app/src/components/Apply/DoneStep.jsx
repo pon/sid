@@ -2,7 +2,7 @@ import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link} from 'react-router';
 
-import Faq from './Faq';
+import Faq from '../common/Faq';
 
 const DoneStep = props => {
   const wrapperStyles = {width: '75%', margin: '0 auto', marginBottom: '1em'};

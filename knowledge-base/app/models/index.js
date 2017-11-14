@@ -54,6 +54,20 @@ modelsExport.Address.belongsTo(modelsExport.State, {foreignKey: 'state_id'})
     otherKey: 'application_id'
   })
 
+  modelsExport.Lease.belongsToMany(modelsExport.Upload, {
+    as: 'Uploads',
+    through: modelsExport.LeaseUpload,
+    foreignKey: 'lease_id',
+    otherKey: 'upload_id'
+  })
+
+  modelsExport.Upload.belongsToMany(modelsExport.Lease, {
+    as: 'Leases',
+    through: modelsExport.LeaseUpload,
+    foreignKey: 'upload_id',
+    otherKey: 'lease_id'
+  })
+
   modelsExport.Application.belongsTo(modelsExport.Lease, {foreignKey: 'lease_id'})
   modelsExport.Lease.hasMany(modelsExport.Application, {foreignKey: 'lease_id'})
 

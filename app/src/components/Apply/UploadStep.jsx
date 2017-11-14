@@ -2,7 +2,7 @@ import React from 'react';
 import {Field, reduxForm} from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import Faq from './Faq';
+import Faq from '../common/Faq';
 import FileUpload from '../common/FileUpload';
 
 const ApplyUploadStepForm = props => {
@@ -13,7 +13,7 @@ const ApplyUploadStepForm = props => {
   return (
     <div style={wrapperStyles}>
       <Faq
-        header={<span>What should I upload</span>}
+        header={<span>What should I upload?</span>}
         body={<span>Please upload a color scan or photo of your ID. If you did not connect your primary checking account on the previous page please upload copies of your previous 3 paystubs.</span>
 }
       />

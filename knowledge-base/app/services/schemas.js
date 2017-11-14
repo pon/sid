@@ -88,6 +88,9 @@ exports.register = (server, options, next) => {
     leaseAttachLandlord: Joi.object().keys({
       landlord_id: Joi.string().guid().required()
     }),
+    leaseAttachUploads: Joi.object().keys({
+      upload_ids: [Joi.array().items(Joi.string().guid().required()), Joi.string().guid().required()]
+    }),
     leaseCreate: Joi.object().keys({
       user_id: Joi.string().max(255).required(),
       address_id: Joi.string().guid().required(),
