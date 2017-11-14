@@ -118,6 +118,9 @@ exports.register = (server, options, next) => {
     loanOfferSign: Joi.object().keys({
       signature: Joi.string().max(255).required()
     }),
+    loanOfferUpdateCurrentStep: Joi.object().keys({
+      current_step: Joi.valid('REVIEW_OFFER', 'PAYOFF_DETAILS', 'PAYMENT', 'SIGN')
+    }),
     profileCreate: Joi.object().keys({
       user_id: Joi.string().max(255).required(),
       first_name: Joi.string().max(255).required(),

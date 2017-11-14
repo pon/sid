@@ -416,6 +416,19 @@ class KnowledgeBaseClient {
     .then(res => res.body)
   }
 
+  getLoanOffer(loanOfferId) {
+    return this._get(`/loan-offers/${loanOfferId}`, {json: true})
+    .then(res => res.body)
+  }
+
+  loanOfferUpdateCurrentStep(loanOfferId, currentStep) {
+    return this._post(`/loan-offers/${loanOfferId}/update-current-step`, {
+      body: {current_step: currentStep},
+      json: true
+    })
+    .then(res => res.body)
+  }
+
   getLandlord(landlordId, asOf) {
     return this._get(
       `/landlords/${landlordId}`,

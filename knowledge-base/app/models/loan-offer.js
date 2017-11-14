@@ -20,6 +20,7 @@ module.exports = db => {
     expires_at: {type: Sequelize.DATE, allowNull: false},
     has_esign_consent: {type: Sequelize.BOOLEAN, defaultValue: false, allowNull: false},
     signature: {type: Sequelize.STRING(255), allowNull: true},
+    current_step: {type: Sequelize.STRING(255), allowNull: true},
     deleted_at: {type: Sequelize.DATE}
   }, {
     paranoid: false,
@@ -35,6 +36,7 @@ module.exports = db => {
             this.interest_rate_type = event.interest_rate_type
             this.term_in_months = event.term_in_months
             this.principal_amount = event.principal_amount
+            this.current_step = event.current_step
             this.expires_at = event.expires_at
             if (!inMemory) return this.save()
             break
@@ -102,7 +104,11 @@ module.exports = db => {
             this.deleted_at = null
             if (!inMemory) return this.save()
             break
-          default:
+          case 'LOAN_OFFER_CURRENT_STEP_UPDATED':
+            this.current_step = event.current_step
+             if (!inMemory) return this.save()
+            break
+         default:
             console.log(eventType, 'event not supported')
         }
       }

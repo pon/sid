@@ -16,16 +16,12 @@ import {blue500} from 'material-ui/styles/colors';
 
 import LoanOffer from './LoanOffer';
 import PayoffDetails from './PayoffDetails';
-import {getCheckout} from '../../reducers/checkout';
+import {
+  getCheckout, 
+  submitCheckoutCompleteReviewOffer
+} from '../../reducers/checkout';
 
 export class Checkout extends Component {
-
-  constructor() {
-    super();
-    this.state = {
-      checkoutStepIndex: 0
-    }
-  }
 
   componentWillMount() {
     return this.props.getCheckout();
@@ -33,6 +29,7 @@ export class Checkout extends Component {
 
   render () {
     let checkoutStep;
+    let checkoutStepIndex;
 
     const CheckoutWrapper = styled.div`
       padding-left: 25%;
@@ -43,31 +40,32 @@ export class Checkout extends Component {
     const payoffDetails = this.props.checkout.get('payoff_details');
     const paymentAccount = this.props.checkout.get('payment_account');
 
-    if (this.state.checkoutStepIndex === 1) {
+    if (loanOffer && loanOffer.current_step === 'REVIEW_OFFER') {
+      checkoutStepIndex = 0;
+      checkoutStep = <LoanOffer loanOffer={loanOffer} nextStep={this.props.submitCheckoutCompleteReviewOffer}/>
+    } else if (loanOffer && loanOffer.current_step === 'PAYOFF_DETAILS') {
+      checkoutStepIndex = 1;
       checkoutStep = <PayoffDetails></PayoffDetails>
-    } else if (!payoffDetails) {
-      checkoutStep = <LoanOffer loanOffer={loanOffer} nextStep={() => {this.setState({checkoutStepIndex: 1})}}/>
-    } else if (this.state.checkoutStepIndex === 1) {
-    } else if (payoffDetails && !paymentAccount) {
-      this.setState({checkoutStepIndex: 2})
-    } else if (payoffDetails && paymentAccount) {
-      this.setState({checkoutStepIndex: 3})
+    } else if (loanOffer && loanOffer.curent_step === 'PAYMENT') {
+      checkoutStepIndex = 2;
+    } else if (loanOffer && loanOffer.current_step === 'SIGN') {
+      checkoutStepIndex = 3;
     }
 
     return (
       <CheckoutWrapper>
-        <Stepper linear={false} activeStep={this.state.checkoutStepIndex}>
+        <Stepper linear={false} activeStep={checkoutStepIndex}>
           <Step>
-            <StepLabel icon={<InsertDriveIcon color={this.state.checkoutStepIndex === 0 ? blue500 : ''}/>}>Your Offer</StepLabel>
+            <StepLabel icon={<InsertDriveIcon color={checkoutStepIndex === 0 ? blue500 : ''}/>}>Your Offer</StepLabel>
           </Step>
           <Step>
-            <StepLabel icon={<HomeIcon color={this.state.checkoutStepIndex === 1 ? blue500 : ''}/>}>Payoff Details</StepLabel>
+            <StepLabel icon={<HomeIcon color={checkoutStepIndex === 1 ? blue500 : ''}/>}>Payoff Details</StepLabel>
           </Step>
           <Step>
-            <StepLabel icon={<CreditCardIcon color={this.state.checkoutStepIndex === 2 ? blue500 : ''}/>}>Payment</StepLabel>
+            <StepLabel icon={<CreditCardIcon color={checkoutStepIndex === 2 ? blue500 : ''}/>}>Payment</StepLabel>
           </Step>
           <Step>
-            <StepLabel icon={<EditIcon color={this.state.checkoutStepIndex === 3 ? blue500 : ''}/>}>Sign</StepLabel>
+            <StepLabel icon={<EditIcon color={checkoutStepIndex === 3 ? blue500 : ''}/>}>Sign</StepLabel>
           </Step>
         </Stepper>
         {checkoutStep}
@@ -83,6 +81,9 @@ const mapStateToProps = ({checkout}) => ({
 const mapDispatchToProps = (dispatch) => ({
   getCheckout: () => {
     return dispatch(getCheckout());
+  },
+  submitCheckoutCompleteReviewOffer: payload => {
+    return dispatch(submitCheckoutCompleteReviewOffer(payload));
   }
 });
 

@@ -440,6 +440,40 @@ exports.register = (server, options, next) => {
         params: {loanOfferId: server.plugins.schemas.uuid}
       }
     }
+  }, {
+    method: 'POST',
+    path: '/loan-offers/{loanOfferId}/update-current-step',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        LoanOffer.findOne({where: {id: request.params.loanOfferId, deleted_at: null}})
+        .then(loanOffer => {
+          if (!loanOffer) throw server.plugins.errors.loanOfferNotFound
+          else if (loanOffer.status !== 'AWAITING_SIGNATURE') {
+            throw server.plugins.errors.loanOfferInvalidStatusToUpdateStep
+          }          
+          
+          const LoanOfferCurrentStepUpdatedEvent = new Events.LOAN_OFFER_CURRENT_STEP_UPDATED(
+            loanOffer.id,
+            request.payload.current_step
+          )
+
+          return loanOffer.process(
+            LoanOfferCurrentStepUpdatedEvent.type,
+            LoanOfferCurrentStepUpdatedEvent.toJSON()
+          )
+          .then(() => {
+            server.emit('KB', LoanOfferCurrentStepUpdatedEvent)
+            return loanOffer
+          })
+        })
+        .asCallback(reply) 
+      },
+      validate: {
+        params: {loanOfferId: server.plugins.schemas.uuid},
+        payload: server.plugins.schemas.loanOfferUpdateCurrentStep
+      }
+    }
   }])
 
   next()
