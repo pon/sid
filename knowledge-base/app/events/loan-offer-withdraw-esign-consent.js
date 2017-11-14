@@ -2,7 +2,7 @@
 
 const type = 'LOAN_OFFER_WITHDRAW_ESIGN_CONSENT'
 
-module.exports = class LoanOfferWithdrawEsignConsent {
+module.exports.event = class LoanOfferWithdrawEsignConsent {
   constructor(id, withdrewAt) {
     this._type = type
     this._id = id

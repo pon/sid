@@ -6,10 +6,7 @@ const eventsExport = {}
 
 for (let key in events) {
   const evt = events[key]
-  for (let k in evt) {
-    console.log(k)
-  }
-  eventsExport[key.type] = evt
+  eventsExport[evt.type] = evt.event
 }
 
 module.exports = eventsExport

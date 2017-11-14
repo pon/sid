@@ -2,7 +2,7 @@
 
 const type = 'APPLICATION_CREATED'
 
-module.exports = class ApplicationCreated {
+module.exports.event = class ApplicationCreated {
   constructor(args) {
     this._type = type
     this._id = args.id

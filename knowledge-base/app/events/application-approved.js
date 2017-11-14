@@ -2,7 +2,7 @@
 
 const type = 'APPLICATION_APPROVED'
 
-module.exports = class ApplicationApproved {
+module.exports.event = class ApplicationApproved {
   constructor(id, approvedAt) {
     this._type = type
     this._id = id

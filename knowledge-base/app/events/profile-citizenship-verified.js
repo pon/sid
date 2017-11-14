@@ -2,7 +2,7 @@
 
 const type = 'PROFILE_CITIZENSHIP_VERIFIED'
 
-module.exports = class ProfileCitizenshipVerified {
+module.exports.event = class ProfileCitizenshipVerified {
   constructor(id, verifiedAt) {
     this._type = type
     this._id = id

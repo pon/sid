@@ -2,7 +2,7 @@
 
 const type = 'APPLICATION_REVERIFIED'
 
-module.exports = class ApplicationReverified {
+module.exports.event = class ApplicationReverified {
   constructor(id, reverifiedAt) {
     this._type = type
     this._id = id

@@ -2,7 +2,7 @@
 
 const type = 'ADDRESS_CREATED'
 
-module.exports = class AddressCreated {
+module.exports.event = class AddressCreated {
   constructor(args) {
     this._type = type
     this._id = args.id

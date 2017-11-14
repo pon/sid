@@ -2,7 +2,7 @@
 
 const type = 'UPLOAD_RESTORED'
 
-module.exports = class UploadRestored {
+module.exports.event = class UploadRestored {
   constructor(id, restoredAt) {
     this._type = type
     this._id = id

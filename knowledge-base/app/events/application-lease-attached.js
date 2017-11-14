@@ -2,7 +2,7 @@
 
 const type = 'APPLICATION_LEASE_ATTACHED'
 
-module.exports = class ApplicationLeaseAttached {
+module.exports.event = class ApplicationLeaseAttached {
   constructor(id, leaseId) {
     this._type = type
     this._id = id

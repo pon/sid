@@ -2,7 +2,7 @@
 
 const type = 'APPLICATION_TIMED_OUT'
 
-module.exports = class ApplicationTimedOut {
+module.exports.event = class ApplicationTimedOut {
   constructor(id, timedOutAt) {
     this._type = type
     this._id = id

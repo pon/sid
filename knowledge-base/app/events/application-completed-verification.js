@@ -2,7 +2,7 @@
 
 const type = 'APPLICATION_COMPLETED_VERIFICATION'
 
-module.exports = class ApplicationCompletedVerification {
+module.exports.event = class ApplicationCompletedVerification {
   constructor(id, completedVerificationAt) {
     this._type = type
     this._id = id

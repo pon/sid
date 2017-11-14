@@ -2,7 +2,7 @@
 
 const type = 'CREDIT_REPORT_RESTORED'
 
-module.exports = class CreditReportRestored {
+module.exports.event = class CreditReportRestored {
   constructor(id, restoredAt) {
     this._type = type
     this._id = id

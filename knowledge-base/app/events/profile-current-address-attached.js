@@ -2,7 +2,7 @@
 
 const type = 'PROFILE_CURRENT_ADDRESS_ATTACHED'
 
-module.exports = class ProfileCurrentAddressAttached {
+module.exports.event = class ProfileCurrentAddressAttached {
   constructor(id, addressId) {
     this._type = type
     this._id = id

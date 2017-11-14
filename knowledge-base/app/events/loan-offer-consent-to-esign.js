@@ -2,7 +2,7 @@
 
 const type = 'LOAN_OFFER_CONSENT_TO_ESIGN'
 
-module.exports = class LoanOfferConsentToEsign {
+module.exports.event = class LoanOfferConsentToEsign {
   constructor(id, consentedAt) {
     this._type = type
     this._id = id

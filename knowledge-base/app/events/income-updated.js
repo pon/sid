@@ -2,7 +2,7 @@
 
 const type = 'INCOME_UPDATED'
 
-module.exports = class IncomeUpdated {
+module.exports.event = class IncomeUpdated {
   constructor(id, args) {
     this._type = type
     this._id = id

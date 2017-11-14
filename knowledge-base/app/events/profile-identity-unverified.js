@@ -2,7 +2,7 @@
 
 const type = 'PROFILE_IDENTITY_UNVERIFIED'
 
-module.exports = class ProfileIdentityUnverified {
+module.exports.event = class ProfileIdentityUnverified {
   constructor(id, unverifiedAt) {
     this._type = type
     this._id = id

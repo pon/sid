@@ -2,7 +2,7 @@
 
 const type = 'ADDRESS_DELETED';
 
-module.exports = class AddressDeleted {
+module.exports.event = class AddressDeleted {
   constructor(id, deletedAt) {
     this._type = type
     this._id = id

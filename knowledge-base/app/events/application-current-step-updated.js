@@ -2,7 +2,7 @@
 
 const type = 'APPLICATION_CURRENT_STEP_UPDATED'
 
-module.exports = class ApplicationCurrentStepUpdated {
+module.exports.event = class ApplicationCurrentStepUpdated {
   constructor(id, currentStep) {
     this._type = type
     this._id = id

@@ -2,7 +2,7 @@
 
 const type = 'APPLICATION_UNDECLINED'
 
-module.exports = class ApplicationUndeclined {
+module.exports.event = class ApplicationUndeclined {
   constructor(id, undeclinedAt) {
     this._type = type
     this._id = id

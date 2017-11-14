@@ -2,7 +2,7 @@
 
 const type = 'PROFILE_CREATED'
 
-module.exports = class ProfileCreated {
+module.exports.event = class ProfileCreated {
   constructor(args) {
     this._type = type
     this._id = args.id

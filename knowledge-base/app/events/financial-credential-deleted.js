@@ -2,7 +2,7 @@
 
 const type = 'FINANCIAL_CREDENTIAL_DELETED'
 
-module.exports = class FinancialCredentialDeleted {
+module.exports.event = class FinancialCredentialDeleted {
   constructor(id, deletedAt) {
     this._type = type
     this._id = id

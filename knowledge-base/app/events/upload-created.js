@@ -2,7 +2,7 @@
 
 const type = 'UPLOAD_CREATED'
 
-module.exports = class UploadCreated {
+module.exports.event = class UploadCreated {
   constructor(args) {
     this._type = type
     this._id = args.id
