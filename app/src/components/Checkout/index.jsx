@@ -58,7 +58,7 @@ export class Checkout extends Component {
             <StepLabel icon={<InsertDriveIcon color={checkoutStepIndex === 0 ? blue500 : ''}/>}>Your Offer</StepLabel>
           </Step>
           <Step>
-            <StepLabel icon={<HomeIcon color={checkoutStepIndex === 1 ? blue500 : ''}/>}>Payoff Details</StepLabel>
+            <StepLabel icon={<HomeIcon color={checkoutStepIndex === 1 ? blue500 : ''}/>}>Deposit Payout Details</StepLabel>
           </Step>
           <Step>
             <StepLabel icon={<CreditCardIcon color={checkoutStepIndex === 2 ? blue500 : ''}/>}>Payment</StepLabel>

@@ -12,20 +12,20 @@ import FileUpload from '../common/FileUpload';
 const PayoffDetailsForm = props => {
   const {submitting, valid, handleSubmit, submitCheckoutPayoffDetails} = props;
 
-  const wrapperStyles = {width: '75%', margin: '0 auto', marginBottom: '1em'};
+  const wrapperStyles = {width: '85%', margin: '0 auto', marginBottom: '1em'};
 
   return (
     <div style={wrapperStyles}>
       <Faq
-        header={<span>What should I upload?</span>}
-        body={<span>Please upload a copy of your new lease. We will use this to verify the security deposit amount and landlord information.</span>}
+        header={<span>{`You're almost done! We just need to verify where the security deposit is being sent.`}</span>}
+        body={<span>{`Please upload a PDF, screenshot, or photo of your new lease agreement. We'll use this to confirm and document the amount of your security deposit and your new landlord's information.`}</span>}
       />
       <br />
       <form onSubmit={handleSubmit(submitCheckoutPayoffDetails)}>
         <Field name="files" type="file" component={FileUpload} categoryOverride={'lease'} uploadMessage={'Upload Your Lease Here'}/>
 
         <Card>
-          <CardHeader title={<h5>Landlord Details</h5>} style={{backgroundColor: grey100}} />
+          <CardHeader title={<h5>Landlord Contact Information</h5>} style={{backgroundColor: grey100}} />
           <CardText>
             <Field name="landlord.name" fullWidth={true} component={TextField} type="text" hintText="Name" />
             <Field name="landlord.phone_number" fullWidth={true} component={TextField} type="text" hintText="Phone Number" />
