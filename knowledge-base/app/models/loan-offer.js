@@ -26,6 +26,24 @@ module.exports = db => {
     paranoid: false,
     deletedAt: false,
     instanceMethods: {
+      toJSON: function () {
+        return {
+          id: this.id,
+          application_id: this.application_id,
+          status: this.status,
+          interest_rate: this.interest_rate,
+          term_in_months: this.term_in_months,
+          principal_amount: this.principal_amount,
+          estimated_monthly_payment: this.principal_amount / 100, //12% APR on 30/360 Interest is 1% of principal
+          expires_at: this.expires_at,
+          has_esign_consent: this.has_esign_consent,
+          signature: this.signature,
+          current_step: this.current_step,
+          created_at: this.created_at,
+          updated_at: this.updated_at,
+          deleted_at: this.deleted_at
+        }
+      },
       process: function (eventType, event, inMemory = false) {
         switch (eventType) {
           case 'LOAN_OFFER_CREATED':
