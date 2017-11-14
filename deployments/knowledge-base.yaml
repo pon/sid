@@ -15,7 +15,7 @@ spec:
         app: knowledge-base
     spec:
       containers:
-        - image: us.gcr.io/poplar-178404/knowledge_base:20171113221950_knowledge_base
+        - image: us.gcr.io/poplar-178404/knowledge_base:20171114135659_knowledge_base
           imagePullPolicy: Always
           name: knowledge-base
           env:
