@@ -1,8 +1,10 @@
 'use strict';
 
+const type = 'APPLICATION_UNTIMED_OUT'
+
 module.exports = class ApplicationUnuntimedOut {
   constructor(id, untimedOutAt) {
-    this._type = 'APPLICATION_UNTIMED_OUT'
+    this._type = type
     this._id = id
     this._untimed_out_at = untimedOutAt || new Date()
   }
@@ -21,3 +23,5 @@ module.exports = class ApplicationUnuntimedOut {
   get type() {return this._type}
   get untimed_out_at() {return this._untimed_out_at}
 }
+
+module.exports.type = type

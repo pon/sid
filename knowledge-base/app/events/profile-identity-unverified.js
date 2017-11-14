@@ -1,8 +1,10 @@
 'use strict';
 
+const type = 'PROFILE_IDENTITY_UNVERIFIED'
+
 module.exports = class ProfileIdentityUnverified {
   constructor(id, unverifiedAt) {
-    this._type = 'PROFILE_IDENTITY_UNVERIFIED'
+    this._type = type
     this._id = id
     this._unverified_at = unverifiedAt || new Date()
   }
@@ -21,3 +23,5 @@ module.exports = class ProfileIdentityUnverified {
   get type() {return this._type}
   get unverified_at() {return this._unverified_at}
 }
+
+module.exports.type = type

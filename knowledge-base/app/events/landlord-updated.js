@@ -1,8 +1,10 @@
 'use strict'
 
+const type = 'LANDLORD_UPDATED'
+
 module.exports = class LandlordUpdated {
   constructor(id, args) {
-    this._type = 'LANDLORD_UPDATED'
+    this._type = type
     this._id = id
     this._name = args.name
     this._phone_number = args.phone_number
@@ -27,3 +29,5 @@ module.exports = class LandlordUpdated {
   get phone_number() {return this._phone_number}
   get email() {return this._email}
 }
+
+module.exports.type = type

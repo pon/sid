@@ -1,8 +1,10 @@
 'use strict';
 
+const type = 'LOAN_OFFER_WITHDRAW_ESIGN_CONSENT'
+
 module.exports = class LoanOfferWithdrawEsignConsent {
   constructor(id, withdrewAt) {
-    this._type = 'LOAN_OFFER_WITHDRAW_ESIGN_CONSENT'
+    this._type = type
     this._id = id
     this._withdrew_at = withdrewAt || new Date()
   }
@@ -21,3 +23,5 @@ module.exports = class LoanOfferWithdrawEsignConsent {
   get type() {return this._type}
   get withdrew_at() {return this._withdrew_at}
 }
+
+module.exports.type = type

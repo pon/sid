@@ -1,8 +1,10 @@
 'use strict';
 
+const type = 'APPLICATION_REVERIFIED'
+
 module.exports = class ApplicationReverified {
   constructor(id, reverifiedAt) {
-    this._type = 'APPLICATION_REVERIFIED'
+    this._type = type
     this._id = id
     this._reverified_at = reverifiedAt || new Date()
   }
@@ -21,3 +23,5 @@ module.exports = class ApplicationReverified {
   get type() {return this._type}
   get reverified_at() {return this._reverified_at}
 }
+
+module.exports.type = type

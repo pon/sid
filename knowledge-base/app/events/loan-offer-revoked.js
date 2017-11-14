@@ -1,8 +1,10 @@
 'use strict';
 
+const type = 'LOAN_OFFER_REVOKED'
+
 module.exports = class LoanOfferRevoked {
   constructor(id, revokedAt) {
-    this._type = 'LOAN_OFFER_REVOKED'
+    this._type = type
     this._id = id
     this._revoked_at = revokedAt || new Date()
   }
@@ -21,3 +23,5 @@ module.exports = class LoanOfferRevoked {
   get type() {return this._type}
   get revoked_at() {return this._revoked_at}
 }
+
+module.exports.type = type

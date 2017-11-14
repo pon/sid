@@ -1,8 +1,10 @@
 'use strict';
 
+const type = 'APPLICATION_CURRENT_STEP_UPDATED'
+
 module.exports = class ApplicationCurrentStepUpdated {
   constructor(id, currentStep) {
-    this._type = 'APPLICATION_CURRENT_STEP_UPDATED'
+    this._type = type
     this._id = id
     this._current_step = currentStep
   }
@@ -21,3 +23,5 @@ module.exports = class ApplicationCurrentStepUpdated {
   get type() {return this._type}
   get current_step() {return this._current_step}
 }
+
+module.exports.type = type

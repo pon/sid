@@ -1,8 +1,10 @@
 'use strict'
 
+const type = 'LOAN_OFFER_UPDATED'
+
 module.exports = class LoanOfferUpdated {
   constructor(id, args) {
-    this._type = 'LOAN_OFFER_UPDATED'
+    this._type = type
     this._id = id
     this._interest_rate = args.interest_rate
     this._interest_rate_type = args.interest_rate_type
@@ -34,3 +36,5 @@ module.exports = class LoanOfferUpdated {
   get principal_amount() {return this._principal_amount}
   get expires_at() {return this._expires_at}
 }
+
+module.exports.type = type

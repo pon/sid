@@ -1,18 +1,17 @@
 'use strict'
 
-const type = 'LEASE_LANDLORD_ATTACHED'
+const type = 'LOAN_OFFER_CURRENT_STEP_UPDATED'
 
-module.exports = class LeaseLandlordAttached {
-  constructor(id, landlordId) {
+module.exports = class LoanOfferCurrentStepUpdated {
+  constructor(id, currentStep) {
     this._type = type
     this._id = id
-    this._landlord_id = landlordId
+    this._current_step = currentStep
   }
 
   toJSON() {
     return {
-      id: this._id,
-      landlord_id: this._landlord_id
+      current_step: this._current_step
     }
   }
 
@@ -22,7 +21,7 @@ module.exports = class LeaseLandlordAttached {
   // Basic Getters
   get id() {return this._id}
   get type() {return this._type}
-  get landlord_id() {return this._landlord_id}
+  get current_step() {return this._current_step}
 }
 
 module.exports.type = type

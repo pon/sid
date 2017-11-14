@@ -1,8 +1,10 @@
 'use strict'
 
+const type = 'ADDRESS_CREATED'
+
 module.exports = class AddressCreated {
   constructor(args) {
-    this._type = 'ADDRESS_CREATED'
+    this._type = type
     this._id = args.id
     this._user_id = args.user_id
     this._street_one = args.street_one
@@ -37,3 +39,5 @@ module.exports = class AddressCreated {
   get state_id() {return this._state_id}
   get zip_code() {return this._zip_code}
 }
+
+module.exports.type = type

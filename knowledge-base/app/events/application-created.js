@@ -1,8 +1,10 @@
 'use strict'
 
+const type = 'APPLICATION_CREATED'
+
 module.exports = class ApplicationCreated {
   constructor(args) {
-    this._type = 'APPLICATION_CREATED'
+    this._type = type
     this._id = args.id
     this._user_id = args.user_id
     this._status = 'APPLYING'
@@ -37,3 +39,5 @@ module.exports = class ApplicationCreated {
   get lease_id() {return this._lease_id}
   get current_step() {return this._current_step}
 }
+
+module.exports.type = type

@@ -1,8 +1,10 @@
 'use strict'
 
+const type = 'APPLICATION_CREDIT_REPORT_ATTACHED'
+
 module.exports = class ApplicationCreditReportAttached {
   constructor(id, creditReportId) {
-    this._type = 'APPLICATION_CREDIT_REPORT_ATTACHED'
+    this._type = type
     this._id = id
     this._credit_report_id = creditReportId
   }
@@ -22,3 +24,5 @@ module.exports = class ApplicationCreditReportAttached {
   get type() {return this._type}
   get credit_report_id() {return this._credit_report_id}
 }
+
+module.exports.type = type

@@ -1,8 +1,10 @@
 'use strict'
 
+const type = 'UPLOAD_CREATED'
+
 module.exports = class UploadCreated {
   constructor(args) {
-    this._type = 'UPLOAD_CREATED'
+    this._type = type
     this._id = args.id
     this._user_id = args.user_id
     this._file_name = args.file_name
@@ -37,3 +39,5 @@ module.exports = class UploadCreated {
   get content_type() {return this._content_type}
   get category() {return this._category}
 }
+
+module.exports.type = type

@@ -1,8 +1,10 @@
 'use strict';
 
+const type = 'APPLICATION_DELETED'
+
 module.exports = class ApplicationDeleted {
   constructor(id, deletedAt) {
-    this._type = 'APPLICATION_DELETED'
+    this._type = type
     this._id = id
     this._deleted_at = deletedAt || new Date()
   }
@@ -21,3 +23,5 @@ module.exports = class ApplicationDeleted {
   get type() {return this._type}
   get deleted_at() {return this._deleted_at}
 }
+
+module.exports.type = type

@@ -1,8 +1,10 @@
 'use strict'
 
+const type = 'FINANCIAL_ACCOUNT_CREATED'
+
 module.exports = class FinancialAccountCreated {
   constructor(args) {
-    this._type = 'FINANCIAL_ACCOUNT_CREATED'
+    this._type = type
     this._id = args.id
     this._financial_credential_id = args.financial_credential_id
     this._remote_id = args.remote_id
@@ -55,3 +57,5 @@ module.exports = class FinancialAccountCreated {
   get routing_number() {return this._routing_number}
   get wire_routing_number() {return this._wire_routing_number}
 }
+
+module.exports.type = type

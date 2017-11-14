@@ -1,8 +1,10 @@
 'use strict'
 
+const type = 'PROFILE_CREATED'
+
 module.exports = class ProfileCreated {
   constructor(args) {
-    this._type = 'PROFILE_CREATED'
+    this._type = type
     this._id = args.id
     this._user_id = args.user_id
     this._first_name = args.first_name
@@ -40,3 +42,5 @@ module.exports = class ProfileCreated {
   get years_of_employment() {return this._years_of_employment}
   get social_security_number() {return this._social_security_number}
 }
+
+module.exports.type = type

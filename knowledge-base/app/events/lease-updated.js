@@ -1,8 +1,10 @@
 'use strict'
 
+const type = 'LEASE_UPDATED'
+
 module.exports = class LeaseUpdated {
   constructor(args) {
-    this._type = 'LEASE_UPDATED'
+    this._type = type
     this._id = args.id
     this._security_deposit = args.security_deposit
     this._monthly_rent = args.monthly_rent
@@ -34,3 +36,5 @@ module.exports = class LeaseUpdated {
   get end_date() {return this.end_date}
   get term_months() {return this.term_months}
 }
+
+module.exports.type = type

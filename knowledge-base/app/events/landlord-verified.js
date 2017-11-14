@@ -1,8 +1,10 @@
 'use strict';
 
+const type = 'LANDLORD_VERIFIED'
+
 module.exports = class LandlordVerified {
   constructor(id, verifiedAt) {
-    this._type = 'LANDLORD_VERIFIED'
+    this._type = type
     this._id = id
     this._verified_at = verifiedAt || new Date()
   }
@@ -21,3 +23,5 @@ module.exports = class LandlordVerified {
   get type() {return this._type}
   get verified_at() {return this._verified_at}
 }
+
+module.exports.type = type

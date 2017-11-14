@@ -1,8 +1,10 @@
 'use strict';
 
+const type = 'INCOME_UNVERIFIED'
+
 module.exports = class IncomeUnverified {
   constructor(id, unverifiedAt) {
-    this._type = 'INCOME_UNVERIFIED'
+    this._type = type
     this._id = id
     this._unverified_at = unverifiedAt || new Date()
   }
@@ -21,3 +23,5 @@ module.exports = class IncomeUnverified {
   get type() {return this._type}
   get unverified_at() {return this._unverified_at}
 }
+
+module.exports.type = type

@@ -1,8 +1,10 @@
 'use strict'
 
+const type = 'APPLICATION_UPLOADS_ATTACHED'
+
 module.exports = class ApplicationUploadsAttached {
   constructor(id, uploadIds) {
-    this._type = 'APPLICATION_UPLOADS_ATTACHED'
+    this._type = type
     this._id = id
     this._upload_ids = uploadIds
   }
@@ -22,3 +24,5 @@ module.exports = class ApplicationUploadsAttached {
   get type() {return this._type}
   get upload_ids() {return this._upload_ids}
 }
+
+module.exports.type = type

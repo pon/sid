@@ -1,8 +1,10 @@
 'use strict'
 
+const type = 'CREDIT_REPORT_CREATED'
+
 module.exports = class CreditReportCreated {
   constructor(args) {
-    this._type = 'CREDIT_REPORT_CREATED'
+    this._type = type
     this._id = args.id
     this._user_id = args.user_id
     this._raw_credit_report = args.raw_credit_report
@@ -28,3 +30,5 @@ module.exports = class CreditReportCreated {
   get raw_credit_report() {return this._raw_credit_report}
   get fico_score() {return this._fico_score}
 }
+
+module.exports.type = type

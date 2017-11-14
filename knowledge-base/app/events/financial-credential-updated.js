@@ -1,8 +1,10 @@
 'use strict';
 
+const type = 'FINANCIAL_CREDENTIAL_UPDATED'
+
 module.exports = class FinancialCredentialUpdated {
   constructor(id, args) {
-    this._type = 'FINANCIAL_CREDENTIAL_UPDATED'
+    this._type = type
     this._id = id
     this._institution_name = args.institution_name
     this._remote_id = args.remote_id
@@ -33,3 +35,5 @@ module.exports = class FinancialCredentialUpdated {
   get enabled() {return this._enabled}
   get connected() {return this._connected}
 }
+
+module.exports.type = type

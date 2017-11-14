@@ -1,8 +1,10 @@
 'use strict'
 
+const type = 'PROFILE_UPDATED'
+
 module.exports = class ProfileUpdated {
   constructor(id, args) {
-    this._type = 'PROFILE_UPDATED'
+    this._type = type
     this._id = id
     this._first_name = args.first_name
     this._last_name = args.last_name
@@ -36,3 +38,5 @@ module.exports = class ProfileUpdated {
   get years_of_employment() {return this._years_of_employment}
   get social_security_number() {return this._social_security_number}
 }
+
+module.exports.type = type

@@ -1,8 +1,10 @@
 'use strict';
 
+const type = 'PROFILE_CITIZENSHIP_VERIFIED'
+
 module.exports = class ProfileCitizenshipVerified {
   constructor(id, verifiedAt) {
-    this._type = 'PROFILE_CITIZENSHIP_VERIFIED'
+    this._type = type
     this._id = id
     this._verified_at = verifiedAt || new Date()
   }
@@ -21,3 +23,5 @@ module.exports = class ProfileCitizenshipVerified {
   get type() {return this._type}
   get verified_at() {return this._verified_at}
 }
+
+module.exports.type = type
