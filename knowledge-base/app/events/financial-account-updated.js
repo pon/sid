@@ -16,6 +16,7 @@ module.exports.event = class FinancialAccountUpdated {
     this._account_number = args.account_number
     this._routing_number = args.routing_number
     this._wire_routing_number = args.wire_routing_number
+    this._stripe_bank_account_token = args.stripe_bank_account_token
   }
 
   toJSON() {
@@ -29,7 +30,8 @@ module.exports.event = class FinancialAccountUpdated {
       raw_response: this._raw_response,
       account_number: this._account_number,
       routing_number: this._routing_number,
-      wire_routing_number: this._wire_routing_number
+      wire_routing_number: this._wire_routing_number,
+      stripe_bank_account_token: this._stripe_bank_account_token
     } 
   }
 
@@ -49,6 +51,7 @@ module.exports.event = class FinancialAccountUpdated {
   get account_number() {return this._account_number}
   get routing_number() {return this._routing_number}
   get wire_routing_number() {return this._wire_routing_number}
+  get stripe_bank_account_token() {return this._stripe_bank_account_token}
 }
 
 module.exports.type = type

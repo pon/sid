@@ -284,6 +284,43 @@ exports.register = (server, options, next) => {
         payload: server.plugins.schemas.financialCredentialCreate
       }
     }
+  }, {
+    method: 'POST',
+    path: '/financial/accounts/{accountId}/connect-to-stripe',
+    config: {
+      tags: ['api'],
+      handler: (request, reply) => {
+        FinancialAccount.findOne({
+          where: {
+            id: request.params.accountId,
+            deleted_at: null
+          },
+          include: [FinancialCredential]
+        })  
+        .then(account => {
+          if (!account) throw server.plugins.errors.financialAccountNotFound
+
+          return PlaidClient.createStripeToken(
+            account.financial_credential.credentials.exchange_response.access_token,
+            account.remote_id
+          )
+          .then(res => {
+            const FinancialAccountUpdatedEvent = new Events.FINANCIAL_ACCOUNT_UPDATED(account.id, {
+              stripe_bank_account_token: res.stripe_bank_account_token
+            })
+
+            return account.process(
+              FinancialAccountUpdatedEvent.type,
+              FinancialAccountUpdatedEvent.toJSON()
+            )
+            .then(() => {
+              server.emit('KB', FinancialAccountUpdatedEvent)
+            })
+          })
+        })
+        .asCallback(reply)
+      }
+    }
   }])
 
   next()

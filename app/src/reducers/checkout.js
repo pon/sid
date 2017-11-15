@@ -132,6 +132,7 @@ export default (state = initialState, {type, payload}) => {
         .set('loan_offer', payload.loan_offer)
         .set('payoff_details', payload.payoff_details)
         .set('payment_account', payload.payment_account)
+        .set('financial_accounts', payload.financial_accounts)
         .delete('error');
     case GET_CHECKOUT_FAILURE:
       return state

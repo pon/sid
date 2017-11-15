@@ -303,6 +303,11 @@ class KnowledgeBaseClient {
     })
   }
 
+  connectAccountToStripe(accountId) {
+    return this._post(`/financial/accounts/${accountId}/connect-to-stripe`, {json: true})
+    .then(res => res.body)
+  }
+
   createApplication(application) {
     return this._post('/applications', {body: application, json: true}).then(res => res.body)
   }

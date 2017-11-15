@@ -16,6 +16,7 @@ import {blue500} from 'material-ui/styles/colors';
 
 import LoanOffer from './LoanOffer';
 import PayoffDetails from './PayoffDetails';
+import Payment from './Payment';
 import {
   getCheckout, 
   submitCheckoutCompleteReviewOffer,
@@ -38,6 +39,7 @@ export class Checkout extends Component {
     `;
 
     const loanOffer = this.props.checkout.get('loan_offer');
+    const financialAccounts = this.props.checkout.get('financial_accounts');
 
     if (loanOffer && loanOffer.current_step === 'REVIEW_OFFER') {
       checkoutStepIndex = 0;
@@ -47,6 +49,7 @@ export class Checkout extends Component {
       checkoutStep = <PayoffDetails submitCheckoutPayoffDetails={this.props.submitCheckoutPayoffDetails}></PayoffDetails>
     } else if (loanOffer && loanOffer.current_step === 'PAYMENT') {
       checkoutStepIndex = 2;
+      checkoutStep = <Payment financialAccounts={financialAccounts}/>
     } else if (loanOffer && loanOffer.current_step === 'SIGN') {
       checkoutStepIndex = 3;
     }

@@ -20,6 +20,7 @@ exports.register = (server, options, next) => {
     applicationInvalidStatusToUpdateStep: Boom.badRequest('application must be applying to update step'),
     applicationNotReadyToApply: Boom.badRequest('application not ready to apply'),
     creditReportNotFound: Boom.notFound('credit report does not exist'),
+    financialAccountNotFound: Boom.notFound('account does not exist'),
     financialCredentialNotFound: Boom.notFound('credential does not exist'),
     incomeAlreadyVerified: Boom.badRequest('income already verified'),
     incomeNotFound: Boom.notFound('income does not exist'),

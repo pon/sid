@@ -18,12 +18,30 @@ exports.register = (server, options, next) => {
         KBClient.getUserApplications(request.auth.credentials.id)
         .then(apps => apps[0])
         .then(app => {
-          return KBClient.getApplicationLoanOffer(app.id)
+          return P.all([
+            KBClient.getApplicationLoanOffer(app.id),
+            KBClient.getFinancialCredentials(request.auth.credentials.id)
+          ])
         })
-        .then(loanOffer => {
+        .spread((loanOffer, credentials) => {
+          const accounts = credentials.reduce((agg, credential) => {
+            credential.financial_accounts.filter(account => {
+              return account.account_type === 'depository' && account.account_subtype === 'checking'
+            })
+            .forEach(account => {
+              agg.push({
+                account_id: account.id,
+                institution_name: credential.institution_name,
+                name: account.name,
+                account_number_last_4: account.account_number.substr(account.account_number.length - 4)
+              })
+            })
+            return agg
+          }, [])
           return P.props({
             loan_offer: loanOffer,
             payoff_details: null,
+            financial_accounts: accounts,
             payment_account: null
           })
         })

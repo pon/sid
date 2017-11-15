@@ -19,6 +19,7 @@ module.exports = db => {
     account_number: {type: Sequelize.STRING(255)},
     routing_number: {type: Sequelize.STRING(255)},
     wire_routing_number: {type: Sequelize.STRING(255)},
+    stripe_bank_account_token: {type: Sequelize.STRING(255)},
     deleted_at: Sequelize.DATE
   }, {
     paranoid: false,
@@ -40,11 +41,13 @@ module.exports = db => {
             this.account_number = event.account_number
             this.routing_number = event.routing_number
             this.wire_routing_number = event.wire_routing_number
+            this.stripe_bank_account_token = event.stripe_bank_account_token
             if (!inMemory) return this.save()
             break
           case 'FINANCIAL_ACCOUNT_UPDATED':
             ['name', 'account_type', 'account_subtype', 'available_balance', 'current_balance', 
-              'raw_response', 'credit_limit', 'account_number', 'routing_number', 'wire_routing_number'
+              'raw_response', 'credit_limit', 'account_number', 'routing_number', 
+              'wire_routing_number', 'stripe_bank_account_token'
             ].forEach(key => {
               if (event[key] !== undefined) {
                 this[key] = event[key]
