@@ -9,6 +9,7 @@ import {SelectField} from 'redux-form-material-ui';
 import Faq from '../common/Faq';
 
 const PaymentForm = props => {
+  const {financialAccounts, handleSubmit, submitCheckoutPayment} = props;
 
   const wrapperStyles = {width: '85%', margin: '0 auto', marginBottom: '1em'};
 
@@ -23,13 +24,13 @@ const PaymentForm = props => {
         body={<span>{`To make things easy - choose one of the accounts you connected during the application process. We'll automatically take the interest payment out of your account each month so you don't need to worry about scheduling it!`}</span>}
       />
       <br />
-      <form>
+      <form onSubmit={handleSubmit(submitCheckoutPayment)}>
         <Card>
           <CardHeader title={<h5>Select Payment Account</h5>} style={{backgroundColor: grey100}} />
           <CardText>
             <Field name="existing_account" fullWidth={true} component={SelectField} hintText="Account">
               {
-                props.financialAccounts.map(account => {
+                financialAccounts.map(account => {
                   return (
                     <MenuItem 
                       key={account.account_id} 

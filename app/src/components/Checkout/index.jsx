@@ -20,6 +20,7 @@ import Payment from './Payment';
 import {
   getCheckout, 
   submitCheckoutCompleteReviewOffer,
+  submitCheckoutPayment,
   submitCheckoutPayoffDetails
 } from '../../reducers/checkout';
 
@@ -49,7 +50,7 @@ export class Checkout extends Component {
       checkoutStep = <PayoffDetails submitCheckoutPayoffDetails={this.props.submitCheckoutPayoffDetails}></PayoffDetails>
     } else if (loanOffer && loanOffer.current_step === 'PAYMENT') {
       checkoutStepIndex = 2;
-      checkoutStep = <Payment financialAccounts={financialAccounts}/>
+      checkoutStep = <Payment financialAccounts={financialAccounts} submitCheckoutPayment={this.props.submitCheckoutPayment}/>
     } else if (loanOffer && loanOffer.current_step === 'SIGN') {
       checkoutStepIndex = 3;
     }
@@ -89,6 +90,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   submitCheckoutPayoffDetails: payload => {
     return dispatch(submitCheckoutPayoffDetails(payload));
+  },
+  submitCheckoutPayment: payload => {
+    return dispatch(submitCheckoutPayment(payload));
   }
 });
 

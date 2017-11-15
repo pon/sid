@@ -145,7 +145,29 @@ exports.register = (server, options, next) => {
         options: {stripUnknown: true}
       }
     }
-
+  }, {
+    method: 'POST',
+    path: '/checkout/payment',
+    config: {
+      handler: (request, reply) => {
+        KBClient.loanOfferUpdateCurrentStep(request.payload.loan_offer_id, 'SIGN')
+        .then(() => {
+          return KBClient.getLoanOffer(request.payload.loan_offer_id)
+        })
+        .then(loanOffer => {
+          return P.props({
+            loan_offer: loanOffer,
+            payoff_details: null,
+            payment_account: null
+          })  
+        })
+        .asCallback(reply)
+      },
+      validate: {
+        payload: server.plugins.schemas.loanOfferPayment,
+        options: {stripUnknown: true}
+      }
+    }
   }])
 
   next()

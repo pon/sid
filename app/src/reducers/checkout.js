@@ -15,6 +15,9 @@ const SUBMIT_CHECKOUT_COMPLETE_REVIEW_OFFER_FAILURE = 'SUBMIT_CHECKOUT_COMPLETE_
 const SUBMIT_CHECKOUT_PAYOFF_DETAILS = 'SUBMIT_CHECKOUT_PAYOFF_DETAILS';
 const SUBMIT_CHECKOUT_PAYOFF_DETAILS_SUCCESS = 'SUBMIT_CHECKOUT_PAYOFF_DETAILS_SUCCESS';
 const SUBMIT_CHECKOUT_PAYOFF_DETAILS_FAILURE = 'SUBMIT_CHECKOUT_PAYOFF_DETAILS_FAILURE';
+const SUBMIT_CHECKOUT_PAYMENT = 'SUBMIT_CHECKOUT_PAYMENT';
+const SUBMIT_CHECKOUT_PAYMENT_SUCCESS = 'SUBMIT_CHECKOUT_PAYMENT_SUCCESS';
+const SUBMIT_CHECKOUT_PAYMENT_FAILURE = 'SUBMIT_CHECKOUT_PAYMENT_FAILURE';
 
 // CREATORS
 export const getCheckout = () => ({
@@ -28,6 +31,11 @@ export const submitCheckoutCompleteReviewOffer = payload => ({
 
 export const submitCheckoutPayoffDetails = payload => ({
   type: SUBMIT_CHECKOUT_PAYOFF_DETAILS,
+  payload
+});
+
+export const submitCheckoutPayment = payload => ({
+  type: SUBMIT_CHECKOUT_PAYMENT,
   payload
 });
 
@@ -118,6 +126,26 @@ const fetchSubmitCheckoutPayoffDetails = payload => {
   });
 }
 
+const fetchSubmitCheckoutPayment = payload => {
+  return fetch(`${API_ROOT}/checkout/payment`, {
+    method: 'POST',
+    headers: {
+      Authorization: sessionStorage.getItem('jwtToken')
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(handleError)
+  .then(response => ({
+    type: SUBMIT_CHECKOUT_PAYMENT_SUCCESS,
+    payload: response
+  }))
+  .catch(error => ({
+    type: SUBMIT_CHECKOUT_PAYMENT_FAILURE,
+    payload: {
+      error: error.message
+    }
+  }));
+};
 
 export default (state = initialState, {type, payload}) => {
   switch (type) {
@@ -168,6 +196,23 @@ export default (state = initialState, {type, payload}) => {
         .set('payment_account', payload.payment_account)
         .delete('error');
     case SUBMIT_CHECKOUT_PAYOFF_DETAILS_FAILURE:
+      return state
+        .set('isSubmitting', false)
+        .set('error', payload.error);
+    case SUBMIT_CHECKOUT_PAYMENT:
+      payload.loan_offer_id = state.get('loan_offer').id;
+      return loop(
+        state.set('isSubmitting', true),
+        Effects.promise(fetchSubmitCheckoutPayment, payload)
+      );
+    case SUBMIT_CHECKOUT_PAYMENT_SUCCESS:
+      return state
+        .set('isSubmitting', false)
+        .set('loan_offer', payload.loan_offer)
+        .set('payoff_details', payload.payoff_details)
+        .set('payment_account', payload.payment_account)
+        .delete('error');
+    case SUBMIT_CHECKOUT_PAYMENT_FAILURE:
       return state
         .set('isSubmitting', false)
         .set('error', payload.error);

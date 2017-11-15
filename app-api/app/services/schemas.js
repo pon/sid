@@ -62,6 +62,9 @@ exports.register = (server, options, next) => {
     loanOfferCompleteReviewOffer: Joi.object().keys({
       loan_offer_id: Joi.string().guid().required()
     }),
+    loanOfferPayment: Joi.object().keys({
+      loan_offer_id: Joi.string().guid().required()
+    }),
     loanOfferPayoffDetails: Joi.object().keys({
       loan_offer_id: Joi.string().max(255).required(),
       files: Joi.any(),
