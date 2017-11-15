@@ -20,10 +20,18 @@ exports.register = (server, options, next) => {
         .then(app => {
           return P.all([
             KBClient.getApplicationLoanOffer(app.id),
-            KBClient.getFinancialCredentials(request.auth.credentials.id)
+            KBClient.getFinancialCredentials(request.auth.credentials.id),
+            KBClient.getProfile(request.auth.credentials.id)
+            .then(profile => {
+              return KBClient.getAddress(profile.current_address_id)
+              .then(address => {
+                profile.current_address = address
+                return profile
+              })
+            })
           ])
         })
-        .spread((loanOffer, credentials) => {
+        .spread((loanOffer, credentials, profile) => {
           const accounts = credentials.reduce((agg, credential) => {
             credential.financial_accounts.filter(account => {
               return account.account_type === 'depository' && account.account_subtype === 'checking'
@@ -42,7 +50,8 @@ exports.register = (server, options, next) => {
             loan_offer: loanOffer,
             payoff_details: null,
             financial_accounts: accounts,
-            payment_account: null
+            payment_account: null,
+            profile: profile
           })
         })
         .asCallback(reply)

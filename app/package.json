@@ -5,6 +5,7 @@
   "dependencies": {
     "immutable": "^3.8.1",
     "material-ui": "^0.18.5",
+    "moment": "^2.19.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-dropzone": "^3.13.3",
