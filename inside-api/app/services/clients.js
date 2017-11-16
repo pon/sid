@@ -1,6 +1,7 @@
 exports.register = (server, options, next) => {
   server.expose({
-    KnowledgeBaseClient: options.knowledgeBaseClient
+    KnowledgeBaseClient: options.knowledgeBaseClient,
+    AppApiClient: options.appApiClient
   })
   next()
 }

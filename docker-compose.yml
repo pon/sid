@@ -222,7 +222,8 @@ inside_api:
     - AWS_SQS_PORT=4568
     - EMAILER_QUEUE=emailer
     - KNOWLEDGE_BASE_URL=knowledge_base:5000
-    - APP_API_URL=http://app_api:4000
+    - APP_API_URL=app_api:4000
+    - APP_URL=http://localhost:3000
     - INSIDE_URL=http://localhost:7000
   volumes:
     - ./inside-api:/usr/src/app

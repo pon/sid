@@ -23,7 +23,22 @@ exports.register = (server, options, next) => {
     return sendEmail(to, 'inside-invitation', data)
   }
 
+  const sendApproval = (to, data) => {
+    const dataTemplate = Joi.object().keys({
+      dashboardUrl: Joi.string().required(),
+      name: Joi.string().required()
+    })
+
+    const dataResult = Joi.validate(data, dataTemplate)
+    if (dataResult.error) {
+      return P.reject(dataResult.error)
+    }
+
+    return sendEmail(to, 'loan-approval', data)
+  }
+
   server.expose({
+    sendApproval: sendApproval,
     sendInvitation: sendInvitation
   })
 

@@ -285,6 +285,20 @@ exports.register = (server, options, next) => {
           }
         }
       }
+    }, {
+      method: 'GET',
+      path: '/users/{userId}/email',
+      config: {
+        auth: false,
+        tags: ['api', 'authentication'],
+        handler: (request, reply) => {
+          return User.findById(request.params.userId)
+          .then(user => {
+            return {email: user.email}
+          })
+          .asCallback(reply)
+        }
+      }
     }])
 
     next()

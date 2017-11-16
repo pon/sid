@@ -1,7 +1,8 @@
 const P = require('bluebird')
 
 exports.register = (server, options, next) => {
-  const KBClient = server.plugins.clients.KnowledgeBaseClient
+  const AppApiClient  = server.plugins.clients.AppApiClient
+  const KBClient      = server.plugins.clients.KnowledgeBaseClient
 
   server.route([{
     method: 'GET',
@@ -60,6 +61,7 @@ exports.register = (server, options, next) => {
     config: {
       tags: ['api', 'underwriting'],
       handler: (request, reply) => {
+        let application
         KBClient.getApplication(request.params.applicationId)
         .catch(KBClient.NotFound, err => {
           throw server.plugins.errors.applicationNotFound 
@@ -67,7 +69,8 @@ exports.register = (server, options, next) => {
         .catch(KBClient.BadRequest, err => {
           throw server.plugins.errors.unableToApproveApplication
         })
-        .then(application => {
+        .then(_application => {
+          application = _application
           if (application.status !== 'UNDERWRITING') {
             throw server.plugins.errors.unableToApproveApplication
           }
@@ -81,6 +84,20 @@ exports.register = (server, options, next) => {
             }),
             KBClient.applicationApprove(request.params.applicationId)
           ])
+        })
+        .tap(() => {
+          return P.all([
+            AppApiClient.getUserEmail(application.user_id)
+            .then(body => body.email),
+            KBClient.getProfile(application.user_id)
+            .then(body => body.first_name)
+          ])
+          .spread((email, name) => {
+            return server.plugins.emailer.sendApproval(email, {
+              name: name,
+              dashboardUrl: `${options.appUrl}/dashboard`
+            }) 
+          })
         })
         .then(() => {
           return KBClient.getApplication(request.params.applicationId)

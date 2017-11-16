@@ -28,7 +28,8 @@ if (process.env.TLS_CERT_PATH && process.env.TLS_KEY_PATH) {
 
 server.connection(serverOptions)
 
-const KBClient = require('./clients/knowledge-base-client')
+const KBClient      = require('./clients/knowledge-base-client')
+const AppApiClient  = require('./clients/app-api-client') 
 
 server.register([
   {
@@ -61,6 +62,10 @@ server.register([
       knowledgeBaseClient: new KBClient({
         url: `http://${process.env.KNOWLEDGE_BASE_URL}`,
         logger: message => {server.log(['clients', 'kb'], message)}
+      }),
+      appApiClient: new AppApiClient({
+        url: `http://${process.env.APP_API_URL}`,
+        logger: message => {server.log(['clients', 'app-api'], message)}
       })
     }
   },
@@ -99,7 +104,12 @@ server.register([
           insideUrl: process.env.INSIDE_URL
         }
       },
-      require('./features/underwriting'),
+      {
+        register: require('./features/underwriting'),
+        options: {
+          appUrl: process.env.APP_URL
+        }
+      },
       require('./features/verification'),
       require('./features/dashboard'),
       {

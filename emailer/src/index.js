@@ -17,7 +17,8 @@ const SQS = new AWS.SQS(sqsOptions)
 
 const subjectMap = {
   'email-verification': 'Please Verify Your Email Address',
-  'inside-invitation': 'Welcome to Poplar Inside!'
+  'inside-invitation': 'Welcome to Poplar Inside!',
+  'loan-approval': 'Good news: you’ve been approved!'
 }
 
 SQS.createQueue({QueueName: process.env.AWS_SQS_QUEUE_NAME}, (err, config) => {
